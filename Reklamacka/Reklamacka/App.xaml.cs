@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Reklamacka.Pages;
@@ -10,7 +10,7 @@ namespace Reklamacka
 		public App()
 		{
 			InitializeComponent();
-
+			
 			MainPage = new NavigationPage(new MainPage());
 		}
 

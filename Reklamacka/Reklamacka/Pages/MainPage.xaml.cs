@@ -1,4 +1,4 @@
-﻿using Reklamacka.Pages;
+using Reklamacka.Pages;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
