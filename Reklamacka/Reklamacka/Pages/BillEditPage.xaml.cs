@@ -1,3 +1,5 @@
+using Reklamacka.ViewModels;
+using Reklamacka.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +12,13 @@ using Xamarin.Forms.Xaml;
 namespace Reklamacka.Pages
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ItemEditPage : ContentPage
+	public partial class BillEditPage : ContentPage
 	{
-		public ItemEditPage()
+		public BillEditPage(Bill bill)
 		{
 			InitializeComponent();
+			// pri vytvoreni viewmodelu se predava aktualne zvolena polozka z MainPage
+			BindingContext = new BillEditViewModel(bill);
 		}
 	}
 }

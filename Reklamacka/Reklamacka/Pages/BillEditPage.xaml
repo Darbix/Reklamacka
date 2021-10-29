@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Reklamacka.Pages.BillEditPage">
+	<ContentPage.Content>
+		<StackLayout>
+			<Label Text="Test" FontSize="Title" TextColor="OrangeRed" VerticalOptions="CenterAndExpand" HorizontalOptions="Center"/>
+			<Entry Text="{Binding ProductName}" VerticalOptions="Center" Placeholder="Product name..."/>
+
+			<StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="CenterAndExpand">
+				<Button Text="Save" Command="{Binding SaveNewBill}"/>
+				<Button Text="Delete all" Command="{Binding DeleteNewBill}"/>
+			</StackLayout>
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>

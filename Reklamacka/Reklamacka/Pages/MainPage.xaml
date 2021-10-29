@@ -5,7 +5,29 @@
 
 	<StackLayout>
 		<Label Text="Reklamacka" FontSize="Title" VerticalOptions="EndAndExpand" HorizontalOptions="Center"/>
-		<Button Text="next" Clicked="Button_Clicked" VerticalOptions="StartAndExpand" HorizontalOptions="Center"/>
+
+		<Button Text="edit" FontSize="Title" FontAttributes="Bold" Command="{Binding EditBill}" BackgroundColor="Red"
+				WidthRequest="100" HeightRequest="50" IsVisible="{Binding CanBeEdited}"/>
+		
+		<Grid>
+			<ListView x:Name="ListBills" ItemsSource="{Binding Bills}" Margin="10" 
+					  SelectedItem="{Binding SelectedBill}" ItemSelected="ListBillsItemSelected">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<ViewCell>
+							<StackLayout>
+								<Label Text="{Binding ProductName}" BackgroundColor="LightBlue"/>
+							</StackLayout>
+						</ViewCell>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
+
+			<Button Text="+" FontSize="Title" FontAttributes="Bold" Command="{Binding AddNewBill}" 
+				Margin="20" BackgroundColor="DeepSkyBlue" CornerRadius="30" 
+				VerticalOptions="End" HorizontalOptions="End" WidthRequest="60" HeightRequest="60"/>
+		</Grid>
+
 	</StackLayout>
 
 </ContentPage>

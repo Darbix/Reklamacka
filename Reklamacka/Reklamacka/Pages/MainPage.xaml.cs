@@ -1,3 +1,5 @@
+using Reklamacka.ViewModels;
+using Reklamacka.Models;
 using Reklamacka.Pages;
 using System;
 using System.Collections.Generic;
@@ -11,19 +13,26 @@ namespace Reklamacka
 {
 	public partial class MainPage : ContentPage
 	{
+		private readonly MainPageViewModel mainPageViewModel;   //!< viemodel hlavni stranky
 		public MainPage()
 		{
 			InitializeComponent();
+			mainPageViewModel = new MainPageViewModel(Navigation);
+			BindingContext = mainPageViewModel;
 		}
 
-		/// <summary>
-		/// Test presunuti se na dalsi stranku
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private async void Button_Clicked(object sender, EventArgs e)
+		// Funkce volajici pri kazdem nacteni hlavni stranky obdobnou funkci ve viewmodelu
+		protected override void OnAppearing()
 		{
-			await Navigation.PushAsync(new ItemEditPage());
+			base.OnAppearing();
+			mainPageViewModel.OnAppearing();
 		}
+
+		// Funkce, ktera vola ListBillsItemSelected z viemodelu pri vyberu polozky z listu
+		private void ListBillsItemSelected(object sender, SelectedItemChangedEventArgs e)
+		{
+			mainPageViewModel.ListBillsItemSelected(sender, e);
+		}
+
 	}
 }
