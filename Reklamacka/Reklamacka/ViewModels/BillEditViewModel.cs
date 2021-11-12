@@ -1,6 +1,8 @@
 using Reklamacka.Models;
+using Reklamacka.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
 using Xamarin.Forms;
@@ -15,53 +17,59 @@ namespace Reklamacka.ViewModels
 
 		public Bill SelectedBill { get; set; } = null;  //!< Aktualne zvoleny item z listu na hlavni strance
 
-		private string productName;
-		/// <summary>
-		/// Vlastnost pro nazev produktu k uctence
-		/// </summary>
-		public string ProductName
-		{
-			get { return productName; }
-			set
-			{
-				productName = value;
-				OnPropertyChanged(nameof(ProductName));
-			}
-		}
 
+		public string ProductName { get; set; }                         //!< Nazev produktu
+		public DateTime PurchaseDate { get; set; } = DateTime.Today;    //!< Datum zakoupeni produktu
+		public DateTime ExpirationDate { get; set; } = DateTime.Today;  //!< Doba konce platnosti zaruky
+		public string Notes { get; set; }                               //!< Poznamky
 		//TODO dalsi vlastnosti objektu
 
 		// konstruktor 
-		public BillEditViewModel(Bill bill)
+		public BillEditViewModel(INavigation Navigation, Bill bill)
 		{
 			// nastaveni SelectedBill na item zvoleny v listu v MainPage
 			SelectedBill = bill;
 			// neni-li SelectedBill null, budou u editace zobrazeny data existujici polozky
 			if (SelectedBill != null)
 			{
+				// Vyplneni kolonek v EditPage vlastnostmi existujici uctenky
 				ProductName = SelectedBill.ProductName;
+				PurchaseDate = SelectedBill.PurchaseDate;
+				ExpirationDate = SelectedBill.ExpirationDate;
+				Notes = SelectedBill.Notes;
 				//TODO dalsi vlastnosti k editaci
 			}
 
 			// vytvoreni Commandu pro ulozeni
-			SaveNewBill = new Command(() =>
+			SaveNewBill = new Command(async () =>
 			{
 				// pokud byl SelectedItem null, generuje se novy objekt ze zadanych dat
 				if (SelectedBill == null)
 				{
 					SelectedBill = new Bill();
 				};
+
+				// Vypis vlastnosti, ktere se maji ulozit do existujici/nove uctenky
 				SelectedBill.ProductName = ProductName;
+				SelectedBill.IsSelected = false;
+				SelectedBill.PurchaseDate = PurchaseDate;
+				SelectedBill.ExpirationDate = ExpirationDate;
+				SelectedBill.Notes = Notes;
+
+				//TODO dalsi vlastnosti
+
 
 				// ulozeni/aktualizace do databaze
-				BaseModel.BillsDB.SaveItemAsync(SelectedBill);
+				await BaseModel.BillsDB.SaveItemAsync(SelectedBill);
+
+				await Navigation.PopAsync();
 			});
 
 			// vytvoreni Commandu pro smazani polozkek
-			DeleteNewBill = new Command(() =>
+			DeleteNewBill = new Command(async () =>
 			{
 				// smazani vsech polozek v databazi
-				BaseModel.BillsDB.DeleteAllItems<Bill>();
+				await BaseModel.BillsDB.DeleteAllItems<Bill>();
 			});
 		}
 

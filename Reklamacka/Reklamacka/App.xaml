@@ -4,5 +4,10 @@
 			 x:Class="Reklamacka.App">
 	<Application.Resources>
 
+		<Style TargetType="NavigationPage">
+			<Setter Property="BarBackgroundColor" Value="#5b62db"/>
+			<Setter Property="BarTextColor" Value="White" />
+		</Style>
+
 	</Application.Resources>
 </Application>

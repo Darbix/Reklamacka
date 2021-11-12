@@ -7,7 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reklamacka.Android", "Rekla
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reklamacka.iOS", "Reklamacka\Reklamacka.iOS\Reklamacka.iOS.csproj", "{08D698BC-722C-4E9D-918E-EB906A243BE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reklamacka", "Reklamacka\Reklamacka\Reklamacka.csproj", "{A2748A69-DCCE-4467-A7C5-37B726792F6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reklamacka", "Reklamacka\Reklamacka\Reklamacka.csproj", "{A2748A69-DCCE-4467-A7C5-37B726792F6B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{629FA0D7-D675-464D-B8AB-FE06409C4B94}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

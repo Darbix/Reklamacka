@@ -2,15 +2,34 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Reklamacka.Pages.BillEditPage">
+	
+	<NavigationPage.TitleView>
+		<StackLayout Orientation="Horizontal">
+			<Label Text="Product bill" TextColor="White" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+			<Button Text="Save" Command="{Binding SaveNewBill}" TextColor="White" BackgroundColor="Transparent" 
+					CornerRadius="20" HorizontalOptions="End" BorderWidth="3" BorderColor="White"/>
+			<Button Text="Delete all" Command="{Binding DeleteNewBill}" TextColor="White" BackgroundColor="Transparent" 
+					CornerRadius="20" HorizontalOptions="End" BorderWidth="3" BorderColor="White"/>
+		</StackLayout>
+	</NavigationPage.TitleView>
+	
 	<ContentPage.Content>
-		<StackLayout>
-			<Label Text="Test" FontSize="Title" TextColor="OrangeRed" VerticalOptions="CenterAndExpand" HorizontalOptions="Center"/>
-			<Entry Text="{Binding ProductName}" VerticalOptions="Center" Placeholder="Product name..."/>
+		<StackLayout VerticalOptions="Start" Margin="10" Spacing="2">
+			<Label Text="..." FontSize="Title" TextColor="OrangeRed" VerticalOptions="CenterAndExpand" HorizontalOptions="Center"/>
+			<Entry Text="{Binding ProductName}" Placeholder="Product name"/>
 
-			<StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="CenterAndExpand">
-				<Button Text="Save" Command="{Binding SaveNewBill}"/>
-				<Button Text="Delete all" Command="{Binding DeleteNewBill}"/>
+			<StackLayout Orientation="Horizontal">
+				<Label Text="Purchase date: " FontSize="Medium" VerticalOptions="Center" Margin="0,0,10,0"/>
+				<DatePicker Format="dd/MM/yyyy" Date="{Binding PurchaseDate}" VerticalOptions="Center" WidthRequest="170"/>
 			</StackLayout>
+			<StackLayout Orientation="Horizontal">
+				<Label Text="Expiration date:" FontSize="Medium" VerticalOptions="Center" Margin="0,0,10,0"/>
+				<DatePicker Format="dd/MM/yyyy" Date="{Binding ExpirationDate}" VerticalOptions="Center" WidthRequest="170"/>
+			</StackLayout>
+
+			<Editor Text="{Binding Notes}" HeightRequest="80" BackgroundColor="#dddddd"/>
+
+			
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>

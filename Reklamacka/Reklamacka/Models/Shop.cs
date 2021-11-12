@@ -10,5 +10,9 @@ namespace Reklamacka.Models
 		public string Link { get; private set; }
 		public string Notes { get; set; }
 
+		public Shop()
+		{
+
+		}
 	}
 }

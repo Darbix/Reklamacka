@@ -26,24 +26,23 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
-		public Bill SelectedBill { get; set; }      //!< Aktualne zvoleny item uctenky z listu
+		private Bill selectedBill;
+		public Bill SelectedBill //!< Aktualne zvoleny item uctenky z listu
+		{
+			get => selectedBill;
+			set
+			{
+				if (selectedBill != null)
+					selectedBill.IsSelected = false;
+				selectedBill = value;
+				OnPropertyChanged(nameof(SelectedBill));
+			}
+		}
 
 		public Command AddNewBill { get; set; }     //!< Command pro tlacitko pridani nove uctenky
 		public Command EditBill { get; set; }       //!< Command pro tlacitko editace uctenky z listu
+		public Command ItemTapped { get; set; }		//!< Command pro reseni eventu kliknuti na polozku
 
-		public bool canBeEdited = false;
-		/// <summary>
-		/// Boolean pro isVisible tlacitka editace uctenky
-		/// </summary>
-		public bool CanBeEdited
-		{
-			get => canBeEdited;
-			set
-			{
-				canBeEdited = value;
-				OnPropertyChanged(nameof(CanBeEdited));
-			}
-		}
 
 		// konstruktor
 		public MainPageViewModel(INavigation Navigation)
@@ -59,16 +58,18 @@ namespace Reklamacka.ViewModels
 			{
 				await Navigation.PushAsync(new BillEditPage(SelectedBill));
 			});
+
+			// Po kliknuti je nastaven priznak IsSelected polozky na true
+			ItemTapped = new Command((e) =>
+		   {
+			   if (SelectedBill == null)
+				   return;
+
+
+			   SelectedBill.IsSelected = true;
+		   });
 		}
 
-		/// <summary>
-		/// Funkce volana pri eventu kliknuti na item v listu
-		/// </summary>
-		public void ListBillsItemSelected(object sender, SelectedItemChangedEventArgs e)
-		{
-			// moznost editace povolena
-			CanBeEdited = true;
-		}
 
 		/// <summary>
 		/// Funkce volana pri eventu kliknuti na item v listu
@@ -79,7 +80,6 @@ namespace Reklamacka.ViewModels
 			// TODO - mozna lze resit nejak lepe
 			Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllItemsAsync());
 			SelectedBill = null;
-			CanBeEdited = false;
 		}
 
 		// OnPropertyChanged() volat pri pozadavku na projeveni zmeny pri nejake udalosti

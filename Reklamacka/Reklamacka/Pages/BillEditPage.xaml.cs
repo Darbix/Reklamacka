@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Collections.ObjectModel;
 
 namespace Reklamacka.Pages
 {
@@ -18,7 +19,7 @@ namespace Reklamacka.Pages
 		{
 			InitializeComponent();
 			// pri vytvoreni viewmodelu se predava aktualne zvolena polozka z MainPage
-			BindingContext = new BillEditViewModel(bill);
+			BindingContext = new BillEditViewModel(Navigation, bill);
 		}
 	}
 }

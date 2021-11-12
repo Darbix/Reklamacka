@@ -28,11 +28,5 @@ namespace Reklamacka
 			mainPageViewModel.OnAppearing();
 		}
 
-		// Funkce, ktera vola ListBillsItemSelected z viemodelu pri vyberu polozky z listu
-		private void ListBillsItemSelected(object sender, SelectedItemChangedEventArgs e)
-		{
-			mainPageViewModel.ListBillsItemSelected(sender, e);
-		}
-
 	}
 }

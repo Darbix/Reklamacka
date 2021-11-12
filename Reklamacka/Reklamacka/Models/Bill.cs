@@ -1,16 +1,15 @@
 using SQLite;
-using Reklamacka.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.ComponentModel;
 
 namespace Reklamacka.Models
 {
 	public enum WarrantyType { OneMonth, TwoYears, ThreeYears /* will be added later */ }
 	public enum GoodsType { Clothes, Electronics, Toys /* will be added later */ }
 
-
-	public class Bill
+	public class Bill: INotifyPropertyChanged
 	{
 		/// <summary>
 		/// Auto-incrementujici se hodnota ID prvku v databazi
@@ -20,12 +19,37 @@ namespace Reklamacka.Models
 
 		public string ProductName { get; set; }     //!< Nazev produktu v uctence
 
+		private bool isSelected = false;
+		/// <summary>
+		/// Bool hodnota urcujici, zda byl item zvolen kliknutim v MainPage
+		/// </summary>
+		public bool IsSelected
+		{
+			get => isSelected;
+			set
+			{
+				isSelected = value;
+				OnPropertyChanged(nameof(IsSelected));
+			}
+		}
+
+
+
+
+		
 
 		//TODO----- netestovana cast, zatim tedy bez dat -----
-		/*
-		public DateTime PurchaseDate { get; private set; }
+		
+		public DateTime PurchaseDate { get; set; }
+		public DateTime ExpirationDate { get; set; }
 		public string WarrantyPath { get; set; }
-		public Shop Shop { get; set; }
+
+		//public Shop ProductShop { get; set; }
+		public string ShopName { get; private set; }
+		public string ShopLink { get; private set; }
+		public string ShopNotes { get; set; }
+
+
 		public WarrantyType WarrantyType { get; set; }
 		public string Notes { get; set; }
 		public bool IsArchived { get; set; }
@@ -66,7 +90,14 @@ namespace Reklamacka.Models
 					return DateTime.Now;
 			}
 		}
-		*/
+		
+
+
+		public event PropertyChangedEventHandler PropertyChanged;
+		public void OnPropertyChanged(string propertyName)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 	}
 
 }
