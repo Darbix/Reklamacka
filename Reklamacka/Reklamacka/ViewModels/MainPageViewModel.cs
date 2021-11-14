@@ -39,10 +39,10 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
-		public Command AddNewBill { get; set; }     //!< Command pro tlacitko pridani nove uctenky
-		public Command EditBill { get; set; }       //!< Command pro tlacitko editace uctenky z listu
-		public Command ItemTapped { get; set; }		//!< Command pro reseni eventu kliknuti na polozku
-
+		public Command AddNewBill { get; set; }         //!< Command pro tlacitko pridani nove uctenky
+		public Command EditBill { get; set; }           //!< Command pro tlacitko editace uctenky z listu
+		public Command ItemTapped { get; set; }         //!< Command pro reseni eventu kliknuti na polozku
+		public Command SortingPagePush { get; set; }    //!< Command pro presun na stranku trideni
 
 		// konstruktor
 		public MainPageViewModel(INavigation Navigation)
@@ -61,13 +61,18 @@ namespace Reklamacka.ViewModels
 
 			// Po kliknuti je nastaven priznak IsSelected polozky na true
 			ItemTapped = new Command((e) =>
-		   {
-			   if (SelectedBill == null)
-				   return;
+			{
+				if (SelectedBill == null)
+					return;
 
+				SelectedBill.IsSelected = true;
+			});
 
-			   SelectedBill.IsSelected = true;
-		   });
+			// vytvoreni commandu pro presun na stranku tridici polozky uctenek
+			SortingPagePush = new Command(async () =>
+			{
+				await Navigation.PushAsync(new SortingPage());
+			});
 		}
 
 

@@ -49,6 +49,12 @@ namespace Reklamacka.ViewModels
 					SelectedBill = new Bill();
 				};
 
+				if (ProductName == null)
+				{
+					await App.Current.MainPage.DisplayAlert("Problem", "Missing product info", "OK");
+					return;
+				}
+
 				// Vypis vlastnosti, ktere se maji ulozit do existujici/nove uctenky
 				SelectedBill.ProductName = ProductName;
 				SelectedBill.IsSelected = false;
