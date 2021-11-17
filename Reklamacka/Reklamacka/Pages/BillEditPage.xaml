@@ -14,8 +14,8 @@
 	</NavigationPage.TitleView>
 	
 	<ContentPage.Content>
-		<StackLayout VerticalOptions="Start" Margin="10" Spacing="2">
-			<Label Text="..." FontSize="Title" TextColor="OrangeRed" VerticalOptions="CenterAndExpand" HorizontalOptions="Center"/>
+		<StackLayout Margin="10" Spacing="2">
+			<Label Text="..." FontSize="Title" TextColor="OrangeRed" HorizontalOptions="Center"/>
 			<Entry Text="{Binding ProductName}" Placeholder="Product name"/>
 
 			<StackLayout Orientation="Horizontal">
@@ -27,9 +27,11 @@
 				<DatePicker Format="dd/MM/yyyy" Date="{Binding ExpirationDate}" VerticalOptions="Center" WidthRequest="170"/>
 			</StackLayout>
 
-			<Editor Text="{Binding Notes}" HeightRequest="80" BackgroundColor="#dddddd"/>
+			<Editor Text="{Binding Notes}" HeightRequest="80" BackgroundColor="#dddddd" VerticalOptions="StartAndExpand"/>
 
+			<Image x:Name="tempImg" Source="{Binding ImgBill}" HeightRequest="150" WidthRequest="150" />
 			
+			<Button Text="Pick" Command="{Binding PickPhoto}" HorizontalOptions="StartAndExpand" VerticalOptions="EndAndExpand"/>
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>

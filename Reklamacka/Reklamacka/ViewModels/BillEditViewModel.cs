@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Text;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Reklamacka.ViewModels
@@ -14,14 +16,29 @@ namespace Reklamacka.ViewModels
 
 		public Command SaveNewBill { get; set; }        //!< Command k tlacitku pro ulozeni zmen/nove uctenky
 		public Command DeleteNewBill { get; set; }      //!< Command k tlacitku smazani vsech polozek TODO zatim vsechny
+		public Command PickPhoto { get; set; }          //!< Command k vyberu fotografie uctenky produktu
 
 		public Bill SelectedBill { get; set; } = null;  //!< Aktualne zvoleny item z listu na hlavni strance
 
 
-		public string ProductName { get; set; }                         //!< Nazev produktu
-		public DateTime PurchaseDate { get; set; } = DateTime.Today;    //!< Datum zakoupeni produktu
-		public DateTime ExpirationDate { get; set; } = DateTime.Today;  //!< Doba konce platnosti zaruky
-		public string Notes { get; set; }                               //!< Poznamky
+		public string ProductName { get; set; }         //!< Nazev produktu
+		public DateTime PurchaseDate { get; set; }      //!< Datum zakoupeni produktu
+		public DateTime ExpirationDate { get; set; }    //!< Doba konce platnosti zaruky
+		public string Notes { get; set; }               //!< Poznamky
+
+		private ImageSource imgBill;
+		/// <summary>
+		/// Zdrojova data obrazku
+		/// </summary>
+		public ImageSource ImgBill
+		{
+			get => imgBill;
+			set
+			{
+				imgBill = value;
+				OnPropertyChanged(nameof(ImgBill));
+			}
+		}
 		//TODO dalsi vlastnosti objektu
 
 		// konstruktor 
@@ -29,26 +46,21 @@ namespace Reklamacka.ViewModels
 		{
 			// nastaveni SelectedBill na item zvoleny v listu v MainPage
 			SelectedBill = bill;
-			// neni-li SelectedBill null, budou u editace zobrazeny data existujici polozky
-			if (SelectedBill != null)
-			{
-				// Vyplneni kolonek v EditPage vlastnostmi existujici uctenky
-				ProductName = SelectedBill.ProductName;
-				PurchaseDate = SelectedBill.PurchaseDate;
-				ExpirationDate = SelectedBill.ExpirationDate;
-				Notes = SelectedBill.Notes;
-				//TODO dalsi vlastnosti k editaci
-			}
+
+			if (SelectedBill == null)
+				SelectedBill = new Bill();
+
+			// Vyplneni kolonek v EditPage vlastnostmi existujici uctenky
+			ProductName = SelectedBill.ProductName;
+			PurchaseDate = SelectedBill.PurchaseDate;
+			ExpirationDate = SelectedBill.ExpirationDate;
+			Notes = SelectedBill.Notes;
+			ImgBill = SelectedBill.GetImage();
+			//TODO dalsi vlastnosti k editaci
 
 			// vytvoreni Commandu pro ulozeni
 			SaveNewBill = new Command(async () =>
 			{
-				// pokud byl SelectedItem null, generuje se novy objekt ze zadanych dat
-				if (SelectedBill == null)
-				{
-					SelectedBill = new Bill();
-				};
-
 				if (ProductName == null)
 				{
 					await App.Current.MainPage.DisplayAlert("Problem", "Missing product info", "OK");
@@ -76,6 +88,36 @@ namespace Reklamacka.ViewModels
 			{
 				// smazani vsech polozek v databazi
 				await BaseModel.BillsDB.DeleteAllItems<Bill>();
+			});
+
+			PickPhoto = new Command(async () =>
+			{
+				// ziskani objektu obrazkoveho vyberu
+				var img = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
+				{
+					Title = "Pick a bill photo"
+				});
+
+				// nacteni obrazku
+				Stream stream = await img.OpenReadAsync();
+
+				// konverze do pole bytu, aby se dal ulozit do databaze
+				byte[] buffer = new byte[16 * 1024];
+				byte[] imageBytes;  // vysledna binarni data
+				using (MemoryStream ms = new MemoryStream())
+				{
+					int read;
+					while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+					{
+						ms.Write(buffer, 0, read);
+					}
+					imageBytes = ms.ToArray();
+				}
+
+				// ulozeni bytu do vlastnosti vybrane polozky
+				SelectedBill.ImgBill = imageBytes;
+				// nacteni obrazku jako ImageSource do vlastnosti okna
+				ImgBill = SelectedBill.GetImage();
 			});
 		}
 

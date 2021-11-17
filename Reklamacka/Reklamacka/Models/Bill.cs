@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
+using Xamarin.Forms;
+using System.IO;
 
 namespace Reklamacka.Models
 {
@@ -18,6 +20,7 @@ namespace Reklamacka.Models
 		public int ID { get; set; }
 
 		public string ProductName { get; set; }     //!< Nazev produktu v uctence
+		public Byte[] ImgBill { get; set; }
 
 		private bool isSelected = false;
 		/// <summary>
@@ -35,14 +38,21 @@ namespace Reklamacka.Models
 
 
 
+		public DateTime PurchaseDate { get; set; } = DateTime.Today;
+		public DateTime ExpirationDate { get; set; } = DateTime.Today;
+		public string WarrantyPath { get; set; }
 
-		
+		public string Notes { get; set; }
+
+		public ImageSource GetImage()
+		{
+			return ImageSource.FromStream(() => new MemoryStream(ImgBill));
+		}
+
+
+
 
 		//TODO----- netestovana cast, zatim tedy bez dat -----
-		
-		public DateTime PurchaseDate { get; set; }
-		public DateTime ExpirationDate { get; set; }
-		public string WarrantyPath { get; set; }
 
 		//public Shop ProductShop { get; set; }
 		public string ShopName { get; private set; }
@@ -51,7 +61,6 @@ namespace Reklamacka.Models
 
 
 		public WarrantyType WarrantyType { get; set; }
-		public string Notes { get; set; }
 		public bool IsArchived { get; set; }
 
 		/// <summary>

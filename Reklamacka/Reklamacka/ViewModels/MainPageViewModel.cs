@@ -27,7 +27,10 @@ namespace Reklamacka.ViewModels
 		}
 
 		private Bill selectedBill;
-		public Bill SelectedBill //!< Aktualne zvoleny item uctenky z listu
+		/// <summary>
+		/// Aktualne zvoleny item uctenky z listu
+		/// </summary>
+		public Bill SelectedBill
 		{
 			get => selectedBill;
 			set
@@ -41,6 +44,7 @@ namespace Reklamacka.ViewModels
 
 		public Command AddNewBill { get; set; }         //!< Command pro tlacitko pridani nove uctenky
 		public Command EditBill { get; set; }           //!< Command pro tlacitko editace uctenky z listu
+		public Command DeleteBill { get; set; }         //!< Command pro smazani vybrane polozky
 		public Command ItemTapped { get; set; }         //!< Command pro reseni eventu kliknuti na polozku
 		public Command SortingPagePush { get; set; }    //!< Command pro presun na stranku trideni
 
@@ -57,6 +61,14 @@ namespace Reklamacka.ViewModels
 			EditBill = new Command(async () =>
 			{
 				await Navigation.PushAsync(new BillEditPage(SelectedBill));
+			});
+
+			// inicializace tlacitka ke smazani polozky
+			DeleteBill = new Command(async () =>
+			{
+				await BaseModel.BillsDB.DeleteItemAsync(SelectedBill);
+				// obnoveni listu polozek
+				OnAppearing();
 			});
 
 			// Po kliknuti je nastaven priznak IsSelected polozky na true

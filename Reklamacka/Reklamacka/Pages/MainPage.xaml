@@ -8,12 +8,12 @@
 
 	<!-- Hodnoty nekterych barev -->
 	<ContentPage.Resources>
-		<Color x:Key="BcgTop1Color">#5b62db</Color>
+		<Color x:Key="BcgTop1Color">#5b62fb</Color>
 		<Color x:Key="BcgTop2Color">#000878</Color>
 		<Color x:Key="BcgBottomColor">#dddddd</Color>
 		<Color x:Key="ItemsRightColor">#5050cb</Color>
-		<Color x:Key="ItemsLeftColor">#2b329b</Color>
-		<Color x:Key="ItemButtonsColor">#d18b3c</Color>
+		<Color x:Key="ItemsLeftColor">#2b32ab</Color>
+		<Color x:Key="ItemButtonsColor">#ff0640</Color>
 		<Color x:Key="BottomButtonsColor">#ff0640</Color>
 	</ContentPage.Resources>
 
@@ -44,14 +44,14 @@
 					RowDefinitions="10, 50, *">
 					<Frame BackgroundColor="{StaticResource BcgBottomColor}" Padding="0" Grid.Row="0" Grid.RowSpan="3" CornerRadius="30">
 						<Grid>
-							<Button Margin="10" Text="•••" Padding="0" HorizontalOptions="StartAndExpand" VerticalOptions="Start" TextColor="Black" HeightRequest="50" 
+							<Button Margin="10" Text="todo" Padding="0" HorizontalOptions="StartAndExpand" VerticalOptions="Start" TextColor="Black" HeightRequest="50" 
 						CornerRadius="25" WidthRequest="50" BackgroundColor="#bbbbbb"/>
 
 						</Grid>
 					</Frame>
 					<Frame Grid.Row="2" BackgroundColor="{StaticResource BcgBottomColor}"/>
 
-					<ListView Grid.Row="2" x:Name="ListBills" ItemsSource="{Binding Bills}" Margin="10" RowHeight="60"
+					<ListView Grid.Row="2" x:Name="ListBills" ItemsSource="{Binding Bills}" Margin="10,10,10,0" RowHeight="60"
 						SelectedItem="{Binding SelectedBill}">
 						<ListView.ItemTemplate>
 							<DataTemplate>
@@ -72,9 +72,14 @@
 											</Frame>
 
 											<Frame Padding="5" BackgroundColor="#77000000" VerticalOptions="FillAndExpand" CornerRadius="30" IsVisible="{Binding IsSelected}">
-												<Button Text="Edit" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Center"
-													Command="{Binding BindingContext.EditBill}" BindingContext="{x:Reference ThisMainPage}"
-													BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="70" TextColor="White"/>
+												<StackLayout Orientation="Horizontal">
+													<Button Text="Edit" FontSize="Default" FontAttributes="Bold" HorizontalOptions="EndAndExpand"
+														Command="{Binding BindingContext.EditBill}" BindingContext="{x:Reference ThisMainPage}"
+														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>
+													<Button Text="Delete" FontSize="Default" FontAttributes="Bold" HorizontalOptions="StartAndExpand"
+														Command="{Binding BindingContext.DeleteBill}" BindingContext="{x:Reference ThisMainPage}"
+														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>
+												</StackLayout>
 											</Frame>
 										</Grid>
 									</StackLayout>
