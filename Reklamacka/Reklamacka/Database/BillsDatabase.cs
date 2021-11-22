@@ -38,10 +38,16 @@ namespace Reklamacka.Database
 			return db.DeleteAllAsync<Bill>();
 		}
 
-		//Get a list of all the notes
+		// Funkce k ziskani itemu jako list serazenych od nejnovejsich
 		public Task<List<Bill>> GetAllItemsAsync()
 		{
-			return db.Table<Bill>().ToListAsync();
+			return db.Table<Bill>().OrderBy(x => x.ExpirationDate).ToListAsync();
+		}
+
+		// Funkce k ziskani itemu jako list serazenych od nejstarsich
+		public Task<List<Bill>>GetAllFromOldestAsync()
+		{
+			return db.Table<Bill>().OrderByDescending(x => x.ExpirationDate).ToListAsync();
 		}
 	}
 }

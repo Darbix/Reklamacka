@@ -47,6 +47,8 @@ namespace Reklamacka.ViewModels
 		public Command DeleteBill { get; set; }         //!< Command pro smazani vybrane polozky
 		public Command ItemTapped { get; set; }         //!< Command pro reseni eventu kliknuti na polozku
 		public Command SortingPagePush { get; set; }    //!< Command pro presun na stranku trideni
+		public Command ReverseBills { get; set; }       //!< Command pro reverzi poradi uctenek
+
 
 		// konstruktor
 		public MainPageViewModel(INavigation Navigation)
@@ -84,6 +86,11 @@ namespace Reklamacka.ViewModels
 			SortingPagePush = new Command(async () =>
 			{
 				await Navigation.PushAsync(new SortingPage());
+			});
+
+			ReverseBills = new Command(async () =>
+			{
+				Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllFromOldestAsync());
 			});
 		}
 
