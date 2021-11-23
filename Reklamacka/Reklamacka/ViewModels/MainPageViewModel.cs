@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using Xamarin.Forms;
 
@@ -42,6 +43,20 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
+		private String nameToSearch;
+		/// <summary>
+		/// String s hodnotou pro vyhledani polozky podle nazvu
+		/// </summary>
+		public String NameToSearch
+		{
+			get => nameToSearch;
+			set
+			{
+				nameToSearch = value;
+				OnPropertyChanged(nameof(NameToSearch));
+			}
+		}
+
 		public Command AddNewBill { get; set; }         //!< Command pro tlacitko pridani nove uctenky
 		public Command EditBill { get; set; }           //!< Command pro tlacitko editace uctenky z listu
 		public Command DeleteBill { get; set; }         //!< Command pro smazani vybrane polozky
@@ -49,6 +64,7 @@ namespace Reklamacka.ViewModels
 		public Command SortingPagePush { get; set; }    //!< Command pro presun na stranku trideni
 		public Command ReverseBills { get; set; }       //!< Command pro reverzi poradi uctenek
 
+		private bool isFromOldest = false;
 
 		// konstruktor
 		public MainPageViewModel(INavigation Navigation)
@@ -90,7 +106,16 @@ namespace Reklamacka.ViewModels
 
 			ReverseBills = new Command(async () =>
 			{
-				Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllFromOldestAsync());
+				if (isFromOldest)
+				{
+					Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllItemsAsync());
+					isFromOldest = false;
+				}
+				else
+				{
+					Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllFromOldestAsync());
+					isFromOldest = true;
+				}
 			});
 		}
 
@@ -102,8 +127,21 @@ namespace Reklamacka.ViewModels
 		{
 			// pri nacteni hlavni stranky se kolekce naplni novymi daty z databaze
 			// TODO - mozna lze resit nejak lepe
-			Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllItemsAsync());
+			if (isFromOldest)
+				Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllFromOldestAsync());
+			else
+				Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllItemsAsync());
+
 			SelectedBill = null;
+		}
+
+		/// <summary>
+		/// Vyhleda pozadovany objekt Bill v seznamu na zaklade nazvu
+		/// </summary>
+		/// <returns> Object Bill, jehoz ProductName bylo vyhledano </returns>
+		public Bill GetBillByName()
+		{
+			return (Bill)Bills.Where(x => x.ProductName.Equals(NameToSearch)).FirstOrDefault();
 		}
 
 		// OnPropertyChanged() volat pri pozadavku na projeveni zmeny pri nejake udalosti

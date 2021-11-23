@@ -28,5 +28,11 @@ namespace Reklamacka
 			mainPageViewModel.OnAppearing();
 		}
 
+		private void SearchBill(object sender, EventArgs e)
+		{
+
+			ListBills.ScrollTo(mainPageViewModel.GetBillByName(), ScrollToPosition.Start, true); 
+
+		}
 	}
 }

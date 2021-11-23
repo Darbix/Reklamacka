@@ -53,11 +53,14 @@
 					RowDefinitions="10, 50, *">
 					<Frame BackgroundColor="{StaticResource BcgBottomColor}" Padding="0" Grid.Row="0" Grid.RowSpan="3" CornerRadius="15">
 						<StackLayout>
-							<StackLayout Orientation="Horizontal">
-								<Button Margin="10" Text="reverse" Padding="0" HorizontalOptions="StartAndExpand" VerticalOptions="Start" TextColor="Black" HeightRequest="30" 
-									CornerRadius="25" WidthRequest="50" BackgroundColor="#bbbbbb" FontSize="10" Command="{Binding ReverseBills}"/>
+							<StackLayout Orientation="Horizontal" Padding="16,10,16,0">
+								<ImageButton Source="revert.png" Command="{Binding ReverseBills}" BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30"/>
+								
+								<Frame Padding="5" WidthRequest="150" VerticalOptions="Center" HorizontalOptions="EndAndExpand" BackgroundColor="#eeeeee" CornerRadius="10">
+									<Entry Text="{Binding NameToSearch}" WidthRequest="150" VerticalOptions="Center" Placeholder="Name to search"/>
+								</Frame>
+								<ImageButton Source="magnifier.png" Clicked="SearchBill" BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30"/>
 							</StackLayout>
-							
 						</StackLayout>
 					</Frame>
 					<Frame Grid.Row="2" BackgroundColor="{StaticResource BcgBottomColor}"/>

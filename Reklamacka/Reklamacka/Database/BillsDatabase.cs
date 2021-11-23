@@ -49,5 +49,6 @@ namespace Reklamacka.Database
 		{
 			return db.Table<Bill>().OrderByDescending(x => x.ExpirationDate).ToListAsync();
 		}
+
 	}
 }
