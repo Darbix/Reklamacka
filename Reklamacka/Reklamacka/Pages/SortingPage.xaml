@@ -1,12 +1,66 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Reklamacka.Pages.SortingPage">
-    <ContentPage.Content>
+			 xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit" 
+			 xmlns:converter="clr-namespace:Reklamacka.Converters"
+			 x:Class="Reklamacka.Pages.SortingPage">
+
+	<ContentPage.Resources>
+		<Color x:Key="BcgTop1Color">#5b62fb</Color>
+		<Color x:Key="BcgTop2Color">#000878</Color>
+		<Color x:Key="BcgBottomColor">#dddddd</Color>
+		<Color x:Key="ItemsRightColor">#3d44cf</Color>
+		<Color x:Key="ItemsLeftColor">#2b32ab</Color>
+		<Color x:Key="ItemButtonsColor">#ff0640</Color>
+		<Color x:Key="BottomButtonsColor">#ff0640</Color>
+
+		<ResourceDictionary>
+			<converter:ExpColorConverter x:Key="ExpToColor" />
+		</ResourceDictionary>
+	</ContentPage.Resources>
+
+	<ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+
+			<ListView Grid.Row="2" x:Name="ListBills" ItemsSource="{Binding Bills}" Margin="10,10,10,0" RowHeight="60"
+						>
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<ViewCell>
+							<StackLayout Padding="0,0,0,5">
+								<Grid VerticalOptions="FillAndExpand">
+									<Frame Padding="5" VerticalOptions="FillAndExpand" CornerRadius="15" BackgroundColor="{StaticResource ItemsRightColor}">
+
+										<StackLayout Orientation="Horizontal">
+											<Image Source="bill.png"/>
+											<Label Text="{Binding ProductName}" TextColor="White" FontSize="18" VerticalOptions="Center"/>
+											<Label Text="{Binding ExpirationDate, StringFormat='{0:Exp. dd/MM/yyyy}'}" TextColor="{Binding ExpirationDate, Converter={StaticResource ExpToColor}}" FontAttributes="Bold" FontSize="18" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/>
+										</StackLayout>
+									</Frame>
+
+									<Frame Padding="5" BackgroundColor="#77000000" VerticalOptions="FillAndExpand" CornerRadius="30" IsVisible="false">
+										<StackLayout Orientation="Horizontal">
+											<Button Text="Edit" FontSize="Default" FontAttributes="Bold" HorizontalOptions="EndAndExpand"
+														
+														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>
+											<Button Text="Delete" FontSize="Default" FontAttributes="Bold" HorizontalOptions="StartAndExpand"
+														
+														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>
+										</StackLayout>
+									</Frame>
+								</Grid>
+							</StackLayout>
+						</ViewCell>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+				<ListView.Behaviors>
+					<behaviors:EventToCommandBehavior
+						EventName="ItemTapped" 
+						Command="{Binding ItemTapped}"
+						CommandParameter="{Binding .}"/>
+				</ListView.Behaviors>
+			</ListView>
+
+		</StackLayout>
     </ContentPage.Content>
 </ContentPage>

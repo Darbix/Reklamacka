@@ -21,5 +21,6 @@ namespace Reklamacka.Pages
 			// pri vytvoreni viewmodelu se predava aktualne zvolena polozka z MainPage
 			BindingContext = new BillEditViewModel(Navigation, bill);
 		}
+
 	}
 }

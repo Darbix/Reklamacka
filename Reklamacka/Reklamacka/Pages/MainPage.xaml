@@ -98,9 +98,9 @@
 						</ListView.ItemTemplate>
 						<ListView.Behaviors>
 							<behaviors:EventToCommandBehavior
-						EventName="ItemTapped" 
-						Command="{Binding ItemTapped}"
-						CommandParameter="{Binding .}"/>
+								EventName="ItemTapped" 
+								Command="{Binding ItemTapped}"
+								CommandParameter="{Binding .}"/>
 						</ListView.Behaviors>
 					</ListView>
 
@@ -121,6 +121,8 @@
 			<StackLayout>
 				<Label Text="Menu" TextColor="White" HorizontalOptions="Center" VerticalOptions="Start" FontSize="Title"/>
 				<Button Text="Sorting" Command="{Binding SortingPagePush}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="StartAndExpand"
+					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
+				<Button Text="About" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="EndAndExpand"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
 			</StackLayout>
 		</ScrollView>

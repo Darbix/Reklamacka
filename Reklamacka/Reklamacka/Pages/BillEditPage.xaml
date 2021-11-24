@@ -16,7 +16,8 @@
 	<ContentPage.Content>
 		<StackLayout Margin="10" Spacing="2">
 			<Label Text="..." FontSize="Title" TextColor="OrangeRed" HorizontalOptions="Center"/>
-			<Entry Text="{Binding ProductName}" Placeholder="Product name"/>
+			<Entry Text="{Binding ProductName}" Placeholder="Product name" FontAttributes="Bold"/>
+			<Picker ItemsSource="{Binding BillTypes}" SelectedItem="{Binding ProductType}"/>
 
 			<StackLayout Orientation="Horizontal">
 				<Label Text="Purchase date: " FontSize="Medium" VerticalOptions="Center" Margin="0,0,10,0"/>
@@ -29,7 +30,7 @@
 
 			<Editor Text="{Binding Notes}" HeightRequest="80" BackgroundColor="#dddddd" VerticalOptions="StartAndExpand"/>
 
-			<Image x:Name="tempImg" Source="{Binding ImgBill}" HeightRequest="150" WidthRequest="150" />
+			<Image x:Name="tempImg" Source="{Binding ImgBill}" HeightRequest="150" WidthRequest="150" Scale="1.2"/>
 			
 			<Button Text="Pick" Command="{Binding PickPhoto}" HorizontalOptions="StartAndExpand" VerticalOptions="EndAndExpand"/>
 		</StackLayout>

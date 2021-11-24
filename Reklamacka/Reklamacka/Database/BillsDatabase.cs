@@ -41,13 +41,25 @@ namespace Reklamacka.Database
 		// Funkce k ziskani itemu jako list serazenych od nejnovejsich
 		public Task<List<Bill>> GetAllItemsAsync()
 		{
-			return db.Table<Bill>().OrderBy(x => x.ExpirationDate).ToListAsync();
+			return db.Table<Bill>().OrderBy(x => x.ExpirationDate).Where(x => x.ExpirationDate >= DateTime.Today).ToListAsync();
 		}
 
 		// Funkce k ziskani itemu jako list serazenych od nejstarsich
 		public Task<List<Bill>>GetAllFromOldestAsync()
 		{
-			return db.Table<Bill>().OrderByDescending(x => x.ExpirationDate).ToListAsync();
+			return db.Table<Bill>().OrderByDescending(x => x.ExpirationDate).Where(x => x.ExpirationDate >= DateTime.Today).ToListAsync();
+		}
+
+		// Funkce k ziskani proslych itemu od nejnovejsich
+		public Task<List<Bill>> GetAllExpiredAsync()
+		{
+			return db.Table<Bill>().OrderBy(x => x.ExpirationDate).Where(x => x.ExpirationDate < DateTime.Today).ToListAsync();
+		}
+
+		// Funkce k ziskani proslych itemu jako list serazenych od nejstarsich
+		public Task<List<Bill>> GetAllExpiredFromOldestAsync()
+		{
+			return db.Table<Bill>().OrderByDescending(x => x.ExpirationDate).Where(x => x.ExpirationDate < DateTime.Today).ToListAsync();
 		}
 
 	}

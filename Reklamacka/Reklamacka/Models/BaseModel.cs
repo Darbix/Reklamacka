@@ -30,5 +30,10 @@ namespace Reklamacka
 			}
 		}
 
+		/// <summary>
+		/// Vycet typu produktu 
+		/// </summary>
+		public enum ProductTypes { Other, Clothes, Electronics, Toys /* will be added later */ }
+
 	}
 }

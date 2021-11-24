@@ -13,10 +13,21 @@ namespace Reklamacka.Pages
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SortingPage : ContentPage
 	{
+		readonly SortingPageViewModel sortingPageViewModel;
+
 		public SortingPage()
 		{
 			InitializeComponent();
-			BindingContext = new SortingPageViewModel();
+
+			sortingPageViewModel = new SortingPageViewModel(Navigation);
+
+			BindingContext = sortingPageViewModel;
+		}
+
+		protected override void OnAppearing()
+		{
+			base.OnAppearing();
+			sortingPageViewModel.OnAppearing();
 		}
 	}
 }

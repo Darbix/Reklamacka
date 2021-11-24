@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using static Reklamacka.BaseModel;
 
 namespace Reklamacka.ViewModels
 {
@@ -25,6 +27,20 @@ namespace Reklamacka.ViewModels
 		public DateTime PurchaseDate { get; set; }      //!< Datum zakoupeni produktu
 		public DateTime ExpirationDate { get; set; }    //!< Doba konce platnosti zaruky
 		public string Notes { get; set; }               //!< Poznamky
+
+
+		//public enum ProductTypes { Clothes, Electronics, Toys /* will be added later */ }
+		public IList<ProductTypes> BillTypes { get; set; } = Enum.GetValues(typeof(ProductTypes)).Cast<ProductTypes>().ToList();
+		private ProductTypes productType;
+		public ProductTypes ProductType
+		{
+			get => productType;
+			set
+			{
+				productType = value;
+				OnPropertyChanged(nameof(ProductType));
+			}
+		}
 
 		private ImageSource imgBill;
 		/// <summary>
@@ -56,6 +72,7 @@ namespace Reklamacka.ViewModels
 			ExpirationDate = SelectedBill.ExpirationDate;
 			Notes = SelectedBill.Notes;
 			ImgBill = SelectedBill.GetImage();
+			ProductType = SelectedBill.ProductType;
 			//TODO dalsi vlastnosti k editaci
 
 			// vytvoreni Commandu pro ulozeni
@@ -73,6 +90,7 @@ namespace Reklamacka.ViewModels
 				SelectedBill.PurchaseDate = PurchaseDate;
 				SelectedBill.ExpirationDate = ExpirationDate;
 				SelectedBill.Notes = Notes;
+				SelectedBill.ProductType = ProductType;
 
 				//TODO dalsi vlastnosti
 

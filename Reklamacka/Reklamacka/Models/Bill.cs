@@ -5,11 +5,12 @@ using System.Text;
 using System.ComponentModel;
 using Xamarin.Forms;
 using System.IO;
+using static Reklamacka.BaseModel;
 
 namespace Reklamacka.Models
 {
 	public enum WarrantyType { OneMonth, TwoYears, ThreeYears /* will be added later */ }
-	public enum GoodsType { Clothes, Electronics, Toys /* will be added later */ }
+	//public enum ProductTypes { Clothes, Electronics, Toys /* will be added later */ }
 
 	public class Bill: INotifyPropertyChanged
 	{
@@ -20,6 +21,8 @@ namespace Reklamacka.Models
 		public int ID { get; set; }
 
 		public string ProductName { get; set; }     //!< Nazev produktu v uctence
+		public ProductTypes ProductType { get; set; }
+
 		public Byte[] ImgBill { get; set; }
 
 		private bool isSelected = false;
