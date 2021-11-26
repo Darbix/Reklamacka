@@ -10,7 +10,6 @@ using static Reklamacka.BaseModel;
 namespace Reklamacka.Models
 {
 	public enum WarrantyType { OneMonth, TwoYears, ThreeYears /* will be added later */ }
-	//public enum ProductTypes { Clothes, Electronics, Toys /* will be added later */ }
 
 	public class Bill: INotifyPropertyChanged
 	{
@@ -43,9 +42,11 @@ namespace Reklamacka.Models
 
 		public DateTime PurchaseDate { get; set; } = DateTime.Today;
 		public DateTime ExpirationDate { get; set; } = DateTime.Today;
-		public string WarrantyPath { get; set; }
+		//public string WarrantyPath { get; set; }
 
 		public string Notes { get; set; }
+
+		public string ShopUrl { get; set; }
 
 		public ImageSource GetImage()
 		{
@@ -56,7 +57,7 @@ namespace Reklamacka.Models
 
 
 		//TODO----- netestovana cast, zatim tedy bez dat -----
-
+		/*
 		//public Shop ProductShop { get; set; }
 		public string ShopName { get; private set; }
 		public string ShopLink { get; private set; }
@@ -103,7 +104,7 @@ namespace Reklamacka.Models
 			}
 		}
 		
-
+		*/
 
 		public event PropertyChangedEventHandler PropertyChanged;
 		public void OnPropertyChanged(string propertyName)

@@ -15,7 +15,6 @@
 	
 	<ContentPage.Content>
 		<StackLayout Margin="10" Spacing="2">
-			<Label Text="..." FontSize="Title" TextColor="OrangeRed" HorizontalOptions="Center"/>
 			<Entry Text="{Binding ProductName}" Placeholder="Product name" FontAttributes="Bold"/>
 			<Picker ItemsSource="{Binding BillTypes}" SelectedItem="{Binding ProductType}"/>
 
@@ -28,9 +27,15 @@
 				<DatePicker Format="dd/MM/yyyy" Date="{Binding ExpirationDate}" VerticalOptions="Center" WidthRequest="170"/>
 			</StackLayout>
 
-			<Editor Text="{Binding Notes}" HeightRequest="80" BackgroundColor="#dddddd" VerticalOptions="StartAndExpand"/>
+			<Editor Text="{Binding Notes}" HeightRequest="80" BackgroundColor="#dddddd" VerticalOptions="Start"/>
 
-			<Image x:Name="tempImg" Source="{Binding ImgBill}" HeightRequest="150" WidthRequest="150" Scale="1.2"/>
+			<Label Text="Bought here:" Margin="0,20,0,0" FontSize="Medium"/>
+			<StackLayout Orientation="Horizontal" VerticalOptions="StartAndExpand">
+				<Button Text="Web" Command="{Binding PushBrowserPage}"/>
+				<Entry WidthRequest="250" Margin="10,0,0,0" Placeholder="web link" Text="{Binding WebLink}"/>
+			</StackLayout>
+
+			<Image x:Name="tempImg" Source="{Binding ImgBill}" HeightRequest="20" WidthRequest="20" Scale="1.2"/>
 			
 			<Button Text="Pick" Command="{Binding PickPhoto}" HorizontalOptions="StartAndExpand" VerticalOptions="EndAndExpand"/>
 		</StackLayout>

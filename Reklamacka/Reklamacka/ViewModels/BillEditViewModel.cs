@@ -1,4 +1,5 @@
 using Reklamacka.Models;
+using Reklamacka.Pages;
 using Reklamacka.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,21 @@ namespace Reklamacka.ViewModels
 		public Command SaveNewBill { get; set; }        //!< Command k tlacitku pro ulozeni zmen/nove uctenky
 		public Command DeleteNewBill { get; set; }      //!< Command k tlacitku smazani vsech polozek TODO zatim vsechny
 		public Command PickPhoto { get; set; }          //!< Command k vyberu fotografie uctenky produktu
+		public Command PushBrowserPage { get; set; }     //!< Command k otevreni webu
 
 		public Bill SelectedBill { get; set; } = null;  //!< Aktualne zvoleny item z listu na hlavni strance
+
+		public string webLink;
+		public string WebLink
+		{
+			get => Website.Link;
+			set
+			{
+				Website.Link = value;
+				OnPropertyChanged(nameof(WebLink));
+			}
+		}
+		public Web Website = new Web();
 
 
 		public string ProductName { get; set; }         //!< Nazev produktu
@@ -73,6 +87,7 @@ namespace Reklamacka.ViewModels
 			Notes = SelectedBill.Notes;
 			ImgBill = SelectedBill.GetImage();
 			ProductType = SelectedBill.ProductType;
+			WebLink = SelectedBill.ShopUrl;
 			//TODO dalsi vlastnosti k editaci
 
 			// vytvoreni Commandu pro ulozeni
@@ -91,6 +106,7 @@ namespace Reklamacka.ViewModels
 				SelectedBill.ExpirationDate = ExpirationDate;
 				SelectedBill.Notes = Notes;
 				SelectedBill.ProductType = ProductType;
+				SelectedBill.ShopUrl = WebLink;
 
 				//TODO dalsi vlastnosti
 
@@ -137,6 +153,17 @@ namespace Reklamacka.ViewModels
 				// nacteni obrazku jako ImageSource do vlastnosti okna
 				ImgBill = SelectedBill.GetImage();
 			});
+
+			PushBrowserPage = new Command(async () =>
+			{
+				await Navigation.PushAsync(new BrowserPage(Website));
+			});
+		}
+
+		public void OnAppearing()
+		{
+			// potrebna aktualizace labelu na novy web
+			WebLink = Website.Link;
 		}
 
 		// event informujici o zmene, udalost volat pri zmenach hodnot vlastnosti
@@ -146,6 +173,12 @@ namespace Reklamacka.ViewModels
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
+	}
+
+	// trida pro web k predani jako reference, aby sel web menit z dalsiho okna
+	public class Web
+	{
+		public string Link { get; set; }
 	}
 
 }

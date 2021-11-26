@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit"
+			 x:Class="Reklamacka.Pages.FiltersSettingPage"
+			 x:Name="ThisPage">
+	
+	<ContentPage.Content>
+		<StackLayout Padding="5">
+
+			<behaviors:Expander>
+				<behaviors:Expander.Header>
+					<!--3d44cf-->
+					<Frame BackgroundColor="#444444" Padding="5" CornerRadius="5">
+						<StackLayout Orientation="Horizontal">
+							<Label Text="\/  " VerticalOptions="Center" TextColor="White"/>
+							<Label Text="Type" FontSize="18" TextColor="White" VerticalOptions="Center"/>
+						</StackLayout>
+					</Frame>
+				</behaviors:Expander.Header>
+
+				<StackLayout HeightRequest="150">
+					<Frame Padding="0" CornerRadius="5">
+						<ListView ItemsSource="{Binding ListTypes}" HasUnevenRows="True" BackgroundColor="#bbbbbb">
+							<ListView.ItemTemplate>
+								<DataTemplate>
+									<ViewCell>
+										<StackLayout Orientation="Horizontal" HeightRequest="25" Padding="5" VerticalOptions="Center">
+											<Grid>
+												<Button BackgroundColor="White" CornerRadius="11" HeightRequest="22" WidthRequest="22" VerticalOptions="Center" HorizontalOptions="Center"
+													Command="{Binding BindingContext.SelectChoice, Source={x:Reference ThisPage}}" CommandParameter="{Binding .}"/>
+												<Frame BackgroundColor="#ff0640" Padding="0" CornerRadius="7" HeightRequest="14" WidthRequest="14" 
+													   VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsChecked}"/>
+											
+											</Grid>
+
+											<Label Text="{Binding Type}" VerticalOptions="Center" TextColor="Black"/>
+										</StackLayout>
+									</ViewCell>
+								</DataTemplate>
+							</ListView.ItemTemplate>
+						</ListView>
+					</Frame>
+				</StackLayout>
+			</behaviors:Expander>
+			<Label Text="ok"/>
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>

@@ -62,5 +62,11 @@ namespace Reklamacka.Database
 			return db.Table<Bill>().OrderByDescending(x => x.ExpirationDate).Where(x => x.ExpirationDate < DateTime.Today).ToListAsync();
 		}
 
+		public Task<List<Bill>> GetAllAsync()
+		{
+			return db.Table<Bill>().OrderBy(x => x.ExpirationDate).ToListAsync();
+			
+		}
+
 	}
 }

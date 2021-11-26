@@ -81,7 +81,7 @@
 												</StackLayout>
 											</Frame>
 
-											<Frame Padding="5" BackgroundColor="#77000000" VerticalOptions="FillAndExpand" CornerRadius="30" IsVisible="{Binding IsSelected}">
+											<Frame Padding="5" BackgroundColor="#77000000" VerticalOptions="FillAndExpand" CornerRadius="15" IsVisible="{Binding IsSelected}">
 												<StackLayout Orientation="Horizontal">
 													<Button Text="Edit" FontSize="Default" FontAttributes="Bold" HorizontalOptions="EndAndExpand"
 														Command="{Binding BindingContext.EditBill}" BindingContext="{x:Reference ThisMainPage}"

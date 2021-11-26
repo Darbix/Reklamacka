@@ -22,5 +22,10 @@ namespace Reklamacka.Pages
 			BindingContext = new BillEditViewModel(Navigation, bill);
 		}
 
+		protected override void OnAppearing()
+		{
+			base.OnAppearing();
+			((BillEditViewModel)BindingContext).OnAppearing();
+		}
 	}
 }
