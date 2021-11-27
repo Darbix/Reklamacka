@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+			 xmlns:local="clr-namespace:Reklamacka.Models"
+			 x:Class="Reklamacka.Pages.ViewImagePage"
+			 NavigationPage.HasNavigationBar="false">
+
+	<ContentPage.Content>
+		<Grid BackgroundColor="#333333">
+			<local:PinchToZoomContainer >
+				<local:PinchToZoomContainer.Content>
+					<Image x:Name="tempImg" Source="{Binding ImgBill}"/>
+				</local:PinchToZoomContainer.Content>
+
+			</local:PinchToZoomContainer>
+			<Button WidthRequest="60" HeightRequest="60" VerticalOptions="End" HorizontalOptions="End" Margin="20" Clicked="Cancel_Clicked"
+					BackgroundColor="#555555" CornerRadius="30" Text="←" FontAttributes="Bold" FontSize="25" TextColor="White"/>
+		</Grid>
+	</ContentPage.Content>
+</ContentPage>

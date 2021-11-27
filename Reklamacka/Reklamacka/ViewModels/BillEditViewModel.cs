@@ -17,12 +17,14 @@ namespace Reklamacka.ViewModels
 	public class BillEditViewModel : INotifyPropertyChanged
 	{
 
-		public Command SaveNewBill { get; set; }        //!< Command k tlacitku pro ulozeni zmen/nove uctenky
-		public Command DeleteNewBill { get; set; }      //!< Command k tlacitku smazani vsech polozek TODO zatim vsechny
-		public Command PickPhoto { get; set; }          //!< Command k vyberu fotografie uctenky produktu
-		public Command PushBrowserPage { get; set; }     //!< Command k otevreni webu
+		public Command SaveNewBill { get; set; }                //!< Command k tlacitku pro ulozeni zmen/nove uctenky
+		public Command DeleteNewBill { get; set; }              //!< Command k tlacitku smazani vsech polozek TODO zatim vsechny
+		public Command PickPhoto { get; set; }                  //!< Command k vyberu fotografie uctenky produktu
+		public Command PushBrowserPage { get; set; }            //!< Command k otevreni webu
+		public Command CallNumber { get; set; }					//!< Command k presunuti do telefonovaci aplikace
+		public Command ViewImage { get; set; }
 
-		public Bill SelectedBill { get; set; } = null;  //!< Aktualne zvoleny item z listu na hlavni strance
+		public Bill SelectedBill { get; set; }                  //!< Aktualne zvoleny item z listu na hlavni strance
 
 		public string webLink;
 		public string WebLink
@@ -41,9 +43,10 @@ namespace Reklamacka.ViewModels
 		public DateTime PurchaseDate { get; set; }      //!< Datum zakoupeni produktu
 		public DateTime ExpirationDate { get; set; }    //!< Doba konce platnosti zaruky
 		public string Notes { get; set; }               //!< Poznamky
+		public string Email { get; set; }
+		public string PhoneNumber { get; set; }
+		public bool HasImage { get; set; }
 
-
-		//public enum ProductTypes { Clothes, Electronics, Toys /* will be added later */ }
 		public IList<ProductTypes> BillTypes { get; set; } = Enum.GetValues(typeof(ProductTypes)).Cast<ProductTypes>().ToList();
 		private ProductTypes productType;
 		public ProductTypes ProductType
@@ -81,6 +84,7 @@ namespace Reklamacka.ViewModels
 				SelectedBill = new Bill();
 
 			// Vyplneni kolonek v EditPage vlastnostmi existujici uctenky
+			// Nelze primy binding, protoze by se auto-savovalo
 			ProductName = SelectedBill.ProductName;
 			PurchaseDate = SelectedBill.PurchaseDate;
 			ExpirationDate = SelectedBill.ExpirationDate;
@@ -88,6 +92,9 @@ namespace Reklamacka.ViewModels
 			ImgBill = SelectedBill.GetImage();
 			ProductType = SelectedBill.ProductType;
 			WebLink = SelectedBill.ShopUrl;
+			HasImage = SelectedBill.HasImage;
+			Email = SelectedBill.Email;
+			PhoneNumber = SelectedBill.PhoneNumber == 0 ? "" : SelectedBill.PhoneNumber.ToString();
 			//TODO dalsi vlastnosti k editaci
 
 			// vytvoreni Commandu pro ulozeni
@@ -107,6 +114,9 @@ namespace Reklamacka.ViewModels
 				SelectedBill.Notes = Notes;
 				SelectedBill.ProductType = ProductType;
 				SelectedBill.ShopUrl = WebLink;
+				SelectedBill.HasImage = HasImage;
+				SelectedBill.Email = Email;
+				SelectedBill.PhoneNumber = PhoneNumber.Equals("")? 0 : Int32.Parse(PhoneNumber);
 
 				//TODO dalsi vlastnosti
 
@@ -131,6 +141,13 @@ namespace Reklamacka.ViewModels
 				{
 					Title = "Pick a bill photo"
 				});
+
+				if (img != null)
+				{
+					HasImage = true;
+				}
+				else
+					return;
 
 				// nacteni obrazku
 				Stream stream = await img.OpenReadAsync();
@@ -157,6 +174,24 @@ namespace Reklamacka.ViewModels
 			PushBrowserPage = new Command(async () =>
 			{
 				await Navigation.PushAsync(new BrowserPage(Website));
+			});
+
+			CallNumber = new Command(async () =>
+			{
+				try
+				{
+					await Launcher.TryOpenAsync("tel:" + PhoneNumber);
+				}
+				catch
+				{
+					await App.Current.MainPage.DisplayAlert("Problem", "Cannot make a phonecall", "OK");
+				}
+
+			});
+
+			ViewImage = new Command(async () =>
+			{
+				await Navigation.PushAsync(new ViewImagePage(SelectedBill));
 			});
 		}
 

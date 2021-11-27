@@ -22,7 +22,7 @@ namespace Reklamacka.Models
 		public string ProductName { get; set; }     //!< Nazev produktu v uctence
 		public ProductTypes ProductType { get; set; }
 
-		public Byte[] ImgBill { get; set; }
+		public byte[] ImgBill { get; set; }
 
 		private bool isSelected = false;
 		/// <summary>
@@ -47,9 +47,15 @@ namespace Reklamacka.Models
 		public string Notes { get; set; }
 
 		public string ShopUrl { get; set; }
+		public string Email { get; set; }
+		public int PhoneNumber { get; set; }
+
+		public bool HasImage { get; set; } = false;
 
 		public ImageSource GetImage()
 		{
+			if (ImgBill == null)
+				return null;
 			return ImageSource.FromStream(() => new MemoryStream(ImgBill));
 		}
 

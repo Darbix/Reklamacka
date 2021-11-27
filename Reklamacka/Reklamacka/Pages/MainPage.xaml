@@ -86,6 +86,9 @@
 													<Button Text="Edit" FontSize="Default" FontAttributes="Bold" HorizontalOptions="EndAndExpand"
 														Command="{Binding BindingContext.EditBill}" BindingContext="{x:Reference ThisMainPage}"
 														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>
+													<Button Text="View" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Center"
+														Command="{Binding BindingContext.ViewImage, Source={x:Reference ThisMainPage}}" IsVisible="{Binding HasImage}"
+														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>
 													<Button Text="Delete" FontSize="Default" FontAttributes="Bold" HorizontalOptions="StartAndExpand"
 														Command="{Binding BindingContext.DeleteBill}" BindingContext="{x:Reference ThisMainPage}"
 														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>

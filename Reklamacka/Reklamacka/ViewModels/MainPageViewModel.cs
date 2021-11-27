@@ -63,6 +63,7 @@ namespace Reklamacka.ViewModels
 		public Command ItemTapped { get; set; }         //!< Command pro reseni eventu kliknuti na polozku
 		public Command SortingPagePush { get; set; }    //!< Command pro presun na stranku trideni
 		public Command ReverseBills { get; set; }       //!< Command pro reverzi poradi uctenek
+		public Command ViewImage { get; set; }
 
 		private bool isFromOldest = false;
 
@@ -94,8 +95,10 @@ namespace Reklamacka.ViewModels
 			{
 				if (SelectedBill == null)
 					return;
-
-				SelectedBill.IsSelected = true;
+				if (SelectedBill.IsSelected)
+					SelectedBill.IsSelected = false;
+				else
+					SelectedBill.IsSelected = true;
 			});
 
 			// vytvoreni commandu pro presun na stranku tridici polozky uctenek
@@ -116,6 +119,11 @@ namespace Reklamacka.ViewModels
 					Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllFromOldestAsync());
 					isFromOldest = true;
 				}
+			});
+
+			ViewImage = new Command(async () =>
+			{
+				await Navigation.PushAsync(new ViewImagePage(SelectedBill));
 			});
 		}
 
