@@ -15,11 +15,14 @@ namespace Reklamacka.Pages
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class FiltersSettingPage : ContentPage
 	{
-		public FiltersSettingPage(ObservableCollection<FilterItem> ListTypes)
+		public FiltersSettingPage(
+			ObservableCollection<Bill> AllBills,
+			ObservableCollection<FilterItem> ListTypes,
+			ObservableCollection<FilterItem> ListUrls)
 		{
 			InitializeComponent();
 
-			BindingContext = new FiltersSettingViewModel(ListTypes);
+			BindingContext = new FiltersSettingViewModel(AllBills, ListTypes, ListUrls);
 
 		}
 	}

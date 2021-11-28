@@ -23,11 +23,11 @@
 		</ResourceDictionary>
 	</ContentPage.Resources>
 
-	<behaviors:SideMenuView>
+	<behaviors:SideMenuView State="{Binding MenuState}">
 		<!-- Hlavni cast okna -->
 		<ContentView BackgroundColor="White">
 
-			<StackLayout Padding="7,5,7,0">
+			<StackLayout Spacing="0">
 				<!-- Uplne pozadi -->
 				<StackLayout.Background>
 					<LinearGradientBrush StartPoint="0,0"
@@ -40,16 +40,19 @@
 				</StackLayout.Background>
 
 				<!-- Hlavicka -->
-				<StackLayout Orientation="Horizontal">
-					<Label Text="•••" FontSize="Title" TextColor="White" HeightRequest="50" HorizontalOptions="StartAndExpand"/>
-					<Label  Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:dd/MM/yyyy}'}" TextColor="#dddddd" HorizontalOptions="EndAndExpand" FontSize="16"/>
+				<Grid ColumnDefinitions="*,*,*" RowDefinitions="auto">
+					<Button Grid.Column="0" Text="•••" FontSize="Title" TextColor="White" HeightRequest="50" HorizontalOptions="Start" VerticalOptions="StartAndExpand"
+							Command="{Binding MenuButtonClicked}" WidthRequest="50" FontAttributes="Bold" BackgroundColor="Transparent"/>
+					<Image Grid.Column="1" Source="logo.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="CenterAndExpand" Margin="0,15,0,15"/>
 
-				</StackLayout>
-				<Label Text="Reklamacka" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" TextColor="white" VerticalOptions="StartAndExpand"/>
+					<Label Grid.Column="2" Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:dd/MM/yyyy}'}" TextColor="#dddddd" 
+							HorizontalOptions="End" VerticalOptions="StartAndExpand" FontSize="16" Margin="5"/>
 
-				
+				</Grid>
+				<!--<Label Text="Reklamacka" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" TextColor="white" VerticalOptions="StartAndExpand"/>-->
+
 				<!-- Mrizka pro kulate rohy, bar s tlacitky a list -->
-				<Grid Margin="0,30,0,0" VerticalOptions="StartAndExpand" HeightRequest="4000"
+				<Grid Margin="7,0,7,0" VerticalOptions="StartAndExpand" HeightRequest="4000"
 					RowDefinitions="10, 50, *">
 					<Frame BackgroundColor="{StaticResource BcgBottomColor}" Padding="0" Grid.Row="0" Grid.RowSpan="3" CornerRadius="15">
 						<StackLayout>

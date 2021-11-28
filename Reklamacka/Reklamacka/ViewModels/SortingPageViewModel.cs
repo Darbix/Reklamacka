@@ -29,6 +29,7 @@ namespace Reklamacka.ViewModels
 		public Command PushFiltersPage { get; set; }
 
 		public ObservableCollection<FilterItem> ListTypes { get; set; } = new ObservableCollection<FilterItem>();
+		public ObservableCollection<FilterItem> ListUrls { get; set; } = new ObservableCollection<FilterItem>();
 
 
 		public SortingPageViewModel(INavigation Navigation)
@@ -60,7 +61,8 @@ namespace Reklamacka.ViewModels
 
 			PushFiltersPage = new Command(async () =>
 			{
-				await Navigation.PushAsync(new FiltersSettingPage(ListTypes));
+				await Navigation.PushAsync(new FiltersSettingPage(
+					new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllAsync()), ListTypes, ListUrls));
 			});
 		}
 
@@ -72,21 +74,65 @@ namespace Reklamacka.ViewModels
 				return;
 			}
 
-			ObservableCollection<Bill> list = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllAsync());
-
-			//types
+			// Listy obsahujici pouze atributy, ktere maji polozky splnovat
 			List<ProductTypes> listTypes = new List<ProductTypes>();
-			for (int i = 0; i < ListTypes.Count; i++)
+			List<string> listUrls = new List<string>();
+
+
+			// TODO !!
+
+			// ---TYPY---
+			try
 			{
-				if (ListTypes[i].IsChecked)
+				// Vyber vsech, pokud zadny neni vybrany, nebo prave vybranych
+				if (ListTypes.First(x => x.IsChecked == true) != null)
 				{
-					listTypes.Add(ListTypes[i].Type);
+					for (int i = 0; i < ListTypes.Count; i++)
+					{
+						if (ListTypes[i].IsChecked)
+						{
+							listTypes.Add(ListTypes[i].Type);
+						}
+					}
+				}
+			}
+			catch
+			{
+				//neni-li nic vybrane, pridaji se vsechny filtry sekce, jako by byly vybrane
+				if (listTypes.Count == 0)
+				{
+					for (int i = 0; i < ListTypes.Count; i++)
+						listTypes.Add(ListTypes[i].Type);
 				}
 			}
 
-			Bills = new ObservableCollection<Bill>(list.OrderBy(x => x.ExpirationDate).Where(x => listTypes.Contains(x.ProductType)).ToList());
+			// ---URL adresy---
+			try
+			{
+				// Pokud nebyl zvolen alespon 1 filter sekce, jsou vybrany vsechny
+				if (ListUrls.First(x => x.IsChecked == true) != null)
+				{
+					for (int i = 0; i < ListUrls.Count; i++)
+					{
+						if (ListUrls[i].IsChecked)
+						{
+							listUrls.Add(ListUrls[i].ShopUrl);
+						}
+					}
+				}
+			}
+			catch
+			{
+				for (int i = 0; i < ListUrls.Count; i++)
+					listUrls.Add(ListUrls[i].ShopUrl);
+				listUrls.Add(null);
+			}
 
-			//Bills = list;
+
+			// Sortovany list objektu bill
+			Collection<Bill> list = new Collection<Bill>(await BaseModel.BillsDB.GetAllAsync());
+			Bills = new ObservableCollection<Bill>(list.Where(x => listUrls.Contains(x.ShopUrl) && listTypes.Contains(x.ProductType)).ToList());
+
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

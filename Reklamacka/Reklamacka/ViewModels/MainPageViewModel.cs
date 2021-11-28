@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
 
 namespace Reklamacka.ViewModels
@@ -57,13 +58,29 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
+		private SideMenuState menuState;
+		/// <summary>
+		/// Stav, ve kterem je vizualizovano bocni menu
+		/// </summary>
+		public SideMenuState MenuState
+		{
+			get => menuState;
+			set
+			{
+				menuState = value;
+				OnPropertyChanged(nameof(MenuState));
+			}
+		}
+
+
 		public Command AddNewBill { get; set; }         //!< Command pro tlacitko pridani nove uctenky
 		public Command EditBill { get; set; }           //!< Command pro tlacitko editace uctenky z listu
 		public Command DeleteBill { get; set; }         //!< Command pro smazani vybrane polozky
 		public Command ItemTapped { get; set; }         //!< Command pro reseni eventu kliknuti na polozku
 		public Command SortingPagePush { get; set; }    //!< Command pro presun na stranku trideni
 		public Command ReverseBills { get; set; }       //!< Command pro reverzi poradi uctenek
-		public Command ViewImage { get; set; }
+		public Command ViewImage { get; set; }			//!< Command k tlacitku pro zobrazeni obrazku
+		public Command MenuButtonClicked { get; set; }	//!< Command k tlacitku otevirajici bocni menu
 
 		private bool isFromOldest = false;
 
@@ -107,7 +124,7 @@ namespace Reklamacka.ViewModels
 				await Navigation.PushAsync(new SortingPage());
 			});
 
-			ReverseBills = new Command(async () =>
+			ReverseBills = new Command(async() =>
 			{
 				if (isFromOldest)
 				{
@@ -125,6 +142,11 @@ namespace Reklamacka.ViewModels
 			{
 				await Navigation.PushAsync(new ViewImagePage(SelectedBill));
 			});
+
+			MenuButtonClicked = new Command(() =>
+			{
+				MenuState = SideMenuState.LeftMenuShown;
+			});
 		}
 
 
@@ -135,11 +157,12 @@ namespace Reklamacka.ViewModels
 		{
 			// pri nacteni hlavni stranky se kolekce naplni novymi daty z databaze
 			// TODO - mozna lze resit nejak lepe
+			Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllFromOldestAsync());
 			if (isFromOldest)
 				Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllFromOldestAsync());
 			else
 				Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllItemsAsync());
-
+			
 			SelectedBill = null;
 		}
 

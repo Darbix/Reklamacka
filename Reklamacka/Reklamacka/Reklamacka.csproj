@@ -8,6 +8,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 	<DebugType>portable</DebugType>
 	<DebugSymbols>true</DebugSymbols>
+	<DefineConstants>DEBUG;TRACE</DefineConstants>
+	<Optimize>true</Optimize>
   </PropertyGroup>
 
   <ItemGroup>

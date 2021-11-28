@@ -7,13 +7,9 @@
 			 x:Name="ThisPage">
 
 	<ContentPage.Resources>
-		<Color x:Key="BcgTop1Color">#5b62fb</Color>
-		<Color x:Key="BcgTop2Color">#000878</Color>
 		<Color x:Key="BcgBottomColor">#dddddd</Color>
 		<Color x:Key="ItemsRightColor">#3d44cf</Color>
-		<Color x:Key="ItemsLeftColor">#2b32ab</Color>
 		<Color x:Key="ItemButtonsColor">#ff0640</Color>
-		<Color x:Key="BottomButtonsColor">#ff0640</Color>
 
 		<ResourceDictionary>
 			<converter:ExpColorConverter x:Key="ExpToColor" />
@@ -31,10 +27,10 @@
 	<ContentPage.Content>
         <StackLayout>
 			<StackLayout HeightRequest="80" Padding="5">
-				<Button Text="Filters" Command="{Binding PushFiltersPage}"/>
+				<Button Text="Filters" Command="{Binding PushFiltersPage}" HorizontalOptions="Center"/>
 			</StackLayout>
 
-			<ListView Grid.Row="2" x:Name="ListBills" ItemsSource="{Binding Bills}" Margin="10,10,10,0" RowHeight="60">
+			<ListView Grid.Row="2" x:Name="ListBills" ItemsSource="{Binding Bills}" Margin="10,0,10,0" RowHeight="65">
 				<ListView.ItemTemplate>
 					<DataTemplate>
 						<ViewCell>
@@ -44,7 +40,6 @@
 
 										<StackLayout Orientation="Horizontal">
 											<Frame BackgroundColor="Transparent" Padding="0" WidthRequest="30">
-												<!--<Image Source="bill.png" IsVisible="false" />-->
 												<Grid>
 													<Button Padding="0" BackgroundColor="White" CornerRadius="11" HeightRequest="22" WidthRequest="22" 
 														    VerticalOptions="Center" HorizontalOptions="Center" Command="{Binding BindingContext.SelectBill, Source={x:Reference ThisPage}}" CommandParameter="{Binding .}"/>
@@ -54,22 +49,38 @@
 												</Grid>
 											</Frame>
 
-											<StackLayout Spacing="0">
-												<Label Text="{Binding ProductName}" TextColor="White" FontSize="17" VerticalOptions="Start"/>
-												<Label FontSize="15" VerticalOptions="StartAndExpand">
-													<Label.FormattedText>
-														<FormattedString>
-															<Span Text="Type: " TextColor="#99bbff"/>
-															<Span Text="{Binding ProductType}"/>
-														</FormattedString>
-													</Label.FormattedText>
-												</Label>
-											</StackLayout>
+											<StackLayout>
+												<StackLayout Orientation="Horizontal">
+													<StackLayout Spacing="0" WidthRequest="95" Margin="0,0,3,0">
+														<Label Text="{Binding ProductName}" TextColor="White" FontSize="16" VerticalOptions="Start" LineBreakMode="TailTruncation"/>
+													
+													</StackLayout>
 											
-											<Label Text="{Binding ExpirationDate, StringFormat='{0:Exp. dd/MM/yyyy}'}" TextColor="{Binding ExpirationDate, Converter={StaticResource ExpToColor}}" FontAttributes="Bold" FontSize="18" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/>
+													<StackLayout HorizontalOptions="StartAndExpand">
+														<Label FontSize="14" VerticalOptions="StartAndExpand" LineBreakMode="TailTruncation">
+															<Label.FormattedText>
+																<FormattedString>
+																	<Span Text="Type: " TextColor="#000858"/>
+																	<Span Text="{Binding ProductType}" TextColor="#99bbff"/>
+																</FormattedString>
+															</Label.FormattedText>
+														</Label>
+													</StackLayout>
+												</StackLayout>
+
+												<Label Text="{Binding ShopUrl}" TextColor="#99bbff" LineBreakMode="TailTruncation" WidthRequest="200"/>
+											</StackLayout>
+
+											<StackLayout Spacing="0" HorizontalOptions="EndAndExpand">
+												<Label Text="{Binding PurchaseDate, StringFormat='{0:DOP. dd/MM/yyyy}'}" TextColor="#88ccff" FontAttributes="Bold"
+													FontSize="15" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand"/>
+												<Label Text="{Binding ExpirationDate, StringFormat='{0:EXP. dd/MM/yyyy}'}" TextColor="{Binding ExpirationDate, Converter={StaticResource ExpToColor}}" 
+												   VerticalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="15" HorizontalOptions="EndAndExpand"/>
+											</StackLayout>
 										</StackLayout>
 									</Frame>
 
+									<!--
 									<Frame Padding="5" BackgroundColor="#77000000" VerticalOptions="FillAndExpand" CornerRadius="30" IsVisible="false">
 										<StackLayout Orientation="Horizontal">
 											<Button Text="Edit" FontSize="Default" FontAttributes="Bold" HorizontalOptions="EndAndExpand"
@@ -80,6 +91,7 @@
 														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>
 										</StackLayout>
 									</Frame>
+									-->
 								</Grid>
 							</StackLayout>
 						</ViewCell>
