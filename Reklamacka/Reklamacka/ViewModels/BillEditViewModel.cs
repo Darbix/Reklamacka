@@ -1,54 +1,38 @@
 using Reklamacka.Models;
 using Reklamacka.Pages;
-using Reklamacka.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using static Reklamacka.BaseModel;
 
 namespace Reklamacka.ViewModels
 {
+	// trida pro web k predani jako reference, aby sel web menit z dalsiho okna
+	public class Web
+	{
+		public string Link { get; set; }
+	}
+
 	public class BillEditViewModel : INotifyPropertyChanged
 	{
-
-		public Command SaveNewBill { get; set; }                //!< Command k tlacitku pro ulozeni zmen/nove uctenky
-		public Command DeleteNewBill { get; set; }              //!< Command k tlacitku smazani vsech polozek TODO zatim vsechny
-		public Command PickPhoto { get; set; }                  //!< Command k vyberu fotografie uctenky produktu
-		public Command PushBrowserPage { get; set; }            //!< Command k otevreni webu
-		public Command CallNumber { get; set; }					//!< Command k presunuti do telefonovaci aplikace
-		public Command ViewImage { get; set; }
-
-		public Bill SelectedBill { get; set; }                  //!< Aktualne zvoleny item z listu na hlavni strance
-
-		public string webLink;
-		public string WebLink
-		{
-			get => Website.Link;
-			set
-			{
-				Website.Link = value;
-				OnPropertyChanged(nameof(WebLink));
-			}
-		}
-		public Web Website = new Web();
-
-
-		public string ProductName { get; set; }         //!< Nazev produktu
-		public DateTime PurchaseDate { get; set; }      //!< Datum zakoupeni produktu
-		public DateTime ExpirationDate { get; set; }    //!< Doba konce platnosti zaruky
-		public string Notes { get; set; }               //!< Poznamky
-		public string Email { get; set; }
-		public string PhoneNumber { get; set; }
-		public bool HasImage { get; set; }
-
-		public IList<ProductTypes> BillTypes { get; set; } = Enum.GetValues(typeof(ProductTypes)).Cast<ProductTypes>().ToList();
-		private ProductTypes productType;
+		public Command SaveBill { get; set; }			//!< Command to save a new bill
+		public Command DeleteBill { get; set; }			//!< Command to delete a selected bill (if active)
+		public Command PushBrowserPage { get; set; }	//!< Load a store's website in default browser
+		public Command PickPhoto { get; set; }			//!< Open a window to select a bill photo
+		public Command CallNumber { get; set; }			//!< Load a phone dialer
+		public Command ViewImage { get; set; }			//!< Display a bill photo
+		public Bill SelectedBill { get; set; }			//!< Edited bill
+		public string ProductName { get; set; }			//!< Goods's name 
+		public DateTime PurchaseDate { get; set; }		//!< Date of purchase
+		public DateTime ExpirationDate { get; set; }	//!< Date of expire
+		public string Notes { get; set; }				//!< Additional notes
+		public bool HasImage { get; set; }				//!< Status whether bill contains a photo
+		public IList<ProductTypes> BillTypes { get; set; } = LofTypes;	//!< List of product types
+		private ProductTypes productType;				//!< Chosen product type
 		public ProductTypes ProductType
 		{
 			get => productType;
@@ -59,7 +43,7 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
-		private ImageSource imgBill;
+		private ImageSource imgBill;					//!< Chosen photo
 		/// <summary>
 		/// Zdrojova data obrazku
 		/// </summary>
@@ -72,86 +56,97 @@ namespace Reklamacka.ViewModels
 				OnPropertyChanged(nameof(ImgBill));
 			}
 		}
-		//TODO dalsi vlastnosti objektu
+		public ObservableCollection<string> ShopNameList { get; private set; } = LofStoreNames;	//!< List of shop names
 
-		// konstruktor 
-		public BillEditViewModel(INavigation Navigation, Bill bill)
+		private Store shop;								//!< Chosen shop
+		public string ShopName							//!< Shop's name to display
 		{
-			// nastaveni SelectedBill na item zvoleny v listu v MainPage
-			SelectedBill = bill;
+			get => shop != null ? shop.Name : string.Empty;
+			set
+			{
+				shop = StoreDB.GetStoreAsync(value).Result;
+				Website.Link = shop != null ? shop.Link : string.Empty;
+				OnPropertyChanged(nameof(ShopName));
+				OnPropertyChanged(nameof(Weblink));
+				OnPropertyChanged(nameof(Email));
+				OnPropertyChanged(nameof(PhoneNumber));
+			}
+		}
 
-			if (SelectedBill == null)
-				SelectedBill = new Bill();
+		public string Weblink							//!< Shop's website to display
+		{
+			get => shop != null ? shop.Link : string.Empty; set { }
+		}
+		public Web Website = new Web();
 
-			// Vyplneni kolonek v EditPage vlastnostmi existujici uctenky
-			// Nelze primy binding, protoze by se auto-savovalo
+		public string Email								//!< Shop's email to display
+		{
+			get => shop != null ? shop.Email : string.Empty; set { }
+		}
+
+		public string PhoneNumber						//!< Shop's contact number to display
+		{
+			get => shop != null ? shop.PhoneNumber : string.Empty; set { }
+		}
+
+		public BillEditViewModel(INavigation navigation, Bill bill)
+		{
+			SelectedBill = bill ?? new Bill();
+
 			ProductName = SelectedBill.ProductName;
 			PurchaseDate = SelectedBill.PurchaseDate;
 			ExpirationDate = SelectedBill.ExpirationDate;
 			Notes = SelectedBill.Notes;
 			ImgBill = SelectedBill.GetImage();
 			ProductType = SelectedBill.ProductType;
-			WebLink = SelectedBill.ShopUrl;
-			HasImage = SelectedBill.HasImage;
-			Email = SelectedBill.Email;
-			PhoneNumber = SelectedBill.PhoneNumber == 0 ? "" : SelectedBill.PhoneNumber.ToString();
-			//TODO dalsi vlastnosti k editaci
+			Store selectedShop = StoreDB.GetStoreAsync(SelectedBill.ShopID).Result;
+			if (selectedShop != null)
+			{
+				shop = selectedShop;
+				ShopName = selectedShop.Name;
+				Weblink = selectedShop.Link;
+				Email = selectedShop.Email;
+				PhoneNumber = selectedShop.PhoneNumber;
+			}
 
-			// vytvoreni Commandu pro ulozeni
-			SaveNewBill = new Command(async () =>
+			SaveBill = new Command(async () =>
 			{
 				if (ProductName == null)
 				{
-					await App.Current.MainPage.DisplayAlert("Problem", "Missing product info", "OK");
+					await App.Current.MainPage.DisplayAlert("Problem", "Product name is needed!", "Ok");
 					return;
 				}
-
-				// Vypis vlastnosti, ktere se maji ulozit do existujici/nove uctenky
 				SelectedBill.ProductName = ProductName;
 				SelectedBill.IsSelected = false;
 				SelectedBill.PurchaseDate = PurchaseDate;
 				SelectedBill.ExpirationDate = ExpirationDate;
 				SelectedBill.Notes = Notes;
 				SelectedBill.ProductType = ProductType;
-				SelectedBill.ShopUrl = WebLink;
 				SelectedBill.HasImage = HasImage;
-				SelectedBill.Email = Email;
-				SelectedBill.PhoneNumber = PhoneNumber.Equals("")? 0 : Int32.Parse(PhoneNumber);
+				if (shop != null)
+					SelectedBill.ShopID = shop.ID;
+				_ = await BillsDB.SaveItemAsync(SelectedBill);
 
-				//TODO dalsi vlastnosti
-
-
-				// ulozeni/aktualizace do databaze
-				await BaseModel.BillsDB.SaveItemAsync(SelectedBill);
-
-				await Navigation.PopAsync();
+				_ = await navigation.PopAsync();
 			});
 
-			// vytvoreni Commandu pro smazani polozkek
-			DeleteNewBill = new Command(async () =>
+			DeleteBill = new Command(async () =>
 			{
-				// smazani vsech polozek v databazi
-				await BaseModel.BillsDB.DeleteAllItems<Bill>();
+				_ = await BillsDB.DeleteItemAsync(SelectedBill);
 			});
 
 			PickPhoto = new Command(async () =>
 			{
-				// ziskani objektu obrazkoveho vyberu
 				var img = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
 				{
 					Title = "Pick a bill photo"
 				});
-
 				if (img != null)
-				{
 					HasImage = true;
-				}
 				else
 					return;
 
-				// nacteni obrazku
 				Stream stream = await img.OpenReadAsync();
-
 				// konverze do pole bytu, aby se dal ulozit do databaze
 				byte[] buffer = new byte[16 * 1024];
 				byte[] imageBytes;  // vysledna binarni data
@@ -173,47 +168,31 @@ namespace Reklamacka.ViewModels
 
 			PushBrowserPage = new Command(async () =>
 			{
-				await Navigation.PushAsync(new BrowserPage(Website));
+				await navigation.PushAsync(new BrowserPage(Website));
 			});
 
 			CallNumber = new Command(async () =>
 			{
 				try
 				{
-					await Launcher.TryOpenAsync("tel:" + PhoneNumber);
+					await Launcher.TryOpenAsync($"tel: {PhoneNumber}");
 				}
 				catch
 				{
-					await App.Current.MainPage.DisplayAlert("Problem", "Cannot make a phonecall", "OK");
+					await App.Current.MainPage.DisplayAlert("Problem", "Cannot make a phone call", "OK");
 				}
-
 			});
 
 			ViewImage = new Command(async () =>
 			{
-				await Navigation.PushAsync(new ViewImagePage(SelectedBill));
+				await navigation.PushAsync(new ViewImagePage(SelectedBill));
 			});
 		}
 
-		public void OnAppearing()
-		{
-			// potrebna aktualizace labelu na novy web
-			WebLink = Website.Link;
-		}
-
-		// event informujici o zmene, udalost volat pri zmenach hodnot vlastnosti
 		public event PropertyChangedEventHandler PropertyChanged;
 		public void OnPropertyChanged(string propertyName)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
-
 	}
-
-	// trida pro web k predani jako reference, aby sel web menit z dalsiho okna
-	public class Web
-	{
-		public string Link { get; set; }
-	}
-
 }

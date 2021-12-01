@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodels="clr-namespace:Reklamacka.ViewModels" x:DataType="viewmodels:AddStoreViewModel"
+			 x:Class="Reklamacka.Pages.AddStorePage">
+    <ContentPage.Content>
+        <StackLayout>
+			<StackLayout Orientation="Horizontal">
+				<Label Text="ShopName"/>
+				<Entry Text="{Binding StoreName}" HorizontalOptions="FillAndExpand"/>
+			</StackLayout>
+			<StackLayout Orientation="Horizontal">
+				<Label Text="ShopLink"/>
+				<Entry Text="{Binding StoreLink}" HorizontalOptions="FillAndExpand"/>
+			</StackLayout>
+			<StackLayout Orientation="Horizontal">
+				<Label Text="Email"/>
+				<Entry Text="{Binding Email}" HorizontalOptions="FillAndExpand"/>
+			</StackLayout>
+			<StackLayout Orientation="Horizontal">
+				<Label Text="Phone Number"/>
+				<Entry Keyboard="Numeric" Text="{Binding PhoneNumber}" HorizontalOptions="FillAndExpand"/>
+			</StackLayout>
+			<Button Text="Save Shop" Command="{Binding SaveStore}"/>
+			<Button Text="Delete All" Command="{Binding DeleteAll}"/>
+		</StackLayout>
+    </ContentPage.Content>
+</ContentPage>
