@@ -1,11 +1,9 @@
 using Reklamacka.Models;
 using Reklamacka.Pages;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
 
@@ -72,7 +70,7 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
-
+		public Command AddShop { get; set; }
 		public Command AddNewBill { get; set; }         //!< Command pro tlacitko pridani nove uctenky
 		public Command EditBill { get; set; }           //!< Command pro tlacitko editace uctenky z listu
 		public Command DeleteBill { get; set; }         //!< Command pro smazani vybrane polozky
@@ -81,22 +79,27 @@ namespace Reklamacka.ViewModels
 		public Command ReverseBills { get; set; }       //!< Command pro reverzi poradi uctenek
 		public Command ViewImage { get; set; }			//!< Command k tlacitku pro zobrazeni obrazku
 		public Command MenuButtonClicked { get; set; }	//!< Command k tlacitku otevirajici bocni menu
+		public Command ArchivePage { get; set; }		//!< Command pro otevreni okna s proslymi uctenky
 
 		private bool isFromOldest = false;
 
 		// konstruktor
 		public MainPageViewModel(INavigation Navigation)
 		{
+			AddShop = new Command(async () =>
+			{
+				await Navigation.PushAsync(new AddStorePage(Navigation));
+			});
 			// vytvoreni commandu pridani nove uctenky - presun na stranku editace
 			AddNewBill = new Command(async () =>
 			{
-				await Navigation.PushAsync(new BillEditPage(null));
+				await Navigation.PushAsync(new BillEditPage(Navigation, null));
 			});
 
 			// vytvoreni commandu editace nove uctenky - presun na stranku editace existujici uctenky
 			EditBill = new Command(async () =>
 			{
-				await Navigation.PushAsync(new BillEditPage(SelectedBill));
+				await Navigation.PushAsync(new BillEditPage(Navigation, SelectedBill));
 			});
 
 			// inicializace tlacitka ke smazani polozky

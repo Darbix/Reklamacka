@@ -2,8 +2,6 @@ using Reklamacka.Models;
 using SQLite;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Reklamacka.Database
@@ -21,12 +19,6 @@ namespace Reklamacka.Database
 			db.CreateTableAsync<Bill>().Wait();
 		}
 		
-		/*public async Task<int> Count()
-		{
-			List<Bill> items = await GetAllAsync();
-			return items.Count();
-		}*/
-
 
 		//Insert and Update new record  
 		public Task<int> SaveItemAsync(Bill bill)
@@ -44,6 +36,12 @@ namespace Reklamacka.Database
 		{
 			return db.DeleteAllAsync<Bill>();
 		}
+
+		public Task<Bill> GetItemAsync(int id)
+			=> db.Table<Bill>().Where(i => i.ID == id).FirstOrDefaultAsync();
+
+		public Task<Bill> GetItemAsync(string name)
+			=> db.Table<Bill>().Where(i => i.ProductName == name).FirstOrDefaultAsync();
 
 		// Funkce k ziskani itemu jako list serazenych od nejnovejsich
 		public Task<List<Bill>> GetAllItemsAsync()

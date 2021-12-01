@@ -15,8 +15,8 @@
 		<Color x:Key="BcgBottomColor">#dddddd</Color>
 		<Color x:Key="ItemsRightColor">#3d44cf</Color>
 		<Color x:Key="ItemsLeftColor">#2b32ab</Color>
-		<Color x:Key="ItemButtonsColor">#ff0640</Color>
-		<Color x:Key="BottomButtonsColor">#ff0640</Color>
+		<Color x:Key="ItemButtonsColor">#af0000</Color>
+		<Color x:Key="BottomButtonsColor">#af0000</Color>
 
 		<ResourceDictionary>
 			<converter:ExpColorConverter x:Key="ExpToColor" />
@@ -126,7 +126,9 @@
 					behaviors:SideMenuView.Position="LeftMenu" behaviors:SideMenuView.MainViewOpacityFactor="0.7" behaviors:SideMenuView.MenuWidthPercentage="0.5">
 			<StackLayout>
 				<Label Text="Menu" TextColor="White" HorizontalOptions="Center" VerticalOptions="Start" FontSize="Title"/>
-				<Button Text="Sorting" Command="{Binding SortingPagePush}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="StartAndExpand"
+				<Button Text="Sorting" Command="{Binding SortingPagePush}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
+					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
+				<Button Text="Add New Shop" Command="{Binding AddShop}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
 				<Button Text="About" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="EndAndExpand"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
