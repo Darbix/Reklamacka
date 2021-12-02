@@ -137,10 +137,19 @@ namespace Reklamacka.ViewModels
 
 			PickPhoto = new Command(async () =>
 			{
-				var img = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
+				FileResult img;
+				try
 				{
-					Title = "Pick a bill photo"
-				});
+					img = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
+					{
+						Title = "Pick a bill photo"
+					});
+				}
+				catch
+				{
+					await App.Current.MainPage.DisplayAlert("Permission", "Permission is needed for loading a file", "OK");
+					return;
+				}
 				if (img != null)
 					HasImage = true;
 				else
