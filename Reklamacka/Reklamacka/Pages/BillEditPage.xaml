@@ -42,18 +42,29 @@
 							<Button Text="Add" Command="{Binding AddStorePush}" HorizontalOptions="End" VerticalOptions="Center" WidthRequest="70" HeightRequest="40"/>
 						</StackLayout>
 						<StackLayout Orientation="Horizontal" VerticalOptions="Start" HeightRequest="40">
-							<Button Text="Web" Command="{Binding PushBrowserPage}" WidthRequest="70" VerticalOptions="Center"/>
-							<Label Text="{Binding Weblink}" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" FontSize="20" BackgroundColor="#22000000"/>
+							<Label Text="{Binding Weblink}" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" FontSize="20" BackgroundColor="#22000000" TextColor="Blue" TextDecorations="Underline">
+								<Label.GestureRecognizers>
+									<TapGestureRecognizer Command="{Binding PushBrowserPage}"/>
+								</Label.GestureRecognizers>
+							</Label>
 						</StackLayout>
 
 						<StackLayout Orientation="Horizontal" HeightRequest="40">
 							<Label Text="Contact phone: " FontSize="Medium" VerticalOptions="Center" WidthRequest="130"/>
-							<Label Text="{Binding PhoneNumber}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" FontSize="20" BackgroundColor="#22000000"/>
-							<Button Text="Call" WidthRequest="70" Command="{Binding CallNumber}" IsVisible="{Binding IsCallAllowed}" VerticalOptions="Center"/>
+							<Label Text="{Binding PhoneNumber}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" FontSize="20" BackgroundColor="#22000000"
+								   TextColor="Blue" TextDecorations="Underline">
+								<Label.GestureRecognizers>
+									<TapGestureRecognizer Command="{Binding CallNumber}"/>
+								</Label.GestureRecognizers>
+							</Label>
 						</StackLayout>
 						<StackLayout Orientation="Horizontal" VerticalOptions="StartAndExpand">
 							<Label Text="Contact email:  " FontSize="Medium" VerticalOptions="Center" WidthRequest="130"/>
-							<Label Text="{Binding Email}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" FontSize="20" BackgroundColor="#22000000"/>
+							<Label Text="{Binding Email}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" FontSize="20" BackgroundColor="#22000000" TextDecorations="Underline" TextColor="Blue">
+								<Label.GestureRecognizers>
+									<TapGestureRecognizer Command="{Binding OpenEmailDefault}"/>
+								</Label.GestureRecognizers>
+							</Label>
 						</StackLayout>
 					</StackLayout>
 				</Frame>

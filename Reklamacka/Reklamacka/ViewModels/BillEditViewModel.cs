@@ -32,6 +32,7 @@ namespace Reklamacka.ViewModels
 		public Command PickFile { get; set; }
 		public Command AddStorePush { get; set; }
 		public Command PickNoneShop { get; set; }
+		public Command OpenEmailDefault { get; set; }
 
 		public Bill SelectedBill { get; set; }          //!< Edited bill
 		public string ProductName { get; set; }         //!< Goods's name 
@@ -174,7 +175,6 @@ namespace Reklamacka.ViewModels
 				// ULOZENI
 				// Vypis vlastnosti, ktere se maji ulozit do existujici/nove uctenky
 				SelectedBill.ProductName = ProductName;
-				SelectedBill.IsSelected = false;
 				SelectedBill.PurchaseDate = PurchaseDate;
 				SelectedBill.ExpirationDate = ExpirationDate;
 				SelectedBill.Notes = Notes;
@@ -250,7 +250,8 @@ namespace Reklamacka.ViewModels
 
 			PushBrowserPage = new Command(async () =>
 			{
-				await navigation.PushAsync(new BrowserPage(Website));
+				if (!string.IsNullOrEmpty(Weblink))
+					await navigation.PushAsync(new BrowserPage(Website));
 			});
 
 			AddStorePush = new Command(async () =>
@@ -260,13 +261,16 @@ namespace Reklamacka.ViewModels
 
 			CallNumber = new Command(async () =>
 			{
-				try
+				if (!string.IsNullOrEmpty(PhoneNumber))
 				{
-					await Launcher.TryOpenAsync($"tel: {PhoneNumber}");
-				}
-				catch
-				{
-					await App.Current.MainPage.DisplayAlert("Problem", "Cannot make a phone call", "OK");
+					try
+					{
+						await Launcher.TryOpenAsync($"tel: {PhoneNumber}");
+					}
+					catch
+					{
+						await App.Current.MainPage.DisplayAlert("Problem", "Cannot make a phone call", "OK");
+					}
 				}
 			});
 
@@ -381,6 +385,12 @@ namespace Reklamacka.ViewModels
 				Weblink = null;
 				IsCallAllowed = false;
 				ShopName = null;
+			});
+
+			OpenEmailDefault = new Command(async () =>
+			{
+				if (!string.IsNullOrEmpty(Email))
+				await Launcher.OpenAsync($"mailto:{Email}");
 			});
 		}
 
