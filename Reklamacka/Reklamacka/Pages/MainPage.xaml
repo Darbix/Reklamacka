@@ -10,13 +10,13 @@
 
 	<!-- Hodnoty nekterych barev -->
 	<ContentPage.Resources>
-		<Color x:Key="BcgTop1Color">#5b62fb</Color>
-		<Color x:Key="BcgTop2Color">#000878</Color>
-		<Color x:Key="BcgBottomColor">#dddddd</Color>
-		<Color x:Key="ItemsRightColor">#3d44cf</Color>
-		<Color x:Key="ItemsLeftColor">#2b32ab</Color>
-		<Color x:Key="ItemButtonsColor">#af0000</Color>
-		<Color x:Key="BottomButtonsColor">#af0000</Color>
+		<Color x:Key="BcgTop1Color">#35344a</Color>
+		<Color x:Key="BcgTop2Color">#35344a</Color>
+		<Color x:Key="BcgBottomColor">#ffffff</Color>
+		<Color x:Key="ItemsRightColor">#ebebee</Color>
+		<!--<Color x:Key="ItemsLeftColor">#2b32ab</Color>-->
+		<Color x:Key="ItemButtonsColor">#9595a0</Color>
+		<Color x:Key="BottomButtonsColor">#787885</Color>
 
 		<ResourceDictionary>
 			<converter:ExpColorConverter x:Key="ExpToColor" />
@@ -43,7 +43,7 @@
 				<Grid ColumnDefinitions="*,*,*" RowDefinitions="auto">
 					<Button Grid.Column="0" Text="•••" FontSize="Title" TextColor="White" HeightRequest="50" HorizontalOptions="Start" VerticalOptions="StartAndExpand"
 							Command="{Binding MenuButtonClicked}" WidthRequest="50" FontAttributes="Bold" BackgroundColor="Transparent"/>
-					<Image Grid.Column="1" Source="logo.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="CenterAndExpand" Margin="0,15,0,15"/>
+					<Image Grid.Column="1" Source="logo.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="CenterAndExpand" Margin="0,30,0,30"/>
 
 					<Label Grid.Column="2" Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:dd/MM/yyyy}'}" TextColor="#dddddd" 
 							HorizontalOptions="End" VerticalOptions="StartAndExpand" FontSize="16" Margin="5"/>
@@ -51,19 +51,25 @@
 				</Grid>
 				<!--<Label Text="Reklamacka" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" TextColor="white" VerticalOptions="StartAndExpand"/>-->
 
-				<!-- Mrizka pro kulate rohy, bar s tlacitky a list -->
-				<Grid VerticalOptions="StartAndExpand" HeightRequest="3000" RowDefinitions="10, 50, *">
-					<Frame BackgroundColor="{StaticResource BcgBottomColor}" Padding="0" Grid.Row="0" Grid.RowSpan="3" CornerRadius="15">
-						<StackLayout>
-							<StackLayout Orientation="Horizontal" Padding="20,10,20,0">
-								<ImageButton Source="revert.png" Command="{Binding ReverseBills}" BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30"/>
-								
-								<Frame Padding="5" WidthRequest="150" VerticalOptions="Center" HorizontalOptions="EndAndExpand" BackgroundColor="#eeeeee" CornerRadius="10">
-									<Entry Text="{Binding NameToSearch}" WidthRequest="150" VerticalOptions="Center" Placeholder="Name to search" TextColor="#444444" FontSize="15" Completed="Search_Completed"/>
-								</Frame>
-								<ImageButton Source="magnifier.png" Margin="4,0,4,0" Command="{Binding SearchBill}" x:Name="SearchButton" BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30"/>
+
+				<Frame BackgroundColor="#33ffffff" Padding="0" CornerRadius="10" Margin="20,0,20,30">
+					<StackLayout Orientation="Horizontal" Padding="5,0,0,0">
+						<ImageButton Source="revert.png" Command="{Binding ReverseBills}"  BackgroundColor="Transparent" Margin="5" WidthRequest="25" HeightRequest="25"/>
+
+						<Frame Padding="5" VerticalOptions="Center" HorizontalOptions="EndAndExpand" BackgroundColor="#33ffffff" CornerRadius="10">
+							<StackLayout Orientation="Horizontal">
+								<Entry Text="{Binding NameToSearch}" WidthRequest="150" Placeholder="Search"  Style="{StaticResource Normal-Font}" TextColor="White" PlaceholderColor="White" FontSize="15" Completed="Search_Completed"/>
+						
+								<ImageButton Source="magnifier.png" Margin="5" Command="{Binding SearchBill}" x:Name="SearchButton" BackgroundColor="Transparent" WidthRequest="25" HeightRequest="25"/>
 							</StackLayout>
-						</StackLayout>
+						</Frame>
+					</StackLayout>
+				</Frame>
+				
+				<!-- Mrizka pro kulate rohy, bar s tlacitky a list -->
+				<Grid VerticalOptions="StartAndExpand" HeightRequest="3000" RowDefinitions="20, 20, *">
+					<Frame BackgroundColor="{StaticResource BcgBottomColor}" Padding="15,0,0,0" Grid.Row="0" Grid.RowSpan="3" CornerRadius="35">
+						<Label Text="List of product bills" TextColor="{StaticResource BcgTop1Color}" Padding="15" Style="{StaticResource ExtraBold-Font}" FontSize="20" Margin="0,10,0,0"/>
 					</Frame>
 					<Frame Grid.Row="2" BackgroundColor="{StaticResource BcgBottomColor}"/>
 
@@ -71,20 +77,22 @@
 						<ListView.ItemTemplate>
 							<DataTemplate>
 								<ViewCell>
-									<StackLayout Padding="10,0,10,5">
+									<StackLayout Padding="15,0,15,4">
 										<Grid VerticalOptions="FillAndExpand">
-											<Frame Padding="0" VerticalOptions="FillAndExpand" CornerRadius="15" BackgroundColor="{StaticResource ItemsRightColor}">
+											<Frame Padding="0" VerticalOptions="FillAndExpand" CornerRadius="10" BackgroundColor="{StaticResource ItemsRightColor}" HasShadow="False">
 												<StackLayout Orientation="Horizontal">
-													<Image Source="bill.png" Margin="5"/>
-													<Label Text="{Binding ProductName}" Style="{StaticResource Normal-Font}" TextColor="White" FontSize="16" VerticalOptions="Center" LineBreakMode="TailTruncation"/>
-													<Frame HorizontalOptions="EndAndExpand" Padding="10,0,10,0" BackgroundColor="{Binding ExpirationDate, Converter={StaticResource ExpToColor}}">
-														<Label Text="{Binding ExpirationDate, StringFormat='{0:Exp. dd/MM/yyyy}'}" TextColor="#222222" 
-														   FontSize="15" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Style="{StaticResource ExtraBold-Font}"/>
+													<Frame Padding="0" CornerRadius="10" Margin="6" HasShadow="False" BackgroundColor="{Binding ExpirationDate, Converter={StaticResource ExpToColor}}">
+														<Image Source="bill.png" Margin="1"/>
+													</Frame>
+													<Label Text="{Binding ProductName}" Style="{StaticResource Bold-Font}" TextColor="Black" FontSize="16" VerticalOptions="Center" LineBreakMode="TailTruncation"/>
+													<Frame HorizontalOptions="EndAndExpand" Padding="10,0,10,0" BackgroundColor="#15000000" CornerRadius="10" Margin="6">
+														<Label Text="{Binding ExpirationDate, StringFormat='{0:Exp. dd/MM/yyyy}'}" TextColor="{StaticResource BcgTop1Color}" 
+														   FontSize="15" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Style="{StaticResource Bold-Font}"/>
 													</Frame>
 													</StackLayout>
 											</Frame>
 
-											<Frame Padding="5" BackgroundColor="#77000000" VerticalOptions="FillAndExpand" CornerRadius="15" IsVisible="{Binding IsSelected}">
+											<Frame Padding="5" BackgroundColor="#85000000" VerticalOptions="FillAndExpand" CornerRadius="10" IsVisible="{Binding IsSelected}">
 												<StackLayout Orientation="Horizontal">
 													<Button Text="Edit" FontSize="Default" FontAttributes="Bold" HorizontalOptions="EndAndExpand"
 														Command="{Binding BindingContext.EditBill}" BindingContext="{x:Reference ThisMainPage}"
@@ -112,7 +120,7 @@
 
 					<StackLayout Grid.Row="2" Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="EndAndExpand">
 						<Button Text="+" FontSize="30" FontAttributes="Bold" Command="{Binding AddNewBill}" 
-							Margin="0,20,20,20" BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="30" 
+							Margin="0,20,20,20" BackgroundColor="{StaticResource BcgTop1Color}" CornerRadius="30" 
 							HorizontalOptions="End" WidthRequest="60" HeightRequest="60" TextColor="White"/>
 					</StackLayout>
 				</Grid>
