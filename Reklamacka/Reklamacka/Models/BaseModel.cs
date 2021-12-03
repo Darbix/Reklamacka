@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Reklamacka
 {
@@ -17,16 +18,20 @@ namespace Reklamacka
 		/// </summary>
 		public enum ProductTypes { Other, Clothes, Electronics, Toys /* will be added later */ }
 		private static ObservableCollection<string> lofStoreNames;
-		public static ObservableCollection<string> LofStoreNames	//!< List of store names from the database
+		public static ObservableCollection<string> LofStoreNames    //!< List of store names from the database
 		{
 			get
 			{
 				// first time loading
 				if (lofStoreNames == null)
 				{
-					lofStoreNames = new ObservableCollection<string>(StoreDB.GetStoresListAlphabetOrderAsync().Result.Select(shop => shop.Name)); 
+					lofStoreNames = new ObservableCollection<string>(StoreDB.GetStoresListAlphabetOrderAsync().Result.Select(shop => shop.Name));
 				}
 				return lofStoreNames;
+			}
+			set
+			{
+				lofStoreNames = value;
 			}
 		}
 		public static IList<ProductTypes> LofTypes { get; set; } = Enum.GetValues(typeof(ProductTypes)).Cast<ProductTypes>().ToList();
@@ -61,5 +66,6 @@ namespace Reklamacka
 				return storeDB;
 			}
 		}
+
 	}
 }

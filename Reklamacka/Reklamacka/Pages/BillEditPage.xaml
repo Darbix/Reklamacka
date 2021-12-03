@@ -7,14 +7,14 @@
 		<StackLayout Orientation="Horizontal">
 			<Label Text="Product bill" TextColor="White" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
 			<Button Text="Save" Command="{Binding SaveBill}" TextColor="White" BackgroundColor="Transparent" 
-					CornerRadius="20" HorizontalOptions="End" BorderWidth="3" BorderColor="White"/>
+					CornerRadius="5" HorizontalOptions="End" BorderWidth="3" BorderColor="White"/>
 			<Button Text="Delete all" Command="{Binding DeleteBill}" TextColor="White" BackgroundColor="Transparent" 
-					CornerRadius="20" HorizontalOptions="End" BorderWidth="3" BorderColor="White"/>
+					CornerRadius="5" HorizontalOptions="End" BorderWidth="3" BorderColor="White"/>
 		</StackLayout>
 	</NavigationPage.TitleView>
 
 	<ContentPage.Content>
-		<ScrollView>
+		<ScrollView BackgroundColor="#bbbbbb">
 			<StackLayout Margin="10" Spacing="2">
 				<Entry Text="{Binding ProductName}" Placeholder="Product name" FontAttributes="Bold"/>
 				<Picker ItemsSource="{Binding BillTypes}" SelectedItem="{Binding ProductType}"/>
@@ -28,33 +28,44 @@
 					<DatePicker Format="dd/MM/yyyy" Date="{Binding ExpirationDate}" VerticalOptions="Center" WidthRequest="170"/>
 				</StackLayout>
 
-				<Editor Text="{Binding Notes}" HeightRequest="120" BackgroundColor="#dddddd" VerticalOptions="Start" Placeholder="Notes..."/>
+				<Frame Padding="0" BackgroundColor="#88ffffff" CornerRadius="4">
+					<Editor Text="{Binding Notes}" HeightRequest="120" VerticalOptions="Start" Placeholder="Notes..."/>
+				</Frame>
 
-				<Label Text="Store Contact infos" Margin="0,20,0,0" FontSize="Medium"/>
+				<Label Text="Store Contact info" Margin="0,20,0,4" FontSize="Medium"/>
+				<Frame BackgroundColor="#1a000000" CornerRadius="4" Padding="12,4,12,12">
+					<StackLayout>
+						<StackLayout Orientation="Horizontal">
+							<Label Text="Name: " FontSize="Medium" VerticalOptions="Center"/>
+							<Picker ItemsSource="{Binding ShopNameList}" SelectedItem="{Binding ShopName}"  HorizontalOptions="FillAndExpand"/>
+							<Button Text="✖" Command="{Binding PickNoneShop}" HorizontalOptions="End" VerticalOptions="Center" WidthRequest="40" HeightRequest="40" BackgroundColor="Transparent"/>
+							<Button Text="Add" Command="{Binding AddStorePush}" HorizontalOptions="End" VerticalOptions="Center" WidthRequest="70" HeightRequest="40"/>
+						</StackLayout>
+						<StackLayout Orientation="Horizontal" VerticalOptions="Start" HeightRequest="40">
+							<Button Text="Web" Command="{Binding PushBrowserPage}" WidthRequest="70" VerticalOptions="Center"/>
+							<Label Text="{Binding Weblink}" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" FontSize="20" BackgroundColor="#22000000"/>
+						</StackLayout>
+
+						<StackLayout Orientation="Horizontal" HeightRequest="40">
+							<Label Text="Contact phone: " FontSize="Medium" VerticalOptions="Center" WidthRequest="130"/>
+							<Label Text="{Binding PhoneNumber}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" FontSize="20" BackgroundColor="#22000000"/>
+							<Button Text="Call" WidthRequest="70" Command="{Binding CallNumber}" IsVisible="{Binding IsCallAllowed}" VerticalOptions="Center"/>
+						</StackLayout>
+						<StackLayout Orientation="Horizontal" VerticalOptions="StartAndExpand">
+							<Label Text="Contact email:  " FontSize="Medium" VerticalOptions="Center" WidthRequest="130"/>
+							<Label Text="{Binding Email}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" FontSize="20" BackgroundColor="#22000000"/>
+						</StackLayout>
+					</StackLayout>
+				</Frame>
+
+				<Button Text="view" Command="{Binding ViewImage}" IsVisible="{Binding HasImage}" HorizontalOptions="Start"/>
+
 				<StackLayout Orientation="Horizontal">
-					<Label Text="Name: " FontSize="Medium" VerticalOptions="Center"/>
-					<Picker ItemsSource="{Binding ShopNameList}" SelectedItem="{Binding ShopName}" HorizontalOptions="FillAndExpand"/>
+					<Button Text="Gallery" Command="{Binding PickPhoto}" CommandParameter="0" HorizontalOptions="Start" VerticalOptions="EndAndExpand"/>
+					<Button Text="Camera" Command="{Binding PickPhoto}" CommandParameter="1" HorizontalOptions="Start" VerticalOptions="EndAndExpand"/>
+					<Button Text="File" Command="{Binding PickFile}" HorizontalOptions="StartAndExpand" VerticalOptions="EndAndExpand"/>
 				</StackLayout>
-				<StackLayout Orientation="Horizontal" VerticalOptions="Start">
-					<Button Text="Web" Command="{Binding PushBrowserPage}" WidthRequest="70" HeightRequest="40" VerticalOptions="Center"/>
-					<Label Text="{Binding Weblink}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" FontSize="20"/>
-				</StackLayout>
-
-				<StackLayout Orientation="Horizontal">
-					<Label Text="Contact phone: " FontSize="Medium" VerticalOptions="Center" WidthRequest="130"/>
-					<Label Text="{Binding PhoneNumber}" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="20"/>
-					<Button Text="Call" WidthRequest="70" HeightRequest="40" Command="{Binding CallNumber}"/>
-				</StackLayout>
-				<StackLayout Orientation="Horizontal" VerticalOptions="StartAndExpand">
-					<Label Text="Contact email:  " FontSize="Medium" VerticalOptions="Center" WidthRequest="130"/>
-					<Label Text="{Binding Email}" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="20"/>
-				</StackLayout>
-
-				<Button Text="view" Command="{Binding ViewImage}" IsVisible="{Binding HasImage}"/>
-				<Image x:Name="tempImg" Source="{Binding ImgBill}" HeightRequest="20" WidthRequest="20" Scale="1.2"/>
-
-				<Button Text="Pick" Command="{Binding PickPhoto}" HorizontalOptions="StartAndExpand" VerticalOptions="EndAndExpand"/>
-
+				
 			</StackLayout>
 		</ScrollView>
 	</ContentPage.Content>

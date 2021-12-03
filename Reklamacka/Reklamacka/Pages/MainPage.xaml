@@ -52,7 +52,7 @@
 				<!--<Label Text="Reklamacka" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" TextColor="white" VerticalOptions="StartAndExpand"/>-->
 
 				<!-- Mrizka pro kulate rohy, bar s tlacitky a list -->
-				<Grid Margin="7,0,7,0" VerticalOptions="StartAndExpand" HeightRequest="4000"
+				<Grid Margin="7,0,7,0" VerticalOptions="StartAndExpand" HeightRequest="3000"
 					RowDefinitions="10, 50, *">
 					<Frame BackgroundColor="{StaticResource BcgBottomColor}" Padding="0" Grid.Row="0" Grid.RowSpan="3" CornerRadius="15">
 						<StackLayout>
@@ -60,9 +60,9 @@
 								<ImageButton Source="revert.png" Command="{Binding ReverseBills}" BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30"/>
 								
 								<Frame Padding="5" WidthRequest="150" VerticalOptions="Center" HorizontalOptions="EndAndExpand" BackgroundColor="#eeeeee" CornerRadius="10">
-									<Entry Text="{Binding NameToSearch}" WidthRequest="150" VerticalOptions="Center" Placeholder="Name to search"/>
+									<Entry Text="{Binding NameToSearch}" WidthRequest="150" VerticalOptions="Center" Placeholder="Name to search" TextColor="#444444" FontSize="15" Completed="Search_Completed"/>
 								</Frame>
-								<ImageButton Source="magnifier.png" Clicked="SearchBill" BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30"/>
+								<ImageButton Source="magnifier.png" Margin="4,0,0,0" Command="{Binding SearchBill}" x:Name="SearchButton" BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30"/>
 							</StackLayout>
 						</StackLayout>
 					</Frame>
@@ -75,12 +75,12 @@
 								<ViewCell>
 									<StackLayout Padding="0,0,0,5">
 										<Grid VerticalOptions="FillAndExpand">
-											<Frame Padding="5" VerticalOptions="FillAndExpand" CornerRadius="15" BackgroundColor="{StaticResource ItemsRightColor}">
-
+											<Frame Padding="5" VerticalOptions="FillAndExpand" CornerRadius="10" BackgroundColor="{StaticResource ItemsRightColor}">
 												<StackLayout Orientation="Horizontal">
 													<Image Source="bill.png"/>
-													<Label Text="{Binding ProductName}" TextColor="White" FontSize="18" VerticalOptions="Center"/>
-													<Label Text="{Binding ExpirationDate, StringFormat='{0:Exp. dd/MM/yyyy}'}" TextColor="{Binding ExpirationDate, Converter={StaticResource ExpToColor}}" FontAttributes="Bold" FontSize="18" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/>
+													<Label Text="{Binding ProductName}" TextColor="White" FontSize="15" VerticalOptions="Center" LineBreakMode="TailTruncation"/>
+													<Label Text="{Binding ExpirationDate, StringFormat='{0:Exp. dd/MM/yyyy}'}" TextColor="{Binding ExpirationDate, Converter={StaticResource ExpToColor}}" 
+														   FontAttributes="Bold" FontSize="15" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/>
 												</StackLayout>
 											</Frame>
 
@@ -112,8 +112,8 @@
 
 					<StackLayout Grid.Row="2" Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="EndAndExpand">
 						<Button Text="+" FontSize="30" FontAttributes="Bold" Command="{Binding AddNewBill}" 
-							Margin="0,20,20,20" BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="35" 
-							HorizontalOptions="End" WidthRequest="70" HeightRequest="70" TextColor="White"/>
+							Margin="0,20,20,20" BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="30" 
+							HorizontalOptions="End" WidthRequest="60" HeightRequest="60" TextColor="White"/>
 					</StackLayout>
 				</Grid>
 
@@ -124,11 +124,13 @@
 		<!-- Left menu bar-->
 		<ScrollView x:Name="LeftBar" Padding="10,20,10,20" BackgroundColor="#444444"
 					behaviors:SideMenuView.Position="LeftMenu" behaviors:SideMenuView.MainViewOpacityFactor="0.7" behaviors:SideMenuView.MenuWidthPercentage="0.5">
-			<StackLayout>
+			<StackLayout Spacing="10">
 				<Label Text="Menu" TextColor="White" HorizontalOptions="Center" VerticalOptions="Start" FontSize="Title"/>
+				<Button Text="Add New Shop" Command="{Binding AddShop}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
+					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
 				<Button Text="Sorting" Command="{Binding SortingPagePush}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
-				<Button Text="Add New Shop" Command="{Binding AddShop}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
+				<Button Text="Settings" Command="{Binding SettingsPagePush}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="StartAndExpand"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
 				<Button Text="About" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="EndAndExpand"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>

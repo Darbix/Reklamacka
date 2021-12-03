@@ -1,6 +1,8 @@
 using Reklamacka.Models;
 using SQLite;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using static Reklamacka.BaseModel;
 
@@ -19,7 +21,7 @@ namespace Reklamacka.Database
 		// Save new Store instance to database
 		public Task<int> SaveStoreInstanceAsync(Store store)
 		{
-			if (store != null && store.ID == 0)
+			if (store != null && store.ID == 0) //todo neradi ho pak abecedne
 				LofStoreNames.Add(store.Name);
 			return store.ID != 0 ? db.UpdateAsync(store) : db.InsertAsync(store);
 		}
@@ -44,8 +46,8 @@ namespace Reklamacka.Database
 		public Task<int> DeleteStoreAsync(Store store)
 		{
 			// Also clear from the list of store names
-			if (store != null && LofStoreNames.Contains(store.Name))
-				LofStoreNames.Remove(store.Name);
+			//if (store != null && LofStoreNames.Contains(store.Name))
+			//	LofStoreNames.Remove(store.Name);
 			return db.DeleteAsync(store);
 		}
 

@@ -42,11 +42,11 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
-		private String nameToSearch;
+		private string nameToSearch = "";
 		/// <summary>
 		/// String s hodnotou pro vyhledani polozky podle nazvu
 		/// </summary>
-		public String NameToSearch
+		public string NameToSearch
 		{
 			get => nameToSearch;
 			set
@@ -77,9 +77,11 @@ namespace Reklamacka.ViewModels
 		public Command ItemTapped { get; set; }         //!< Command pro reseni eventu kliknuti na polozku
 		public Command SortingPagePush { get; set; }    //!< Command pro presun na stranku trideni
 		public Command ReverseBills { get; set; }       //!< Command pro reverzi poradi uctenek
-		public Command ViewImage { get; set; }			//!< Command k tlacitku pro zobrazeni obrazku
-		public Command MenuButtonClicked { get; set; }	//!< Command k tlacitku otevirajici bocni menu
-		public Command ArchivePage { get; set; }		//!< Command pro otevreni okna s proslymi uctenky
+		public Command ViewImage { get; set; }          //!< Command k tlacitku pro zobrazeni obrazku
+		public Command MenuButtonClicked { get; set; }  //!< Command k tlacitku otevirajici bocni menu
+		public Command SettingsPagePush { get; set; }
+		public Command SearchBill { get; set; }
+		public Command ArchivePage { get; set; }        //!< Command pro otevreni okna s proslymi uctenkami
 
 		private bool isFromOldest = false;
 
@@ -127,16 +129,21 @@ namespace Reklamacka.ViewModels
 				await Navigation.PushAsync(new SortingPage());
 			});
 
-			ReverseBills = new Command(async() =>
+			SettingsPagePush = new Command(async () =>
+			{
+				await Navigation.PushAsync(new UserSettingsPage());
+			});
+
+			ReverseBills = new Command(() =>
 			{
 				if (isFromOldest)
 				{
-					Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllItemsAsync());
+					Bills = new ObservableCollection<Bill>(Bills.OrderBy(x => x.ExpirationDate)); //..(await BaseModel.BillsDB.GetAllItemsAsync())
 					isFromOldest = false;
 				}
 				else
 				{
-					Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllFromOldestAsync());
+					Bills = new ObservableCollection<Bill>(Bills.OrderByDescending(x => x.ExpirationDate)); //..(await BaseModel.BillsDB.GetAllFromOldestAsync())
 					isFromOldest = true;
 				}
 			});
@@ -150,6 +157,14 @@ namespace Reklamacka.ViewModels
 			{
 				MenuState = SideMenuState.LeftMenuShown;
 			});
+
+			SearchBill = new Command(async () =>
+			{
+				if (!NameToSearch.Equals(""))
+					Bills = new ObservableCollection<Bill>((await BaseModel.BillsDB.GetAllItemsAsync()).Where(x => x.ProductName.Contains(NameToSearch)).OrderBy(x => x.ProductName).ToList());
+				else
+					Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllItemsAsync());
+			});
 		}
 
 
@@ -160,23 +175,14 @@ namespace Reklamacka.ViewModels
 		{
 			// pri nacteni hlavni stranky se kolekce naplni novymi daty z databaze
 			// TODO - mozna lze resit nejak lepe
-			Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllFromOldestAsync());
 			if (isFromOldest)
 				Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllFromOldestAsync());
 			else
 				Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllItemsAsync());
-			
+
 			SelectedBill = null;
 		}
 
-		/// <summary>
-		/// Vyhleda pozadovany objekt Bill v seznamu na zaklade nazvu
-		/// </summary>
-		/// <returns> Object Bill, jehoz ProductName bylo vyhledano </returns>
-		public Bill GetBillByName()
-		{
-			return (Bill)Bills.Where(x => x.ProductName.Equals(NameToSearch)).FirstOrDefault();
-		}
 
 		// OnPropertyChanged() volat pri pozadavku na projeveni zmeny pri nejake udalosti
 		public event PropertyChangedEventHandler PropertyChanged;

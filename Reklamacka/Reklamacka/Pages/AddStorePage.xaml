@@ -3,7 +3,38 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodels="clr-namespace:Reklamacka.ViewModels" x:DataType="viewmodels:AddStoreViewModel"
 			 x:Class="Reklamacka.Pages.AddStorePage">
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Padding="15">
+
+			<Grid RowDefinitions="auto,auto,auto,auto,auto,*,*,*" ColumnDefinitions="*,2*" Margin="0,20,0,0">
+				<Label Grid.Row="0" Grid.Column="0" Text="Pick shop" VerticalOptions="Center"/>
+				<Frame Grid.Row="0" Grid.Column="1" Padding="0" BackgroundColor="#cccccc" CornerRadius="5" WidthRequest="200">
+					<Picker ItemsSource="{Binding ShopNameList}" SelectedItem="{Binding ShopName}" HorizontalOptions="FillAndExpand"/>
+				</Frame>
+
+				<Label Grid.Row="1" Grid.Column="0" Text="ShopName" VerticalOptions="Center"/>
+				<Entry Grid.Row="1" Grid.Column="1" Text="{Binding StoreName}" HorizontalOptions="FillAndExpand"/>
+
+				<Label Grid.Row="2" Grid.Column="0" Text="ShopLink" VerticalOptions="Center"/>
+				<Entry Grid.Row="2" Grid.Column="1" Text="{Binding StoreLink}" HorizontalOptions="FillAndExpand"/>
+
+				<Label Grid.Row="3" Grid.Column="0" Text="Email" VerticalOptions="Center"/>
+				<Entry Grid.Row="3" Grid.Column="1" Text="{Binding Email}" HorizontalOptions="FillAndExpand"/>
+
+				<Label Grid.Row="4" Grid.Column="0" Text="Phone Number" VerticalOptions="Center"/>
+				<Entry Grid.Row="4" Grid.Column="1" Keyboard="Numeric" Text="{Binding PhoneNumber}" HorizontalOptions="FillAndExpand"/>
+
+				<Button Grid.Row="6" Grid.ColumnSpan="2" Text="Save Shop" Command="{Binding SaveStore}" HorizontalOptions="Center"/>
+				<Button Grid.Row="7" Grid.ColumnSpan="2" Text="Delete All" Command="{Binding DeleteAll}" HorizontalOptions="Center"/>
+			</Grid>
+			
+			<!--
+			<StackLayout Orientation="Horizontal">
+				<Label Text="Pick shop" VerticalOptions="Center"/>
+				<Frame Padding="0" BackgroundColor="#cccccc" CornerRadius="5" WidthRequest="200">
+					<Entry Text="{Binding StoreName}" HorizontalOptions="Fill" />
+				</Frame>
+			</StackLayout>
+
 			<StackLayout Orientation="Horizontal">
 				<Label Text="ShopName"/>
 				<Entry Text="{Binding StoreName}" HorizontalOptions="FillAndExpand"/>
@@ -22,6 +53,8 @@
 			</StackLayout>
 			<Button Text="Save Shop" Command="{Binding SaveStore}"/>
 			<Button Text="Delete All" Command="{Binding DeleteAll}"/>
+			-->
 		</StackLayout>
+			
     </ContentPage.Content>
 </ContentPage>
