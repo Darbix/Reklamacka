@@ -41,11 +41,13 @@
 										<StackLayout Orientation="Horizontal">
 											<Frame BackgroundColor="Transparent" Padding="0" WidthRequest="30">
 												<Grid>
-													<Button Padding="0" BackgroundColor="White" CornerRadius="11" HeightRequest="22" WidthRequest="22" 
-														    VerticalOptions="Center" HorizontalOptions="Center" Command="{Binding BindingContext.SelectBill, Source={x:Reference ThisPage}}" CommandParameter="{Binding .}"/>
-													
+													<Frame BackgroundColor="White" Padding="0" CornerRadius="11" HeightRequest="22" WidthRequest="22" 
+													   VerticalOptions="Center" HorizontalOptions="Center"/>
 													<Frame BackgroundColor="#ff0640" Padding="0" CornerRadius="9" HeightRequest="18" WidthRequest="18" 
 													   VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsSelected}"/>
+
+													<Button Padding="0" BackgroundColor="Transparent" CornerRadius="11" HeightRequest="22" WidthRequest="22" BorderColor="White" BorderWidth="4"
+														    VerticalOptions="Center" HorizontalOptions="Center" Command="{Binding BindingContext.SelectBill, Source={x:Reference ThisPage}}" CommandParameter="{Binding .}"/>
 												</Grid>
 											</Frame>
 

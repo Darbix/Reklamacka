@@ -26,5 +26,10 @@ namespace Reklamacka.Pages
 		{
 			((BrowserViewModel)BindingContext).GetUrl(e);
 		}
+
+		private void WebView_Navigated(object sender, WebNavigatedEventArgs e)
+		{
+			((BrowserViewModel)BindingContext).Navigated(sender, e);
+		}
 	}
 }

@@ -2,6 +2,8 @@ using Reklamacka.Models;
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Reklamacka.Database
@@ -18,7 +20,6 @@ namespace Reklamacka.Database
 			// vytvoreni tabulky pro objekty Bills v databazi
 			db.CreateTableAsync<Bill>().Wait();
 		}
-		
 
 		//Insert and Update new record  
 		public Task<int> SaveItemAsync(Bill bill)

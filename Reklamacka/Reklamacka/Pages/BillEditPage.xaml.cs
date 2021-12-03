@@ -1,8 +1,15 @@
 using Reklamacka.ViewModels;
 using Reklamacka.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Collections.ObjectModel;
+using Xamarin.Essentials;
 
 namespace Reklamacka.Pages
 {
@@ -19,7 +26,12 @@ namespace Reklamacka.Pages
 		protected override void OnAppearing()
 		{
 			base.OnAppearing();
-			// ((BillEditViewModel)BindingContext).OnAppearing();
+			((BillEditViewModel)BindingContext).OnAppearing();
+		}
+		protected override void OnDisappearing()
+		{
+			((BillEditViewModel)BindingContext).OnDisappearing();
+			base.OnDisappearing();
 		}
 	}
 }

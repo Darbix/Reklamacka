@@ -56,6 +56,8 @@ namespace Reklamacka.Models
 			return ImageSource.FromStream(() => new MemoryStream(ImgBill));
 		}
 
+		public string FilePath { get; set; }
+
 		public event PropertyChangedEventHandler PropertyChanged;
 		public void OnPropertyChanged(string propertyName)
 		{

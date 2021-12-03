@@ -12,7 +12,7 @@
 
 	<ContentPage.Content>
 		<StackLayout>
-			<WebView Source="{Binding SourceUrl}" HeightRequest="1000" WidthRequest="100" Navigating="WebView_Navigating"/>
+			<WebView Source="{Binding SourceUrl}" HeightRequest="1000" WidthRequest="100" Navigating="WebView_Navigating" Navigated="WebView_Navigated"/>
 		</StackLayout>
     </ContentPage.Content>
 </ContentPage>
