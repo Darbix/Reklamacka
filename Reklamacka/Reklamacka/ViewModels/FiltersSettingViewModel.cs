@@ -8,67 +8,62 @@ using System.Text;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using static Reklamacka.BaseModel;
+using static Reklamacka.ViewModels.SortingPageViewModel;
 
 namespace Reklamacka.ViewModels
 {
-	public class FiltersSettingViewModel
+	public class FiltersSettingViewModel : INotifyPropertyChanged
 	{
-
-		//public List<ProductTypes> ListTypes { get; set; } = Enum.GetValues(typeof(ProductTypes)).Cast<ProductTypes>().ToList();
-
-		public ObservableCollection<FilterItem> ListTypes { get; set; }// = new ObservableCollection<FilterItem>();
-		public ObservableCollection<FilterItem> ListUrls { get; set; }// = new ObservableCollection<FilterItem>();
-
+		public ObservableCollection<FilterItem> ListTypes { get; set; }			//!< Product types filter
+		public ObservableCollection<FilterItem> ListStoreNames { get; set; }	//!< Stores filter
 		public Command SelectChoice { get; set; }
-		public ObservableCollection<Bill> AllBills { get; set; }
 
-		public FiltersSettingViewModel(
-			ObservableCollection<Bill> AllBills,
-			ObservableCollection<FilterItem> ListTypes,
-			ObservableCollection<FilterItem> ListUrls)
+		public FiltersSettingViewModel()
 		{
-			this.AllBills = AllBills;
-			this.ListUrls = ListUrls;
-			this.ListTypes = ListTypes;
-
-			if (AllBills == null || ListUrls == null || ListTypes == null)
-				return;
-
-			// Naplneni kolonek vyberu filtru typy
-			List<ProductTypes> types = Enum.GetValues(typeof(ProductTypes)).Cast<ProductTypes>().ToList();
-			if (ListTypes.Count == 0)
+			// init filters
+			if (FilterLofTypes == null)
 			{
-				for (int i = 0; i < types.Count; i++)
+				FilterLofTypes = new ObservableCollection<FilterItem>();
+				LofTypes.ToList().ForEach(x => FilterLofTypes.Add(new FilterItem
 				{
-					var item = new FilterItem() { Type = types[i] };
-					ListTypes.Add(item);
-				}
+					IsChecked = false,
+					Type = x
+				}));
 			}
 
-			// Naplneni kolonek vyberu filtru url adresami obchodu
-			if (ListUrls.Count == 0)
+			if (FilterLofStoreNames == null)
 			{
-				for (int i = 0; i < AllBills.Count; i++)
+				FilterLofStoreNames = new ObservableCollection<FilterItem>();
+
+				LofStoreNames.ToList().ForEach(x => FilterLofStoreNames.Add(new FilterItem
 				{
-					if (AllBills[i].ShopUrl == null)
-						continue;
-					var item = new FilterItem() { ShopUrl = AllBills[i].ShopUrl };
-					ListUrls.Add(item);
-				}
+					IsChecked = false,
+					ShopName = x
+				}));
 			}
+			ListTypes = FilterLofTypes;
+			ListStoreNames = FilterLofStoreNames;
 
-
-			// zvoleni Filtru za-checknutim
 			SelectChoice = new Command((f) =>
 			{
 				if (!(f is FilterItem filterItem))
 					return;
 
-				if (filterItem.IsChecked)
-					filterItem.IsChecked = false;
-				else
-					filterItem.IsChecked = true;
+				filterItem.IsChecked = !filterItem.IsChecked;
 			});
+		}
+
+		public async void OnDisappearing()
+		{
+			LofFilteredProductTypes = ListTypes.Where(x => x.IsChecked).Select(x => x.Type).ToList();
+			LofFilteredShopNames = ListStoreNames.Where(x => x.IsChecked).Select(item => item.ShopName).ToList();
+			await System.Threading.Tasks.Task.CompletedTask;
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+		public void OnPropertyChanged(string propertyName)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

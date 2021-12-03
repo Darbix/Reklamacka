@@ -10,7 +10,7 @@ namespace Reklamacka.Models
 	{
 		public string Name { get; set; }
 		public ProductTypes Type { get; set; }
-		public string ShopUrl { get; set; }
+		public string ShopName { get; set; }
 
 		private bool isChecked = false;
 		/// <summary>

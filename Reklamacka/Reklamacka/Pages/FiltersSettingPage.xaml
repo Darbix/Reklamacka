@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit" 
 			 x:Class="Reklamacka.Pages.FiltersSettingPage"
 			 x:Name="ThisPage">
 	
@@ -54,7 +54,7 @@
 
 				<StackLayout HeightRequest="170">
 					<Frame Padding="0" CornerRadius="5">
-						<ListView ItemsSource="{Binding ListUrls}" HasUnevenRows="True" BackgroundColor="#bbbbbb">
+						<ListView ItemsSource="{Binding ListStoreNames}" HasUnevenRows="True" BackgroundColor="#bbbbbb">
 							<ListView.ItemTemplate>
 								<DataTemplate>
 									<ViewCell>
@@ -65,7 +65,7 @@
 												<Frame BackgroundColor="#ff0640" Padding="0" CornerRadius="7" HeightRequest="14" WidthRequest="14" 
 													   VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsChecked}"/>
 											</Grid>
-											<Label Text="{Binding ShopUrl}" VerticalOptions="Center" TextColor="Black"/>
+											<Label Text="{Binding ShopName}" VerticalOptions="Center" TextColor="Black"/>
 										</StackLayout>
 									</ViewCell>
 								</DataTemplate>
@@ -74,9 +74,6 @@
 					</Frame>
 				</StackLayout>
 			</behaviors:Expander>
-
-
-			<Label Text="end"/>
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>
