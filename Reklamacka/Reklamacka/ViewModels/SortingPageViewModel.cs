@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using Xamarin.Forms;
 using static Reklamacka.BaseModel;
 
@@ -13,8 +12,12 @@ namespace Reklamacka.ViewModels
 {
 	public class SortingPageViewModel : INotifyPropertyChanged
 	{
-		private ObservableCollection<Bill> bills;
-		public ObservableCollection<Bill> Bills
+		public static ObservableCollection<FilterItem> FilterLofTypes { get; set; }								//!< Static collection of selected product types; used in Filter mode
+		public static ObservableCollection<FilterItem> FilterLofStoreNames { get; set; }						//!< Static collection of selected store names; used in Filter mode
+		public static List<string> LofFilteredShopNames { get; set; } = new List<string>();						//!< Bills of goods that were purchased from these stores will be displayed
+		public static List<ProductTypes> LofFilteredProductTypes { get; set; } = new List<ProductTypes>();		//!< Goods of selected categories will be displayed
+		private List<ItemBill> bills;
+		public List<ItemBill> Bills						//!< List of bills with additional properties
 		{
 			get => bills;
 			set
@@ -24,115 +27,95 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
+		private ObservableCollection<ItemBill> observeBills;
+		public ObservableCollection<ItemBill> ObserveBills		//!< Displayable bills
+		{
+			get => observeBills;
+			set
+			{
+				observeBills = value;
+				OnPropertyChanged(nameof(ObserveBills));
+			}
+		}
+
 		public Command SelectBill { get; set; }
 		public Command DeleteSelected { get; set; }
 		public Command PushFiltersPage { get; set; }
 
-		public ObservableCollection<FilterItem> ListTypes { get; set; } = new ObservableCollection<FilterItem>();
-		public ObservableCollection<FilterItem> ListUrls { get; set; } = new ObservableCollection<FilterItem>();
-
-
 		public SortingPageViewModel(INavigation Navigation)
 		{
+			// init collections of bills
+            var lofBills = BillsDB.GetAllAsync().Result;
+			if (Bills == null)
+                Bills = new List<ItemBill>();
+
+			if (lofBills != null)
+				lofBills.ForEach(bill => Bills.Add(new ItemBill(bill)));
+
+			// reset filters
+			FilterLofStoreNames = null;
+			FilterLofTypes = null;
+
 			SelectBill = new Command((s) =>
 			{
-				if (!(s is Bill bill))
+				if (!(s is ItemBill item))
 					return;
 
-				if (bill.IsSelected)
-					bill.IsSelected = false;
-				else
-					bill.IsSelected = true;
+				item.IsSelected = !item.IsSelected;
+				Console.WriteLine("Bill {0} is {1}", item.BillItem.ProductName, item.IsSelected ? "selected" : "not selected");
 			});
 
 			DeleteSelected = new Command(async () =>
 			{
-				var yesDelete = await App.Current.MainPage.DisplayAlert("Delete items", "are you sure you want to delete these items?", "Yes", "No");
+				bool yesDelete = await App.Current.MainPage.DisplayAlert("Delete items", "are you sure you want to delete these items?", "Yes", "No");
 				if (!yesDelete)
 					return;
-				for (int i = 0; i < Bills.Count; i++)
-				{
-					Bill toDelete = Bills[i];
-					if (toDelete.IsSelected)
-						await BaseModel.BillsDB.DeleteItemAsync(toDelete);
-				}
+
+				// delete selected items
+				Bills.Where(item => item.IsSelected).ToList().ForEach(item => BillsDB.DeleteItemAsync(item.BillItem));
 				OnAppearing();
 			});
 
 			PushFiltersPage = new Command(async () =>
 			{
-				await Navigation.PushAsync(new FiltersSettingPage(
-					new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllAsync()), ListTypes, ListUrls));
+				await Navigation.PushAsync(new FiltersSettingPage());
+				//	new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllAsync()), ListTypes, ListShopNames));
 			});
 		}
 
 		public async void OnAppearing()
 		{
-			if (Bills == null)
+			// supporting flag
+			bool valSet = false;
+
+			// reset values
+            Bills.ForEach(item => item.IsVisible = false);
+            Bills.ForEach(item => item.IsSelected = false);
+
+			// filter applied
+			// filter by product types
+			if (LofFilteredProductTypes != null && LofFilteredProductTypes.Count() > 0)
 			{
-				Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllAsync());
-				return;
+				// make visible items that are the same category as selected types
+				Bills.Where(item => LofFilteredProductTypes.Any(type => item.BillItem.ProductType == type)).ToList().ForEach(item => item.IsVisible = true);
+				valSet = true;
+			}
+			// filter by store name
+			if (LofFilteredShopNames != null && LofFilteredShopNames.Count() > 0)
+			{
+				// make visible items that were purchase from selected stores
+				Bills.Where(item => LofFilteredShopNames.Any(name => item.StoreName == name)).ToList().ForEach(item => item.IsVisible = true);
+				valSet = true;
 			}
 
-			// Listy obsahujici pouze atributy, ktere maji polozky splnovat
-			List<ProductTypes> listTypes = new List<ProductTypes>();
-			List<string> listUrls = new List<string>();
+			// if all filters are empty (all in default mode)
+			// set all items as visible
+			if (!valSet)
+				Bills.ForEach(item => item.IsVisible = true);
 
-
-			// TODO !!
-
-			// ---TYPY---
-			try
-			{
-				// Vyber vsech, pokud zadny neni vybrany, nebo prave vybranych
-				if (ListTypes.First(x => x.IsChecked == true) != null)
-				{
-					for (int i = 0; i < ListTypes.Count; i++)
-					{
-						if (ListTypes[i].IsChecked)
-						{
-							listTypes.Add(ListTypes[i].Type);
-						}
-					}
-				}
-			}
-			catch
-			{
-				//neni-li nic vybrane, pridaji se vsechny filtry sekce, jako by byly vybrane
-				if (listTypes.Count == 0)
-				{
-					for (int i = 0; i < ListTypes.Count; i++)
-						listTypes.Add(ListTypes[i].Type);
-				}
-			}
-
-			// ---URL adresy---
-			try
-			{
-				// Pokud nebyl zvolen alespon 1 filter sekce, jsou vybrany vsechny
-				if (ListUrls.First(x => x.IsChecked == true) != null)
-				{
-					for (int i = 0; i < ListUrls.Count; i++)
-					{
-						if (ListUrls[i].IsChecked)
-						{
-							listUrls.Add(ListUrls[i].ShopUrl);
-						}
-					}
-				}
-			}
-			catch
-			{
-				for (int i = 0; i < ListUrls.Count; i++)
-					listUrls.Add(ListUrls[i].ShopUrl);
-				listUrls.Add(null);
-			}
-
-
-			// Sortovany list objektu bill
-			Collection<Bill> list = new Collection<Bill>(await BaseModel.BillsDB.GetAllAsync());
-			Bills = new ObservableCollection<Bill>(list.Where(x => listUrls.Contains(x.ShopUrl) && listTypes.Contains(x.ProductType)).ToList());
-
+			// save only visible item into observable collection of bills
+			ObserveBills = new ObservableCollection<ItemBill>(Bills.Where(x => x.IsVisible));
+			await System.Threading.Tasks.Task.CompletedTask;
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
