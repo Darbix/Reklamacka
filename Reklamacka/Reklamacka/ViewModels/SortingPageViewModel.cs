@@ -15,7 +15,7 @@ namespace Reklamacka.ViewModels
 		public static ObservableCollection<FilterItem> FilterLofTypes { get; set; }								//!< Static collection of selected product types; used in Filter mode
 		public static ObservableCollection<FilterItem> FilterLofStoreNames { get; set; }						//!< Static collection of selected store names; used in Filter mode
 		public static List<string> LofFilteredShopNames { get; set; } = new List<string>();						//!< Bills of goods that were purchased from these stores will be displayed
-		public static List<ProductTypes> LofFilteredProductTypes { get; set; } = new List<ProductTypes>();		//!< Goods of selected categories will be displayed
+		public static List<ProductTypes> LofFilteredProductTypes { get; set; }									//!< Goods of selected categories will be displayed
 		private List<ItemBill> bills;
 		public List<ItemBill> Bills						//!< List of bills with additional properties
 		{
@@ -55,6 +55,8 @@ namespace Reklamacka.ViewModels
 			// reset filters
 			FilterLofStoreNames = null;
 			FilterLofTypes = null;
+			LofFilteredProductTypes = new List<ProductTypes>();
+			LofFilteredShopNames = new List<string>();
 
 			SelectBill = new Command((s) =>
 			{
@@ -72,7 +74,7 @@ namespace Reklamacka.ViewModels
 					return;
 
 				// delete selected items
-				Bills.Where(item => item.IsSelected).ToList().ForEach(item => BillsDB.DeleteItemAsync(item.BillItem));
+				Bills.Where(item => item.IsSelected).ToList().ForEach(item => { BillsDB.DeleteItemAsync(item.BillItem); Bills.Remove(item); });
 				OnAppearing();
 			});
 

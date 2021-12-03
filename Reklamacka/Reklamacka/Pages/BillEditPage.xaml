@@ -16,7 +16,7 @@
 	<ContentPage.Content>
 		<ScrollView BackgroundColor="#bbbbbb">
 			<StackLayout Margin="10" Spacing="2">
-				<Entry Text="{Binding ProductName}" Placeholder="Product name" FontAttributes="Bold"/>
+				<Entry Text="{Binding ProductName}" Placeholder="Product name"/>
 				<Picker ItemsSource="{Binding BillTypes}" SelectedItem="{Binding ProductType}"/>
 
 				<StackLayout Orientation="Horizontal">

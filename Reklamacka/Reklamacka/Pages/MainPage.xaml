@@ -52,36 +52,36 @@
 				<!--<Label Text="Reklamacka" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" TextColor="white" VerticalOptions="StartAndExpand"/>-->
 
 				<!-- Mrizka pro kulate rohy, bar s tlacitky a list -->
-				<Grid Margin="7,0,7,0" VerticalOptions="StartAndExpand" HeightRequest="3000"
-					RowDefinitions="10, 50, *">
+				<Grid VerticalOptions="StartAndExpand" HeightRequest="3000" RowDefinitions="10, 50, *">
 					<Frame BackgroundColor="{StaticResource BcgBottomColor}" Padding="0" Grid.Row="0" Grid.RowSpan="3" CornerRadius="15">
 						<StackLayout>
-							<StackLayout Orientation="Horizontal" Padding="16,10,16,0">
+							<StackLayout Orientation="Horizontal" Padding="20,10,20,0">
 								<ImageButton Source="revert.png" Command="{Binding ReverseBills}" BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30"/>
 								
 								<Frame Padding="5" WidthRequest="150" VerticalOptions="Center" HorizontalOptions="EndAndExpand" BackgroundColor="#eeeeee" CornerRadius="10">
 									<Entry Text="{Binding NameToSearch}" WidthRequest="150" VerticalOptions="Center" Placeholder="Name to search" TextColor="#444444" FontSize="15" Completed="Search_Completed"/>
 								</Frame>
-								<ImageButton Source="magnifier.png" Margin="4,0,0,0" Command="{Binding SearchBill}" x:Name="SearchButton" BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30"/>
+								<ImageButton Source="magnifier.png" Margin="4,0,4,0" Command="{Binding SearchBill}" x:Name="SearchButton" BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30"/>
 							</StackLayout>
 						</StackLayout>
 					</Frame>
 					<Frame Grid.Row="2" BackgroundColor="{StaticResource BcgBottomColor}"/>
 
-					<ListView Grid.Row="2" x:Name="ListBills" ItemsSource="{Binding Bills}" Margin="10,10,10,0" RowHeight="60"
-						SelectedItem="{Binding SelectedBill}">
+					<ListView Grid.Row="2" x:Name="ListBills" ItemsSource="{Binding Bills}" Margin="10,10,10,0" RowHeight="60" SelectedItem="{Binding SelectedBill}">
 						<ListView.ItemTemplate>
 							<DataTemplate>
 								<ViewCell>
-									<StackLayout Padding="0,0,0,5">
+									<StackLayout Padding="10,0,10,5">
 										<Grid VerticalOptions="FillAndExpand">
-											<Frame Padding="5" VerticalOptions="FillAndExpand" CornerRadius="10" BackgroundColor="{StaticResource ItemsRightColor}">
+											<Frame Padding="0" VerticalOptions="FillAndExpand" CornerRadius="15" BackgroundColor="{StaticResource ItemsRightColor}">
 												<StackLayout Orientation="Horizontal">
-													<Image Source="bill.png"/>
-													<Label Text="{Binding ProductName}" TextColor="White" FontSize="15" VerticalOptions="Center" LineBreakMode="TailTruncation"/>
-													<Label Text="{Binding ExpirationDate, StringFormat='{0:Exp. dd/MM/yyyy}'}" TextColor="{Binding ExpirationDate, Converter={StaticResource ExpToColor}}" 
-														   FontAttributes="Bold" FontSize="15" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/>
-												</StackLayout>
+													<Image Source="bill.png" Margin="5"/>
+													<Label Text="{Binding ProductName}" Style="{StaticResource Normal-Font}" TextColor="White" FontSize="16" VerticalOptions="Center" LineBreakMode="TailTruncation"/>
+													<Frame HorizontalOptions="EndAndExpand" Padding="10,0,10,0" BackgroundColor="{Binding ExpirationDate, Converter={StaticResource ExpToColor}}">
+														<Label Text="{Binding ExpirationDate, StringFormat='{0:Exp. dd/MM/yyyy}'}" TextColor="#222222" 
+														   FontSize="15" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Style="{StaticResource ExtraBold-Font}"/>
+													</Frame>
+													</StackLayout>
 											</Frame>
 
 											<Frame Padding="5" BackgroundColor="#77000000" VerticalOptions="FillAndExpand" CornerRadius="15" IsVisible="{Binding IsSelected}">
@@ -132,7 +132,7 @@
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
 				<Button Text="Settings" Command="{Binding SettingsPagePush}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="StartAndExpand"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
-				<Button Text="About" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="EndAndExpand"
+				<Button Text="Help" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="EndAndExpand"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
 			</StackLayout>
 		</ScrollView>

@@ -17,6 +17,7 @@ namespace Reklamacka.Pages
 		protected override void OnAppearing()
 		{
 			base.OnAppearing();
+			((AddStoreViewModel)BindingContext).OnAppearing();
 		}
 	}
 }

@@ -3,18 +3,30 @@ using Reklamacka.Models;
 using static Reklamacka.BaseModel;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Reklamacka.Pages;
 
 namespace Reklamacka.ViewModels
 {
 	public class AddStoreViewModel : ContentView
 	{
-		public Command SaveStore { get; set; }	//!< Command for saving new store to the database
-		public Command DeleteAll { get; set; }	//!< Command to clear store database; TODO: temporary solution
+		public Command SaveStore { get; set; }			//!< Command for saving new store to the database
+		public Command DeleteAll { get; set; }			//!< Command to clear store database; TODO: temporary solution
+		public Command PushBrowserPage { get; set; }
+		public Web Website = new Web();
+
 		private Store storeInstance;
-		public string StoreName { get; set; }	//!< New store's name
-		public string StoreLink { get; set; }	//!< New store's weblink
-		public string Email { get; set; }		//!< New store's contact email
-		public string PhoneNumber { get; set; } //!< New store's contact number
+		public string StoreName { get; set; }			//!< New store's name
+		public string StoreLink { get; set; }						//!< New store's weblink
+		/*{
+			get => Website.Link;
+			set
+			{
+				Website.Link = value;
+				OnPropertyChanged(nameof(StoreLink));
+			}
+		}*/
+		public string Email { get; set; }				//!< New store's contact email
+		public string PhoneNumber { get; set; }			//!< New store's contact number
 
 		public ObservableCollection<string> ShopNameList { get; private set; } = LofStoreNames;
 
@@ -96,6 +108,18 @@ namespace Reklamacka.ViewModels
 				BillsDB.GetAllItemsAsync().Result.ForEach(bill => bill.ShopID = 0);
 				await navig.PopAsync();
 			});
+
+			PushBrowserPage = new Command(async () =>
+			{
+				Website.Link = StoreLink;
+				await navig.PushAsync(new BrowserPage(Website));
+			});
+		}
+
+		public void OnAppearing()
+		{
+			StoreLink = Website.Link;
+			OnPropertyChanged(nameof(StoreLink));
 		}
 	}
 }

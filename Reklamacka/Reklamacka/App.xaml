@@ -9,5 +9,17 @@
 			<Setter Property="BarTextColor" Value="White" />
 		</Style>
 
+		<Style x:Key="Normal-Font" TargetType="Label">
+			<Setter Property="FontFamily" Value="OpenSans-Medium.ttf#OpenSans-Medium.ttf"/>
+		</Style>
+
+		<Style x:Key="Bold-Font" TargetType="Label">
+			<Setter Property="FontFamily" Value="OpenSans-Bold.ttf#OpenSans-Bold.ttf"/>
+		</Style>
+
+		<Style x:Key="ExtraBold-Font" TargetType="Label">
+			<Setter Property="FontFamily" Value="OpenSans-ExtraBold.ttf#OpenSans-ExtraBold.ttf"/>
+		</Style>
+
 	</Application.Resources>
 </Application>
