@@ -16,7 +16,6 @@ namespace Reklamacka.ViewModels
 		public Command PushBrowserPage { get; set; }
 		public Command DeleteStore { get; set; }
 		public Command Deselect { get; set; }
-		public Web Website = new Web();
 
 		private Store storeInstance;
 		public string StoreName { get; set; }			//!< New store's name
