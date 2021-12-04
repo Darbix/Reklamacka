@@ -117,18 +117,6 @@
 														HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding BindingContext.ViewImage, Source={x:Reference ThisMainPage}}" WidthRequest="70" CornerRadius="15" IsVisible="{Binding BillItem.HasImage}"/>
 													<Button Style="{StaticResource FontAwesome5Solid}" Text="&#xf1f8;" FontSize="Title" TextColor="White" BackgroundColor="{StaticResource ItemButtonsColor}"
 														HorizontalOptions="StartAndExpand" VerticalOptions="Center" Command="{Binding BindingContext.DeleteBill, Source={x:Reference ThisMainPage}}" WidthRequest="70" CornerRadius="15"/>
-													
-													<!--
-													<Button Text="Edit" FontSize="Default" FontAttributes="Bold" HorizontalOptions="EndAndExpand"
-														Command="{Binding BindingContext.EditBill}" BindingContext="{x:Reference ThisMainPage}"
-														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>
-													<Button Text="View" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Center"
-														Command="{Binding BindingContext.ViewImage, Source={x:Reference ThisMainPage}}" IsVisible="{Binding BillItem.HasImage}"
-														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>
-													<Button Text="Delete" FontSize="Default" FontAttributes="Bold" HorizontalOptions="StartAndExpand"
-														Command="{Binding BindingContext.DeleteBill}" BindingContext="{x:Reference ThisMainPage}"
-														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>
-													-->
 												</StackLayout>
 											</Frame>
 										</Grid>
@@ -162,11 +150,11 @@
 				<Label Text="Menu" Style="{StaticResource Bold-Font}" TextColor="{StaticResource IconColor}" HorizontalOptions="Center" VerticalOptions="Start" FontSize="Title"/>
 				<Button Text="Add New Shop" Command="{Binding AddShop}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White" Style="{StaticResource Bold-Font}"/>
-				<Button Text="Sorting" Command="{Binding SortingPagePush}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
+				<Button Text="Advance Search" Command="{Binding SortingPagePush}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
+					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White" Style="{StaticResource Bold-Font}"/>
+				<Button Text="Archive" Command="{Binding ArchivePage}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White" Style="{StaticResource Bold-Font}"/>
 				<Button Text="Settings" Command="{Binding SettingsPagePush}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="StartAndExpand"
-					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White" Style="{StaticResource Bold-Font}"/>
-				<Button Text="Help" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="EndAndExpand"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White" Style="{StaticResource Bold-Font}"/>
 			</StackLayout>
 		</ScrollView>
