@@ -8,6 +8,7 @@ using Xamarin.Forms;
 
 using Reklamacka.Models;
 using static Reklamacka.BaseModel;
+using Reklamacka.Pages;
 using System.Collections.ObjectModel;
 
 namespace Reklamacka.ViewModels
@@ -36,21 +37,41 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
+		private ItemBill selectedItem;
+		public ItemBill SelectedItem
+		{
+			get => selectedItem;
+			set
+			{
+				selectedItem = value;
+				OnPropertyChanged(nameof(SelectedItem));
+			}
+		}
+
 		public bool OlderFirst { get; private set; }
 		public string SearchedSubstring { get; set; }
 
-		public Command DeleteSelected;
-		public Command EditSelected;
-		public Command NameSearch;
-		public Command SortByDate;
+		public Command SelectBill { get; set; }
+		public Command DeleteSelected { get; set; }
+		public Command EditSelected { get; set; }
+		public Command NameSearch { get; set; }
+		public Command SortByDate { get; set; }
 
-		public ArchiveViewModel()
+		public ArchiveViewModel(INavigation navig)
 		{
 			LofBills = new List<ItemBill>();
-			EditSelected = new Command(async () =>
+			SelectBill = new Command((e) =>
 			{
-				// TODO:
-				await System.Threading.Tasks.Task.CompletedTask;
+				if (!(e is ItemBill item))
+					return;
+				item.IsSelected = !item.IsSelected;
+			});
+			EditSelected = new Command(async (e) =>
+			{
+				if (!(e is ItemBill item))
+					return;
+
+				await navig.PushAsync(new BillEditPage(navig, item.BillItem));
 			});
 			DeleteSelected = new Command(async () =>
 			{

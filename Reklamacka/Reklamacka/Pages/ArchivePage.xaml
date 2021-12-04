@@ -1,12 +1,114 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Reklamacka.Pages.ArchivePage">
-    <ContentPage.Content>
+			 xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit" 
+			 xmlns:converter="clr-namespace:Reklamacka.Converters"
+             x:Class="Reklamacka.Pages.ArchivePage"
+			 x:Name="ThisPage">
+
+	<ContentPage.Resources>
+		<Color x:Key="BcgBottomColor">#dddddd</Color>
+		<Color x:Key="ItemsRightColor">#3d44cf</Color>
+		<Color x:Key="ItemButtonsColor">#ff0640</Color>
+
+		<ResourceDictionary>
+			<converter:ExpColorConverter x:Key="ExpToColor" />
+		</ResourceDictionary>
+	</ContentPage.Resources>
+	<NavigationPage.TitleView>
+		<StackLayout Orientation="Horizontal" Padding="2">
+			<Label Text="History" TextColor="White" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+			<Button Text="Delete" WidthRequest="100" HorizontalOptions="Start" CornerRadius="10" BackgroundColor="#ff0640" TextColor="White"
+						Command="{Binding DeleteSelected}"/>
+		</StackLayout>
+	</NavigationPage.TitleView>
+	<ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+			<ListView Grid.Row="2" x:Name="ListBills" ItemsSource="{Binding ObserveBills}" Margin="10,0,10,0" RowHeight="65" SelectedItem="{Binding SelectedItem}">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<ViewCell>
+							<StackLayout Padding="0,0,0,5">
+								<Grid VerticalOptions="FillAndExpand">
+									<Frame Padding="5" VerticalOptions="FillAndExpand" CornerRadius="15" BackgroundColor="{StaticResource ItemsRightColor}">
+
+										<StackLayout Orientation="Horizontal">
+											<Frame BackgroundColor="Transparent" Padding="0" WidthRequest="30">
+												<Grid>
+													<Frame BackgroundColor="White" Padding="0" CornerRadius="11" HeightRequest="22" WidthRequest="22" 
+													   VerticalOptions="Center" HorizontalOptions="Center"/>
+													<Frame BackgroundColor="#ff0640" Padding="0" CornerRadius="9" HeightRequest="18" WidthRequest="18" 
+													   VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsSelected}"/>
+
+													<Button Padding="0" BackgroundColor="Transparent" CornerRadius="11" HeightRequest="22" WidthRequest="22" BorderColor="White" BorderWidth="4"
+														    VerticalOptions="Center" HorizontalOptions="Center" Command="{Binding BindingContext.SelectBill, Source={x:Reference ThisPage}}" CommandParameter="{Binding .}"/>
+												</Grid>
+											</Frame>
+
+											<Frame BackgroundColor="Transparent" Padding="0"
+												   behaviors:TouchEffect.Command="{Binding BindingContext.EditSelected, Source={x:Reference ThisPage}}" behaviors:TouchEffect.CommandParameter="{Binding .}">
+												   
+												<StackLayout Orientation="Horizontal">
+													<StackLayout>
+														<StackLayout Orientation="Horizontal">
+															<StackLayout Spacing="0" WidthRequest="95" Margin="0,0,3,0">
+																<Label Text="{Binding BillItem.ProductName}" TextColor="White" FontSize="16" VerticalOptions="Start" LineBreakMode="TailTruncation"/>
+															
+															</StackLayout>
+													
+															<StackLayout HorizontalOptions="StartAndExpand">
+																<Label FontSize="14" VerticalOptions="StartAndExpand" LineBreakMode="TailTruncation">
+																	<Label.FormattedText>
+																		<FormattedString>
+																			<Span Text="Type: " TextColor="#000858"/>
+																			<Span Text="{Binding BillItem.ProductType}" TextColor="#99bbff"/>
+																		</FormattedString>
+																	</Label.FormattedText>
+																</Label>
+															</StackLayout>
+														</StackLayout>
+
+														<Label Text="{Binding StoreName}" TextColor="#99bbff" LineBreakMode="TailTruncation" WidthRequest="200"/>
+													</StackLayout>
+
+													<StackLayout Spacing="0" HorizontalOptions="EndAndExpand">
+														<Label Text="{Binding BillItem.PurchaseDate, StringFormat='{0:DOP. dd/MM/yyyy}'}" TextColor="#88ccff" FontAttributes="Bold"
+															FontSize="15" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand"/>
+														<Label Text="{Binding BillItem.ExpirationDate, StringFormat='{0:EXP. dd/MM/yyyy}'}" TextColor="{Binding BillItem.ExpirationDate, Converter={StaticResource ExpToColor}}" 
+														   VerticalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="15" HorizontalOptions="EndAndExpand"/>
+													</StackLayout>
+												</StackLayout>
+											</Frame>
+										</StackLayout>
+									</Frame>
+
+								<!--
+									<Frame Padding="5" BackgroundColor="#77000000" VerticalOptions="FillAndExpand" CornerRadius="30" IsVisible="false">
+										<StackLayout Orientation="Horizontal">
+											<Button Text="Edit" FontSize="Default" FontAttributes="Bold" HorizontalOptions="EndAndExpand"
+														
+														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>
+											<Button Text="Delete" FontSize="Default" FontAttributes="Bold" HorizontalOptions="StartAndExpand"
+														
+														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>
+										</StackLayout>
+									</Frame>
+									-->
+								</Grid>
+							</StackLayout>
+						</ViewCell>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+				<!--
+				<ListView.Behaviors>
+					<behaviors:EventToCommandBehavior
+						EventName="ItemTapped" 
+						Command="{Binding ItemTapped}"
+						CommandParameter="{Binding .}"/>
+				</ListView.Behaviors>
+				-->
+			</ListView>
+
+		</StackLayout>
     </ContentPage.Content>
 </ContentPage>
