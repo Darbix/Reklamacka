@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Reklamacka.Pages.UserSettingsPage">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodels="clr-namespace:Reklamacka.ViewModels" x:DataType="viewmodels:UserSettingsViewModel"
+			 x:Class="Reklamacka.Pages.UserSettingsPage">
+	<NavigationPage.TitleView>
+		<StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+			<Button Text="Default" Command="{Binding ResetSettings}" TextColor="White" BackgroundColor="Transparent" 
+					CornerRadius="5" HorizontalOptions="End" BorderWidth="3" BorderColor="White" Margin="0,0,20,0"/>
+		</StackLayout>
+	</NavigationPage.TitleView>
     <ContentPage.Content>
         <StackLayout Padding="0,30,0,30" BackgroundColor="#dddddd">
 			<Label Text="Settings" HorizontalOptions="Center" FontSize="Title" TextColor="#444444" Margin="10"/>
@@ -17,8 +23,21 @@
 				<Switch Grid.Row="2" Grid.Column="1" ThumbColor="#bbbbbb" HorizontalOptions="StartAndExpand" IsToggled="{Binding IsOnAlowColors}" OnColor="#ff0640"/>
 
 			</Grid>
-			<Button Text="Default" VerticalOptions="EndAndExpand" HorizontalOptions="Center" BackgroundColor="#bbbbbb" CornerRadius="3" Command="{Binding ResetSettings}"/>
+
+			<Label Text="About" FontSize="Title" HorizontalOptions="Center"/>
+			<Label Text="This application serves as submission for a group project of class ITU at FIT, BUT 2021/2022" FontSize="Medium" Margin="10"/>
+			<StackLayout Margin="10">
+				<Label Text="Authors" FontSize="Large" Margin="0,0,0,-5"/>
+				<Label Text="{Binding Authors}" FontSize="Medium"/>
+				<Label Text="Link to repo" FontSize="Large" Margin="0,10,0,-5"/>
+				<Label Text="{Binding GitHubLink.Link}" FontSize="Medium" TextColor="Blue" TextDecorations="Underline">
+					<Label.GestureRecognizers>
+						<TapGestureRecognizer Command="{Binding ShowRepoPage}"/>
+					</Label.GestureRecognizers>
+				</Label>
+			</StackLayout>
 
 		</StackLayout>
+
     </ContentPage.Content>
 </ContentPage>

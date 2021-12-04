@@ -6,12 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Reklamacka.Pages;
 
 namespace Reklamacka.ViewModels
 {
 	public class UserSettingsViewModel: INotifyPropertyChanged
 	{
+		public Web GitHubLink { get; private set; } = new Web() { Link = @"https://github.com/Darbix/Reklamacka" };
+		public string Authors { get; private set; } = "Kedra David (xkedra00)\nDo Hung (xdohun00)";
 		public Command ResetSettings { get; set; }
+		public Command ShowRepoPage { get; set; }
 
 		public bool IsOnAutoDelete 
 		{
@@ -58,7 +62,7 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
-		public UserSettingsViewModel() 
+		public UserSettingsViewModel()
 		{
 			ResetSettings = new Command(() =>
 			{
@@ -68,6 +72,11 @@ namespace Reklamacka.ViewModels
 				IsOnAutoDelete = IsOnAutoDelete;
 				IsOnNotifications = IsOnNotifications;
 				IsOnAlowColors = IsOnAlowColors;
+			});
+
+			ShowRepoPage = new Command(async () =>
+			{
+				await App.Current.MainPage.Navigation.PushAsync(new BrowserPage(GitHubLink));
 			});
 		}
 
