@@ -49,11 +49,37 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
-		public Command SelectBill { get; set; }
-		public Command DeleteSelected { get; set; }
-		public Command PushFiltersPage { get; set; }
-		public Command EditBill { get; set; }
-		public Command b { get; set; } = new Command(() => { Console.WriteLine("b"); });
+		private bool nameByAlpha;
+		public bool NameByAlpha
+		{
+			get => nameByAlpha;
+			set
+			{
+				nameByAlpha = value;
+				OnPropertyChanged(nameof(NameByAlpha));
+			}
+		}
+
+		public string SearchSubstring;		//!< string for name filter
+
+		private bool byExpDate;
+		public bool ByExpDate
+		{
+			get => byExpDate;
+			set
+			{
+				byExpDate = value;
+				OnPropertyChanged(nameof(ByExpDate));
+			}
+		}
+
+		public Command SelectBill { get; set; }			//!< Change ItemBill.IsSelected property
+		public Command DeleteSelected { get; set; }		//!< Delete items that are selected
+		public Command PushFiltersPage { get; set; }	//!< Open new page
+		public Command EditBill { get; set; }			//!< Edit tapped item
+		public Command SortByExpDate { get; set; }		//!< Sort visible items by expiration date
+		public Command SortByName { get; set; }			//!< Sort visible items by name
+		public Command SearchName { get; set; }			//!< Filter items by given string
 
 		public SortingPageViewModel(INavigation Navigation)
 		{
@@ -70,6 +96,8 @@ namespace Reklamacka.ViewModels
 			FilterLofTypes = null;
 			LofFilteredProductTypes = new List<ProductTypes>();
 			LofFilteredShopNames = new List<string>();
+			ByExpDate = true;
+			NameByAlpha = true;
 
 			EditBill = new Command(async (e) =>
 			{
@@ -100,7 +128,38 @@ namespace Reklamacka.ViewModels
 			PushFiltersPage = new Command(async () =>
 			{
 				await Navigation.PushAsync(new FiltersSettingPage());
-				//	new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllAsync()), ListTypes, ListShopNames));
+			});
+
+			SortByExpDate = new Command(async () =>
+			{
+				if (ObserveBills == null || !ObserveBills.Any())
+					return;
+				if (ByExpDate)
+					ObserveBills = new ObservableCollection<ItemBill>(ObserveBills.OrderBy(item => item.BillItem.ExpirationDate).ToList());
+				else
+					ObserveBills = new ObservableCollection<ItemBill>(ObserveBills.OrderByDescending(item => item.BillItem.ExpirationDate).ToList());
+				ByExpDate = !ByExpDate;
+				await System.Threading.Tasks.Task.CompletedTask;
+			});
+			SortByName = new Command(async () =>
+			{
+				if (ObserveBills == null || !ObserveBills.Any())
+					return;
+				if (NameByAlpha)
+					ObserveBills = new ObservableCollection<ItemBill>(ObserveBills.OrderBy(item => item.BillItem.ProductName).ToList());
+				else
+					ObserveBills = new ObservableCollection<ItemBill>(ObserveBills.OrderByDescending(item => item.BillItem.ProductName).ToList());
+				NameByAlpha = !NameByAlpha;
+				await System.Threading.Tasks.Task.CompletedTask;
+			});
+
+			SearchName = new Command(async () =>
+			{
+				if (!string.IsNullOrWhiteSpace(SearchSubstring))
+					Bills.Where(item => item.BillItem.ProductName.Contains(SearchSubstring)).ToList().ForEach(item => item.IsVisible = false);
+
+				ObserveBills = new ObservableCollection<ItemBill>(Bills.Where(item => item.IsVisible).ToList());
+				await System.Threading.Tasks.Task.CompletedTask;
 			});
 		}
 
@@ -116,6 +175,8 @@ namespace Reklamacka.ViewModels
 				item.IsSelected = false;
 				item.UpdateStoreName();
 			});
+			NameByAlpha = true;
+			ByExpDate = true;
 
 			// filter applied
 			// filter by product types
