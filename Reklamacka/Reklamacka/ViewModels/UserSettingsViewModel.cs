@@ -12,7 +12,7 @@ namespace Reklamacka.ViewModels
 {
 	public class UserSettingsViewModel: INotifyPropertyChanged
 	{
-		public Web GitHubLink { get; private set; } = new Web() { Link = @"https://github.com/Darbix/Reklamacka" };
+		public string GitHubLink { get; private set; } = @"https://github.com/Darbix/Reklamacka";
 		public string Authors { get; private set; } = "Kedra David (xkedra00)\nDo Hung (xdohun00)";
 		public Command ResetSettings { get; set; }
 		public Command ShowRepoPage { get; set; }
@@ -76,7 +76,7 @@ namespace Reklamacka.ViewModels
 
 			ShowRepoPage = new Command(async () =>
 			{
-				await App.Current.MainPage.Navigation.PushAsync(new BrowserPage(GitHubLink));
+				await Launcher.TryOpenAsync(GitHubLink);
 			});
 		}
 

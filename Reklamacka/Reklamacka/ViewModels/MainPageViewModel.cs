@@ -215,6 +215,7 @@ namespace Reklamacka.ViewModels
 		/// </summary>
 		public async void OnAppearing()
 		{
+			MenuState = SideMenuState.MainViewShown;
 			SelectedItem = null;
 
 			// update list of bills

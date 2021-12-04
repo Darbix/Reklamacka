@@ -17,7 +17,6 @@
 				<Label Grid.Row="2" Grid.Column="0" Text="ShopLink" VerticalOptions="Center"/>
 				<Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="*,auto">
 					<Entry Grid.Column="0"  Text="{Binding StoreLink}" HorizontalOptions="Fill"/>
-					<Button Grid.Column="1" Text="Browse" Command="{Binding PushBrowserPage}" FontSize="13" HeightRequest="40" HorizontalOptions="End" VerticalOptions="Center"/>
 				</Grid>
 
 				<Label Grid.Row="3" Grid.Column="0" Text="Email" VerticalOptions="Center"/>

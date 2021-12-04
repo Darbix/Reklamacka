@@ -15,12 +15,6 @@ using static Reklamacka.BaseModel;
 
 namespace Reklamacka.ViewModels
 {
-	// trida pro web k predani jako reference, aby sel web menit z dalsiho okna
-	public class Web
-	{
-		public string Link { get; set; }
-	}
-
 	public class BillEditViewModel : INotifyPropertyChanged
 	{
 		public Command SaveBill { get; set; }           //!< Command to save a new bill
@@ -85,20 +79,6 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
-		private bool isCallAllowed = false;
-		/// <summary>
-		/// Status whether phone call can be realized
-		/// </summary>
-		public bool IsCallAllowed
-		{
-			get => isCallAllowed;
-			set
-			{
-				isCallAllowed = value;
-				OnPropertyChanged(nameof(IsCallAllowed));
-			}
-		}
-
 		public ObservableCollection<string> ShopNameList		//!< List of shop names
 		{
 			get => LofStoreNames;
@@ -111,15 +91,10 @@ namespace Reklamacka.ViewModels
 			set
 			{
 				shop = StoreDB.GetStoreAsync(value).Result;
-				Website.Link = shop != null ? shop.Link : string.Empty;
 				OnPropertyChanged(nameof(ShopName));
 				OnPropertyChanged(nameof(Weblink));
 				OnPropertyChanged(nameof(Email));
 				OnPropertyChanged(nameof(PhoneNumber));
-
-				if (shop != null)
-					if (shop.PhoneNumber != null || !shop.PhoneNumber.Equals(""))
-						IsCallAllowed = true;
 			}
 		}
 
@@ -127,7 +102,6 @@ namespace Reklamacka.ViewModels
 		{
 			get => shop != null ? shop.Link : string.Empty; set { }
 		}
-		public Web Website = new Web();
 
 		public string Email								//!< Shop's email to display
 		{
@@ -252,7 +226,17 @@ namespace Reklamacka.ViewModels
 			PushBrowserPage = new Command(async () =>
 			{
 				if (!string.IsNullOrEmpty(Weblink))
-					await navigation.PushAsync(new BrowserPage(Website));
+				{
+					try
+					{
+						await Launcher.TryOpenAsync(Weblink);
+					}
+					catch
+					{
+						await App.Current.MainPage.DisplayAlert("Invalid link", "This URL format is not valid! Try to change it in Store Management page!", "OK");
+						return;
+					}
+				}
 			});
 
 			AddStorePush = new Command(async () =>
@@ -384,7 +368,6 @@ namespace Reklamacka.ViewModels
 				Email = null;
 				PhoneNumber = null;
 				Weblink = null;
-				IsCallAllowed = false;
 				ShopName = null;
 			});
 
