@@ -15,6 +15,8 @@ namespace Reklamacka.ViewModels
 		public Command DeleteAll { get; set; }			//!< Command to clear store database; TODO: temporary solution
 		public Command PushBrowserPage { get; set; }
 		public Command DeleteStore { get; set; }
+		public Command Deselect { get; set; }
+		public Web Website = new Web();
 
 		private Store storeInstance;
 		public string StoreName { get; set; }			//!< New store's name
@@ -40,13 +42,12 @@ namespace Reklamacka.ViewModels
 						StoreLink = shop.Link;
 						Email = shop.Email;
 						PhoneNumber = shop.PhoneNumber;
-
-						OnPropertyChanged(nameof(StoreName));
-						OnPropertyChanged(nameof(StoreLink));
-						OnPropertyChanged(nameof(Email));
-						OnPropertyChanged(nameof(PhoneNumber));
 					}
 				}
+				OnPropertyChanged(nameof(StoreName));
+				OnPropertyChanged(nameof(StoreLink));
+				OnPropertyChanged(nameof(Email));
+				OnPropertyChanged(nameof(PhoneNumber));
 			}
 		}
 
@@ -143,6 +144,18 @@ namespace Reklamacka.ViewModels
 					StoreLink = url.ToString();
 					await Launcher.TryOpenAsync(StoreLink);
 				}
+			});
+
+			Deselect = new Command(() =>
+			{
+				shop = null;
+				StoreName = null;
+				StoreLink = null;
+				Email = null;
+				PhoneNumber = null;
+
+				ShopName = null;
+				OnPropertyChanged(nameof(ShopName));
 			});
 		}
 

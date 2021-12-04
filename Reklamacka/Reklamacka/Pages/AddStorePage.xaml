@@ -2,34 +2,51 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodels="clr-namespace:Reklamacka.ViewModels" x:DataType="viewmodels:AddStoreViewModel"
 			 x:Class="Reklamacka.Pages.AddStorePage">
+	<ContentPage.Resources>
+		<Color x:Key="IconColor">#c72c56</Color>
+	</ContentPage.Resources>
+
+	<NavigationPage.TitleView>
+		<StackLayout Orientation="Horizontal" Margin="0,0,5,0">
+			<Button Style="{StaticResource FontAwesome5Solid}" Text="&#xf1f8;" FontSize="30" TextColor="{StaticResource IconColor}" BackgroundColor="Transparent"
+						HorizontalOptions="EndAndExpand" WidthRequest="60" Command="{Binding DeleteStore}"/>
+			<Button Style="{StaticResource FontAwesome5Solid}" Text="&#xf793;" FontSize="30" TextColor="{StaticResource IconColor}" BackgroundColor="Transparent"
+						HorizontalOptions="End" WidthRequest="60" Command="{Binding DeleteAll}"/>
+		</StackLayout>
+	</NavigationPage.TitleView>
+	
     <ContentPage.Content>
-        <StackLayout Padding="15">
+		<StackLayout BackgroundColor="#d0d0da">
 
-			<Grid RowDefinitions="auto,auto,auto,auto,auto,*,*,*,*" ColumnDefinitions="*,2.5*" Margin="0,20,0,0">
-				<Label Grid.Row="0" Grid.Column="0" Text="Pick shop" VerticalOptions="Center"/>
-				<Frame Grid.Row="0" Grid.Column="1" Padding="0" BackgroundColor="#cccccc" CornerRadius="5" WidthRequest="200">
-					<Picker ItemsSource="{Binding ShopNameList}" SelectedItem="{Binding ShopName}" HorizontalOptions="FillAndExpand" />
-				</Frame>
+			<Grid RowDefinitions="auto,auto,auto,auto,auto,*,*" ColumnDefinitions="*,2.5*" Margin="0,20,0,0" RowSpacing="15" Padding="20" >
+				<Label Grid.Row="0" Grid.Column="0" Text="Pick shop" VerticalOptions="Center" Style="{StaticResource Normal-Font}" FontSize="Medium" TextColor="#35344a"/>
+				<StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+					<Frame Padding="0" BackgroundColor="#18000000" CornerRadius="5" WidthRequest="200">
+						<Picker ItemsSource="{Binding ShopNameList}" SelectedItem="{Binding ShopName}" HorizontalOptions="FillAndExpand" />
+					</Frame>
+					<Button Text="✖" WidthRequest="40" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Command="{Binding Deselect}"/>
+				</StackLayout>
 
-				<Label Grid.Row="1" Grid.Column="0" Text="ShopName" VerticalOptions="Center"/>
+				<Label Grid.Row="1" Grid.Column="0" Text="Shop name" VerticalOptions="Center" Style="{StaticResource Normal-Font}" FontSize="Medium" TextColor="#35344a"/>
 				<Entry Grid.Row="1" Grid.Column="1" Text="{Binding StoreName}" HorizontalOptions="FillAndExpand"/>
 
-				<Label Grid.Row="2" Grid.Column="0" Text="ShopLink" VerticalOptions="Center"/>
+				<Label Grid.Row="2" Grid.Column="0" Text="Web link" VerticalOptions="Center" Style="{StaticResource Normal-Font}" FontSize="Medium" TextColor="#35344a"/>
 				<Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="*,auto">
 					<Entry Grid.Column="0"  Text="{Binding StoreLink}" HorizontalOptions="Fill"/>
+					<Button Grid.Column="1" Command="{Binding PushBrowserPage}" CommandParameter="0" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="Transparent" WidthRequest="55"
+							 Style="{StaticResource FontAwesome5Solid}" Text="&#xf0ac;" FontSize="28" TextColor="{StaticResource IconColor}" CornerRadius="15"/>
 				</Grid>
 
-				<Label Grid.Row="3" Grid.Column="0" Text="Email" VerticalOptions="Center"/>
+				<Label Grid.Row="3" Grid.Column="0" Text="Email" VerticalOptions="Center" Style="{StaticResource Normal-Font}" FontSize="Medium" TextColor="#35344a"/>
 				<Entry Grid.Row="3" Grid.Column="1" Text="{Binding Email}" HorizontalOptions="FillAndExpand"/>
 
-				<Label Grid.Row="4" Grid.Column="0" Text="Phone Number" VerticalOptions="Center"/>
+				<Label Grid.Row="4" Grid.Column="0" Text="Phone" VerticalOptions="Center" Style="{StaticResource Normal-Font}" FontSize="Medium" TextColor="#35344a"/>
 				<Entry Grid.Row="4" Grid.Column="1" Keyboard="Numeric" Text="{Binding PhoneNumber}" HorizontalOptions="FillAndExpand"/>
-
-				<Button Grid.Row="6" Grid.ColumnSpan="2" Text="Save Shop" Command="{Binding SaveStore}" HorizontalOptions="Center" WidthRequest="110"/>
-				<Button Grid.Row="7" Grid.ColumnSpan="2" Text="Delete" Command="{Binding DeleteStore}" HorizontalOptions="Center" WidthRequest="110"/>
-				<Button Grid.Row="8" Grid.ColumnSpan="2" Text="Delete All" Command="{Binding DeleteAll}" HorizontalOptions="Center" WidthRequest="110"/>
 			</Grid>
-			
+
+			<Button Style="{StaticResource FontAwesome5Solid}" Text="&#xf058;" FontSize="60" TextColor="{StaticResource IconColor}" BackgroundColor="Transparent"
+					HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand"  Command="{Binding SaveStore}" WidthRequest="100" HeightRequest="100" CornerRadius="50"/>
+
 		</StackLayout>
 			
     </ContentPage.Content>

@@ -42,12 +42,12 @@
 
 				<!-- Hlavicka -->
 				<Grid ColumnDefinitions="*,*,*" RowDefinitions="auto">
-					<Button Grid.Column="0" Style="{StaticResource FontAwesome5Solid}" Text="&#xf0c9;" FontSize="Title" TextColor="{StaticResource IconColor}" HeightRequest="50" BackgroundColor="Transparent"
+					<Button Grid.Column="0" Style="{StaticResource FontAwesome5Solid}" Text="&#xf0c9;" FontSize="30" TextColor="{StaticResource IconColor}" HeightRequest="50" BackgroundColor="Transparent"
 							HorizontalOptions="Start" VerticalOptions="StartAndExpand" Command="{Binding MenuButtonClicked}" WidthRequest="50" FontAttributes="Bold"/>
 					<Image Grid.Column="1" Source="logo_red.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="CenterAndExpand" Margin="0,30,0,30"/>
 
 					<Label Grid.Column="2" Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:dd/MM/yyyy}'}" TextColor="{StaticResource IconColor}" 
-							HorizontalOptions="End" VerticalOptions="StartAndExpand" FontSize="16" Margin="8" Style="{StaticResource Normal-Font}"/>
+							HorizontalOptions="End" VerticalOptions="StartAndExpand" FontSize="17" Margin="8" Style="{StaticResource Normal-Font}"/>
 				</Grid>
 
 				<Frame BackgroundColor="#30ffffff" Padding="0" CornerRadius="10" Margin="20,0,20,30">
@@ -58,7 +58,7 @@
 
 						<Frame Padding="5,0,0,0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="#20ffffff" CornerRadius="10" HasShadow="False">
 							<StackLayout Orientation="Horizontal">
-								<Entry Text="{Binding NameToSearch}" WidthRequest="150" Placeholder="Search"  Style="{StaticResource Normal-Font}" 
+								<Entry Text="{Binding NameToSearch}" WidthRequest="150" Placeholder="Search"  Style="{StaticResource Normal-Font}" Margin="5,0,0,0"
 									   TextColor="White" PlaceholderColor="#77ffffff" FontSize="15" Completed="Search_Completed" HorizontalOptions="FillAndExpand"/>
 						
 								<!--<ImageButton Source="magnifier.png" Margin="5" Command="{Binding SearchBill}" x:Name="SearchButton" BackgroundColor="Transparent" WidthRequest="25" HeightRequest="25"/>-->
@@ -101,8 +101,8 @@
 														<Label Style="{StaticResource FontAwesome5Solid}" Margin="10" Text="&#xf543;" FontSize="30" TextColor="#ccffffff" VerticalOptions="Center" HorizontalOptions="Center"/>
 													</Grid>
 														
-													<Label Text="{Binding BillItem.ProductName}" Style="{StaticResource Bold-Font}" TextColor="Black" FontSize="16" VerticalOptions="Center" LineBreakMode="TailTruncation"/>
-													<Frame HorizontalOptions="EndAndExpand" Padding="10,0,10,0" BackgroundColor="#15000000" CornerRadius="10" Margin="6">
+													<Label Text="{Binding BillItem.ProductName}" Style="{StaticResource Bold-Font}" TextColor="Black" FontSize="15" VerticalOptions="Center" WidthRequest="140" LineBreakMode="TailTruncation"/>
+													<Frame HorizontalOptions="EndAndExpand" Padding="10,0,10,0" BackgroundColor="#15000000" CornerRadius="10" Margin="6" WidthRequest="120">
 														<Label Text="{Binding BillItem.ExpirationDate, StringFormat='{0:Exp. dd/MM/yyyy}'}" TextColor="{StaticResource BcgTop1Color}" 
 														   FontSize="15" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Style="{StaticResource Bold-Font}"/>
 													</Frame>
@@ -147,8 +147,8 @@
 		<ScrollView x:Name="LeftBar" Padding="10,20,10,20" BackgroundColor="#252435"
 					behaviors:SideMenuView.Position="LeftMenu" behaviors:SideMenuView.MainViewOpacityFactor="0.7" behaviors:SideMenuView.MenuWidthPercentage="0.5">
 			<StackLayout Spacing="10">
-				<Label Text="Menu" Style="{StaticResource Bold-Font}" TextColor="{StaticResource IconColor}" HorizontalOptions="Center" VerticalOptions="Start" FontSize="Title"/>
-				<Button Text="Store Mangement" Command="{Binding AddShop}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
+				<Label Text="Menu" Style="{StaticResource Bold-Font}" TextColor="{StaticResource IconColor}" HorizontalOptions="Center" VerticalOptions="Start" FontSize="Title" Margin="0,0,0,15"/>
+				<Button Text="Store Management" Command="{Binding AddShop}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White" Style="{StaticResource Bold-Font}"/>
 				<Button Text="Advance Search" Command="{Binding SortingPagePush}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White" Style="{StaticResource Bold-Font}"/>

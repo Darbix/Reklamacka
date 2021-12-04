@@ -16,7 +16,7 @@ namespace Reklamacka
 		/// <summary>
 		/// Vycet typu produktu 
 		/// </summary>
-		public enum ProductTypes { Other, Clothes, Electronics, Toys /* will be added later */ }
+		public enum ProductTypes { Other, Cars, Clothes, Electronics, Shoes, Tools, Toys /* will be added later */ }
 		private static ObservableCollection<string> lofStoreNames;
 		public static ObservableCollection<string> LofStoreNames    //!< List of store names from the database
 		{

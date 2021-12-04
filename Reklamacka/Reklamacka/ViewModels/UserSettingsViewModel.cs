@@ -64,8 +64,11 @@ namespace Reklamacka.ViewModels
 
 		public UserSettingsViewModel()
 		{
-			ResetSettings = new Command(() =>
+			ResetSettings = new Command(async () =>
 			{
+				if (!await App.Current.MainPage.DisplayAlert("Reset settings", "Settings will be restored to default", "OK", "Cancel"))
+					return;
+
 				Preferences.Clear();
 
 				// aktualizace nastaveni v okne -> zavolaji se OnPropertyChanged
