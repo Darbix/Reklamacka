@@ -24,7 +24,7 @@ namespace Reklamacka.Models
 		public byte[] ImgBill { get; set; }
 
 		public DateTime PurchaseDate { get; set; } = DateTime.Today;
-		public DateTime ExpirationDate { get; set; } = DateTime.Today;
+		public DateTime ExpirationDate { get; set; } = DateTime.Today.AddYears(2);
 		//public string WarrantyPath { get; set; }
 
 		public string Notes { get; set; }
