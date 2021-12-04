@@ -30,7 +30,7 @@
 				<Button Text="Filters" Command="{Binding PushFiltersPage}" HorizontalOptions="Center"/>
 			</StackLayout>
 
-			<ListView Grid.Row="2" x:Name="ListBills" ItemsSource="{Binding ObserveBills}" Margin="10,0,10,0" RowHeight="65">
+			<ListView Grid.Row="2" x:Name="ListBills" ItemsSource="{Binding ObserveBills}" Margin="10,0,10,0" RowHeight="65" SelectedItem="{Binding SelectedItem}">
 				<ListView.ItemTemplate>
 					<DataTemplate>
 						<ViewCell>
@@ -51,34 +51,40 @@
 												</Grid>
 											</Frame>
 
-											<StackLayout>
+											<Frame BackgroundColor="Transparent" Padding="0"
+												   behaviors:TouchEffect.Command="{Binding BindingContext.EditBill, Source={x:Reference ThisPage}}" behaviors:TouchEffect.CommandParameter="{Binding .}">
+												   
 												<StackLayout Orientation="Horizontal">
-													<StackLayout Spacing="0" WidthRequest="95" Margin="0,0,3,0">
-														<Label Text="{Binding BillItem.ProductName}" TextColor="White" FontSize="16" VerticalOptions="Start" LineBreakMode="TailTruncation"/>
+													<StackLayout>
+														<StackLayout Orientation="Horizontal">
+															<StackLayout Spacing="0" WidthRequest="95" Margin="0,0,3,0">
+																<Label Text="{Binding BillItem.ProductName}" TextColor="White" FontSize="16" VerticalOptions="Start" LineBreakMode="TailTruncation"/>
+															
+															</StackLayout>
 													
+															<StackLayout HorizontalOptions="StartAndExpand">
+																<Label FontSize="14" VerticalOptions="StartAndExpand" LineBreakMode="TailTruncation">
+																	<Label.FormattedText>
+																		<FormattedString>
+																			<Span Text="Type: " TextColor="#000858"/>
+																			<Span Text="{Binding BillItem.ProductType}" TextColor="#99bbff"/>
+																		</FormattedString>
+																	</Label.FormattedText>
+																</Label>
+															</StackLayout>
+														</StackLayout>
+
+														<Label Text="{Binding StoreName}" TextColor="#99bbff" LineBreakMode="TailTruncation" WidthRequest="200"/>
 													</StackLayout>
-											
-													<StackLayout HorizontalOptions="StartAndExpand">
-														<Label FontSize="14" VerticalOptions="StartAndExpand" LineBreakMode="TailTruncation">
-															<Label.FormattedText>
-																<FormattedString>
-																	<Span Text="Type: " TextColor="#000858"/>
-																	<Span Text="{Binding BillItem.ProductType}" TextColor="#99bbff"/>
-																</FormattedString>
-															</Label.FormattedText>
-														</Label>
+
+													<StackLayout Spacing="0" HorizontalOptions="EndAndExpand">
+														<Label Text="{Binding BillItem.PurchaseDate, StringFormat='{0:DOP. dd/MM/yyyy}'}" TextColor="#88ccff" FontAttributes="Bold"
+															FontSize="15" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand"/>
+														<Label Text="{Binding BillItem.ExpirationDate, StringFormat='{0:EXP. dd/MM/yyyy}'}" TextColor="{Binding BillItem.ExpirationDate, Converter={StaticResource ExpToColor}}" 
+														   VerticalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="15" HorizontalOptions="EndAndExpand"/>
 													</StackLayout>
 												</StackLayout>
-
-												<Label Text="{Binding StoreName}" TextColor="#99bbff" LineBreakMode="TailTruncation" WidthRequest="200"/>
-											</StackLayout>
-
-											<StackLayout Spacing="0" HorizontalOptions="EndAndExpand">
-												<Label Text="{Binding BillItem.PurchaseDate, StringFormat='{0:DOP. dd/MM/yyyy}'}" TextColor="#88ccff" FontAttributes="Bold"
-													FontSize="15" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand"/>
-												<Label Text="{Binding BillItem.ExpirationDate, StringFormat='{0:EXP. dd/MM/yyyy}'}" TextColor="{Binding BillItem.ExpirationDate, Converter={StaticResource ExpToColor}}" 
-												   VerticalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="15" HorizontalOptions="EndAndExpand"/>
-											</StackLayout>
+											</Frame>
 										</StackLayout>
 									</Frame>
 

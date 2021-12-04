@@ -1,4 +1,6 @@
 using System.ComponentModel;
+using System;
+using Xamarin.Forms;
 using static Reklamacka.BaseModel;
 
 namespace Reklamacka.Models
@@ -35,6 +37,13 @@ namespace Reklamacka.Models
 				StoreName = string.Empty;
 			if (BillItem.ShopID == 0)
 				StoreName = string.Empty;
+			UpdateStoreName();
+		}
+
+		public void UpdateStoreName()
+		{
+			if (BillItem == null)
+				return;
 			Store store = StoreDB.GetStoreAsync(BillItem.ShopID).Result;
 			StoreName = store != null ? store.Name : string.Empty;
 		}
