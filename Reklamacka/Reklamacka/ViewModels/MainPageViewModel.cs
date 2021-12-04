@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
+using System.Globalization;
 using static Reklamacka.BaseModel;
 
 namespace Reklamacka.ViewModels
@@ -182,10 +183,12 @@ namespace Reklamacka.ViewModels
 
 			SearchBill = new Command(async () =>
 			{
+				// reset
+				LofBills.ForEach(bill => bill.IsVisible = true);
+
+				// looks for name that contains SearchSubstring while ignoring cases
 				if (!string.IsNullOrWhiteSpace(NameToSearch))
-					LofBills.ForEach(bill => bill.IsVisible = bill.BillItem.ProductName.Contains(NameToSearch));
-				else
-					LofBills.ForEach(bill => bill.IsVisible = true);
+					LofBills.Where(item => new CultureInfo("cs-CZ", false).CompareInfo.IndexOf(item.BillItem.ProductName, NameToSearch, CompareOptions.IgnoreCase) < 0).ToList().ForEach(item => item.IsVisible = false);
 
 				ObserveBill = new ObservableCollection<ItemBill>(LofBills.Where(bill => bill.IsVisible));
 				await System.Threading.Tasks.Task.CompletedTask;

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using Xamarin.Forms;
 using static Reklamacka.BaseModel;
@@ -155,8 +156,12 @@ namespace Reklamacka.ViewModels
 
 			SearchName = new Command(async () =>
 			{
+				// reset filter
+				Bills.ForEach(item => item.IsVisible = true);
+
+				// looks for name that contains SearchSubstring while ignoring cases
 				if (!string.IsNullOrWhiteSpace(SearchSubstring))
-					Bills.Where(item => item.BillItem.ProductName.Contains(SearchSubstring)).ToList().ForEach(item => item.IsVisible = false);
+					Bills.Where(item => new CultureInfo("cs-CZ", false).CompareInfo.IndexOf(item.BillItem.ProductName, SearchSubstring, CompareOptions.IgnoreCase) >= 0).ToList().ForEach(item => item.IsVisible = false);
 
 				ObserveBills = new ObservableCollection<ItemBill>(Bills.Where(item => item.IsVisible).ToList());
 				await System.Threading.Tasks.Task.CompletedTask;
