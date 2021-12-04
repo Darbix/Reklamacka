@@ -4,36 +4,41 @@
 			 x:Class="Reklamacka.Pages.FiltersSettingPage"
 			 x:Name="ThisPage">
 
+	<NavigationPage.TitleView>
+		<StackLayout Orientation="Horizontal" Padding="2">
+			<Label Text="Filters" TextColor="White" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center" Style="{StaticResource Bold-Font}"/>
+		</StackLayout>
+	</NavigationPage.TitleView>
+
 	<ContentPage.Content>
-		<StackLayout Padding="5">
+		<StackLayout Padding="5" Spacing="20" Margin="5,10,5,0">
 
 			<behaviors:Expander>
 				<behaviors:Expander.Header>
-					<!--3d44cf-->
-					<Frame BackgroundColor="#555555" Padding="5" CornerRadius="5">
+					<Frame BackgroundColor="#4a4a5a" Padding="5" CornerRadius="5">
 						<StackLayout Orientation="Horizontal">
-							<Label Text="\/  " VerticalOptions="Center" TextColor="White"/>
-							<Label Text="Type" FontSize="18" TextColor="White" VerticalOptions="Center"/>
+							<Label Text="Type" Padding="5,0,0,0" FontSize="18" TextColor="#ebebee" VerticalOptions="Center"  Style="{StaticResource Bold-Font}"/>
+							<Label Style="{StaticResource FontAwesome5Solid}" Text="&#xf107;" Margin="0,0,10,0" FontSize="30" VerticalOptions="Center" TextColor="#ebebee" HorizontalOptions="EndAndExpand"/>
 						</StackLayout>
 					</Frame>
 				</behaviors:Expander.Header>
 
-				<StackLayout HeightRequest="170">
+				<StackLayout HeightRequest="200">
 					<Frame Padding="0" CornerRadius="5">
-						<ListView ItemsSource="{Binding ListTypes}" HasUnevenRows="True" BackgroundColor="#bbbbbb">
+						<ListView ItemsSource="{Binding ListTypes}" HasUnevenRows="True" BackgroundColor="#cbcbda">
 							<ListView.ItemTemplate>
 								<DataTemplate>
 									<ViewCell>
-										<StackLayout Orientation="Horizontal" HeightRequest="25" Padding="5" VerticalOptions="Center">
+										<StackLayout Orientation="Horizontal" HeightRequest="30" Padding="5" VerticalOptions="Center">
 											<Grid VerticalOptions="Center">
-												<Frame BackgroundColor="White" Padding="0" CornerRadius="11" HeightRequest="22" WidthRequest="22" 
+												<Frame BackgroundColor="White" Padding="0" CornerRadius="13" HeightRequest="26" WidthRequest="26" 
 													   VerticalOptions="Center" HorizontalOptions="Center"/>
-												<Frame BackgroundColor="#ff0640" Padding="0" CornerRadius="9" HeightRequest="18" WidthRequest="18" 
+												<Frame BackgroundColor="#ff0640" Padding="0" CornerRadius="11" HeightRequest="22" WidthRequest="22" 
 													   VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsChecked}"/>
-												<Button Padding="0" BackgroundColor="Transparent" CornerRadius="11" HeightRequest="22" WidthRequest="22" BorderColor="White" BorderWidth="4"
+												<Button Padding="0" BackgroundColor="Transparent" CornerRadius="13" HeightRequest="26" WidthRequest="26" BorderColor="White" BorderWidth="4"
 														    VerticalOptions="Center" HorizontalOptions="Center" Command="{Binding BindingContext.SelectChoice, Source={x:Reference ThisPage}}" CommandParameter="{Binding .}"/>
 											</Grid>
-											<Label Text="{Binding Type}" VerticalOptions="Center" TextColor="Black"/>
+											<Label Text="{Binding Type}" VerticalOptions="Center" TextColor="#1a1a3a"/>
 										</StackLayout>
 									</ViewCell>
 								</DataTemplate>
@@ -46,30 +51,30 @@
 
 			<behaviors:Expander>
 				<behaviors:Expander.Header>
-					<Frame BackgroundColor="#555555" Padding="5" CornerRadius="5">
+					<Frame BackgroundColor="#4a4a5a" Padding="5" CornerRadius="5">
 						<StackLayout Orientation="Horizontal">
-							<Label Text="\/  " VerticalOptions="Center" TextColor="White"/>
-							<Label Text="Shop web" FontSize="18" TextColor="White" VerticalOptions="Center"/>
+							<Label Text="Store name" Padding="5,0,0,0" FontSize="18" TextColor="#ebebee" VerticalOptions="Center"  Style="{StaticResource Bold-Font}"/>
+							<Label Style="{StaticResource FontAwesome5Solid}" Text="&#xf107;" Margin="0,0,10,0" FontSize="30" VerticalOptions="Center" TextColor="#ebebee" HorizontalOptions="EndAndExpand"/>
 						</StackLayout>
 					</Frame>
 				</behaviors:Expander.Header>
 
-				<StackLayout HeightRequest="170">
+				<StackLayout HeightRequest="200">
 					<Frame Padding="0" CornerRadius="5">
-						<ListView ItemsSource="{Binding ListStoreNames}" HasUnevenRows="True" BackgroundColor="#bbbbbb">
+						<ListView ItemsSource="{Binding ListStoreNames}" HasUnevenRows="True" BackgroundColor="#cbcbda">
 							<ListView.ItemTemplate>
 								<DataTemplate>
 									<ViewCell>
-										<StackLayout Orientation="Horizontal" HeightRequest="25" Padding="5" VerticalOptions="Center">
+										<StackLayout Orientation="Horizontal" HeightRequest="30" Padding="5" VerticalOptions="Center">
 											<Grid VerticalOptions="Center">
-												<Frame BackgroundColor="White" Padding="0" CornerRadius="11" HeightRequest="22" WidthRequest="22" 
+												<Frame BackgroundColor="White" Padding="0" CornerRadius="13" HeightRequest="26" WidthRequest="26" 
 													   VerticalOptions="Center" HorizontalOptions="Center"/>
-												<Frame BackgroundColor="#ff0640" Padding="0" CornerRadius="9" HeightRequest="18" WidthRequest="18" 
+												<Frame BackgroundColor="#ff0640" Padding="0" CornerRadius="11" HeightRequest="22" WidthRequest="22" 
 													   VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsChecked}"/>
-												<Button Padding="0" BackgroundColor="Transparent" CornerRadius="11" HeightRequest="22" WidthRequest="22" BorderColor="White" BorderWidth="4"
+												<Button Padding="0" BackgroundColor="Transparent" CornerRadius="13" HeightRequest="26" WidthRequest="26" BorderColor="White" BorderWidth="4"
 														    VerticalOptions="Center" HorizontalOptions="Center" Command="{Binding BindingContext.SelectChoice, Source={x:Reference ThisPage}}" CommandParameter="{Binding .}"/>
 											</Grid>
-											<Label Text="{Binding ShopName}" VerticalOptions="Center" TextColor="Black"/>
+											<Label Text="{Binding ShopName}" VerticalOptions="Center" TextColor="#1a1a3a"/>
 										</StackLayout>
 									</ViewCell>
 								</DataTemplate>

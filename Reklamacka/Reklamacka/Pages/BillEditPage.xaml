@@ -19,7 +19,7 @@
 	</NavigationPage.TitleView>
 
 	<ContentPage.Content>
-		<ScrollView BackgroundColor="#c0c0c8" Padding="0">
+		<ScrollView BackgroundColor="#d0d0da" Padding="0">
 			<StackLayout>
 				<StackLayout Margin="22,10,22,5" Spacing="3">
 
@@ -44,7 +44,7 @@
 						<StackLayout>
 							<StackLayout Orientation="Horizontal" Spacing="0">
 								<Label Text="Name: " FontSize="Medium" VerticalOptions="Center" Style="{StaticResource Normal-Font}"/>
-								<Frame Padding="5,0,5,0" HorizontalOptions="FillAndExpand" VerticalOptions="Center" HasShadow="False" BackgroundColor="#20000000" CornerRadius="4">
+								<Frame Padding="5,0,5,0" HorizontalOptions="FillAndExpand" VerticalOptions="Center" HasShadow="False" BackgroundColor="#16000000" CornerRadius="4">
 									<Picker ItemsSource="{Binding ShopNameList}" SelectedItem="{Binding ShopName}"  HorizontalOptions="FillAndExpand"/>
 								</Frame>
 								<Button Text="✖" Command="{Binding PickNoneShop}" HorizontalOptions="End" VerticalOptions="Center" WidthRequest="40" HeightRequest="40" BackgroundColor="Transparent"/>
@@ -55,7 +55,7 @@
 								</Grid>
 							</StackLayout>
 							<StackLayout Orientation="Horizontal" VerticalOptions="Start">
-								<Frame Padding="0" HorizontalOptions="FillAndExpand" HasShadow="False" BackgroundColor="#20000000" CornerRadius="4">
+								<Frame Padding="0" HorizontalOptions="FillAndExpand" HasShadow="False" BackgroundColor="#16000000" CornerRadius="4">
 									<Label Text="{Binding Weblink}" VerticalOptions="Center"  Padding="5,0,0,0" HorizontalOptions="FillAndExpand" FontSize="20"
 										TextColor="#5333f7" TextDecorations="Underline" LineBreakMode="TailTruncation">
 										<Label.GestureRecognizers>
@@ -67,7 +67,7 @@
 
 							<StackLayout Orientation="Horizontal" Margin="0,2,0,2">
 								<Label Text="Phone: " FontSize="Medium" VerticalOptions="Center" WidthRequest="80" Style="{StaticResource Normal-Font}"/>
-								<Frame Padding="0" HorizontalOptions="FillAndExpand" HasShadow="False" BackgroundColor="#20000000" CornerRadius="4">
+								<Frame Padding="0" HorizontalOptions="FillAndExpand" HasShadow="False" BackgroundColor="#16000000" CornerRadius="4">
 									<Label Text="{Binding PhoneNumber}" HorizontalOptions="FillAndExpand" Padding="5,0,0,0" VerticalOptions="Center" FontSize="20" 
 										TextColor="#5333f7" TextDecorations="Underline">
 										<Label.GestureRecognizers>
@@ -78,7 +78,7 @@
 							</StackLayout>
 							<StackLayout Orientation="Horizontal" VerticalOptions="StartAndExpand">
 								<Label Text="Email:  " FontSize="Medium" VerticalOptions="Center" WidthRequest="80" Style="{StaticResource Normal-Font}"/>
-								<Frame Padding="0" HorizontalOptions="FillAndExpand" HasShadow="False" BackgroundColor="#20000000" CornerRadius="4">
+								<Frame Padding="0" HorizontalOptions="FillAndExpand" HasShadow="False" BackgroundColor="#16000000" CornerRadius="4">
 									<Label Text="{Binding Email}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" FontSize="20"  Padding="5,0,0,0"
 								   TextDecorations="Underline" TextColor="#5333f7" LineBreakMode="TailTruncation">
 										<Label.GestureRecognizers>

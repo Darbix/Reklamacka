@@ -61,7 +61,16 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
-		public string SearchSubstring;		//!< string for name filter
+		private string searchSubstring;
+		public string SearchSubstring       //< String for name filter
+		{
+			get => searchSubstring;
+			set
+			{
+				searchSubstring = value;
+				OnPropertyChanged(nameof(SearchSubstring));
+			}
+		}
 
 		private bool byExpDate;
 		public bool ByExpDate
