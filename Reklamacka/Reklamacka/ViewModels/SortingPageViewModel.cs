@@ -38,9 +38,22 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
+		private ItemBill selectedItem;
+		public ItemBill SelectedItem
+		{
+			get => selectedItem;
+			set
+			{
+				selectedItem = value;
+				OnPropertyChanged(nameof(SelectedItem));
+			}
+		}
+
 		public Command SelectBill { get; set; }
 		public Command DeleteSelected { get; set; }
 		public Command PushFiltersPage { get; set; }
+		public Command EditBill { get; set; }
+		public Command b { get; set; } = new Command(() => { Console.WriteLine("b"); });
 
 		public SortingPageViewModel(INavigation Navigation)
 		{
@@ -58,13 +71,19 @@ namespace Reklamacka.ViewModels
 			LofFilteredProductTypes = new List<ProductTypes>();
 			LofFilteredShopNames = new List<string>();
 
+			EditBill = new Command(async (e) =>
+			{
+				if (!(e is ItemBill item))
+					return;
+				await Navigation.PushAsync(new BillEditPage(Navigation, item.BillItem));
+			});
+
 			SelectBill = new Command((s) =>
 			{
 				if (!(s is ItemBill item))
 					return;
 
 				item.IsSelected = !item.IsSelected;
-				Console.WriteLine("Bill {0} is {1}", item.BillItem.ProductName, item.IsSelected ? "selected" : "not selected");
 			});
 
 			DeleteSelected = new Command(async () =>
@@ -91,8 +110,12 @@ namespace Reklamacka.ViewModels
 			bool valSet = false;
 
 			// reset values
-            Bills.ForEach(item => item.IsVisible = false);
-            Bills.ForEach(item => item.IsSelected = false);
+            Bills.ForEach(item =>
+			{
+				item.IsVisible = false;
+				item.IsSelected = false;
+				item.UpdateStoreName();
+			});
 
 			// filter applied
 			// filter by product types
