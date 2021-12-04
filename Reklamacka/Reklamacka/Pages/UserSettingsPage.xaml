@@ -30,7 +30,7 @@
 				<Label Text="Authors" FontSize="Large" Margin="0,0,0,-5"/>
 				<Label Text="{Binding Authors}" FontSize="Medium"/>
 				<Label Text="Link to repo" FontSize="Large" Margin="0,10,0,-5"/>
-				<Label Text="{Binding GitHubLink.Link}" FontSize="Medium" TextColor="Blue" TextDecorations="Underline">
+				<Label Text="{Binding GitHubLink}" FontSize="Medium" TextColor="Blue" TextDecorations="Underline">
 					<Label.GestureRecognizers>
 						<TapGestureRecognizer Command="{Binding ShowRepoPage}"/>
 					</Label.GestureRecognizers>

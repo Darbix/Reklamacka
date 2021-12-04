@@ -148,7 +148,7 @@
 					behaviors:SideMenuView.Position="LeftMenu" behaviors:SideMenuView.MainViewOpacityFactor="0.7" behaviors:SideMenuView.MenuWidthPercentage="0.5">
 			<StackLayout Spacing="10">
 				<Label Text="Menu" Style="{StaticResource Bold-Font}" TextColor="{StaticResource IconColor}" HorizontalOptions="Center" VerticalOptions="Start" FontSize="Title"/>
-				<Button Text="Add New Shop" Command="{Binding AddShop}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
+				<Button Text="Store Mangement" Command="{Binding AddShop}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White" Style="{StaticResource Bold-Font}"/>
 				<Button Text="Advance Search" Command="{Binding SortingPagePush}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
 					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White" Style="{StaticResource Bold-Font}"/>

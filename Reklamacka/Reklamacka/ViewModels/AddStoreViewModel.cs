@@ -4,6 +4,8 @@ using static Reklamacka.BaseModel;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Reklamacka.Pages;
+using System;
+using Xamarin.Essentials;
 
 namespace Reklamacka.ViewModels
 {
@@ -13,7 +15,6 @@ namespace Reklamacka.ViewModels
 		public Command DeleteAll { get; set; }			//!< Command to clear store database; TODO: temporary solution
 		public Command PushBrowserPage { get; set; }
 		public Command DeleteStore { get; set; }
-		public Web Website = new Web();
 
 		private Store storeInstance;
 		public string StoreName { get; set; }			//!< New store's name
@@ -59,7 +60,7 @@ namespace Reklamacka.ViewModels
 					return;
 				}
 
-				if (PhoneNumber != null)
+				if (!string.IsNullOrWhiteSpace(PhoneNumber))
 				{
 					if (PhoneNumber.Length > 9)
 					{
@@ -71,6 +72,13 @@ namespace Reklamacka.ViewModels
 						await App.Current.MainPage.DisplayAlert("Error", "Phone number must include only numbers", "Cancel");
 						return;
 					}
+				}
+
+				if (!string.IsNullOrWhiteSpace(StoreLink))
+				{
+					// adds http:// if it's not defined
+					var url = new UriBuilder(StoreLink).Uri;
+					StoreLink = url.ToString();
 				}
 
 				// create a new instance of the store
@@ -129,14 +137,17 @@ namespace Reklamacka.ViewModels
 
 			PushBrowserPage = new Command(async () =>
 			{
-				Website.Link = StoreLink;
-				await navig.PushAsync(new BrowserPage(Website));
+				if (!string.IsNullOrWhiteSpace(StoreLink))
+				{
+					var url = new UriBuilder(StoreLink).Uri;
+					StoreLink = url.ToString();
+					await Launcher.TryOpenAsync(StoreLink);
+				}
 			});
 		}
 
 		public void OnAppearing()
 		{
-			StoreLink = Website.Link;
 			OnPropertyChanged(nameof(StoreLink));
 		}
 	}
