@@ -11,12 +11,13 @@
 	<!-- Hodnoty nekterych barev -->
 	<ContentPage.Resources>
 		<Color x:Key="BcgTop1Color">#35344a</Color>
-		<Color x:Key="BcgTop2Color">#35344a</Color>
+		<Color x:Key="BcgTop2Color">#1a1a3a</Color>
 		<Color x:Key="BcgBottomColor">#ffffff</Color>
 		<Color x:Key="ItemsRightColor">#ebebee</Color>
 		<!--<Color x:Key="ItemsLeftColor">#2b32ab</Color>-->
-		<Color x:Key="ItemButtonsColor">#9595a0</Color>
-		<Color x:Key="BottomButtonsColor">#686875</Color>
+		<Color x:Key="ItemButtonsColor">#8a8a9a</Color>
+		<Color x:Key="BottomButtonsColor">#4a4a5a</Color>
+		<Color x:Key="IconColor">#c72c56</Color>
 
 		<ResourceDictionary>
 			<converter:ExpColorConverter x:Key="ExpToColor" />
@@ -41,27 +42,28 @@
 
 				<!-- Hlavicka -->
 				<Grid ColumnDefinitions="*,*,*" RowDefinitions="auto">
-					<Button Grid.Column="0" Text="•••" FontSize="Title" TextColor="White" HeightRequest="50" HorizontalOptions="Start" VerticalOptions="StartAndExpand"
-							Command="{Binding MenuButtonClicked}" WidthRequest="50" FontAttributes="Bold" BackgroundColor="Transparent"/>
-					<Image Grid.Column="1" Source="logo.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="CenterAndExpand" Margin="0,30,0,30"/>
+					<Button Grid.Column="0" Style="{StaticResource FontAwesome5Solid}" Text="&#xf0c9;" FontSize="Title" TextColor="{StaticResource IconColor}" HeightRequest="50" BackgroundColor="Transparent"
+							HorizontalOptions="Start" VerticalOptions="StartAndExpand" Command="{Binding MenuButtonClicked}" WidthRequest="50" FontAttributes="Bold"/>
+					<Image Grid.Column="1" Source="logo_red.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="CenterAndExpand" Margin="0,30,0,30"/>
 
-					<Label Grid.Column="2" Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:dd/MM/yyyy}'}" TextColor="#dddddd" 
-							HorizontalOptions="End" VerticalOptions="StartAndExpand" FontSize="16" Margin="5"/>
-
+					<Label Grid.Column="2" Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:dd/MM/yyyy}'}" TextColor="{StaticResource IconColor}" 
+							HorizontalOptions="End" VerticalOptions="StartAndExpand" FontSize="16" Margin="8" Style="{StaticResource Normal-Font}"/>
 				</Grid>
-				<!--<Label Text="Reklamacka" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" TextColor="white" VerticalOptions="StartAndExpand"/>-->
 
+				<Frame BackgroundColor="#30ffffff" Padding="0" CornerRadius="10" Margin="20,0,20,30">
+					<StackLayout Orientation="Horizontal" Padding="0">
+						<!--<ImageButton Source="revert.png" Command="{Binding ReverseBills}"  BackgroundColor="Transparent" Margin="5" WidthRequest="25" HeightRequest="25"/>-->
+						<Button Style="{StaticResource FontAwesome5Solid}" Text="&#xf160;" FontSize="25" BackgroundColor="Transparent" TextColor="#aaffffff"
+								 Margin="5" HorizontalOptions="Start" WidthRequest="60" Command="{Binding ReverseBills}"/>
 
-				<Frame BackgroundColor="#33ffffff" Padding="0" CornerRadius="10" Margin="20,0,20,30">
-					<StackLayout Orientation="Horizontal" Padding="5,0,0,0">
-						<ImageButton Source="revert.png" Command="{Binding ReverseBills}"  BackgroundColor="Transparent" Margin="5" WidthRequest="25" HeightRequest="25"/>
-
-						<Frame Padding="5" VerticalOptions="Center" HorizontalOptions="FillAndExpand" BackgroundColor="#33ffffff" CornerRadius="10">
+						<Frame Padding="5,0,0,0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="#20ffffff" CornerRadius="10" HasShadow="False">
 							<StackLayout Orientation="Horizontal">
 								<Entry Text="{Binding NameToSearch}" WidthRequest="150" Placeholder="Search"  Style="{StaticResource Normal-Font}" 
-									   TextColor="White" PlaceholderColor="White" FontSize="15" Completed="Search_Completed" HorizontalOptions="FillAndExpand"/>
+									   TextColor="White" PlaceholderColor="#77ffffff" FontSize="15" Completed="Search_Completed" HorizontalOptions="FillAndExpand"/>
 						
-								<ImageButton Source="magnifier.png" Margin="5" Command="{Binding SearchBill}" x:Name="SearchButton" BackgroundColor="Transparent" WidthRequest="25" HeightRequest="25"/>
+								<!--<ImageButton Source="magnifier.png" Margin="5" Command="{Binding SearchBill}" x:Name="SearchButton" BackgroundColor="Transparent" WidthRequest="25" HeightRequest="25"/>-->
+								<Button Style="{StaticResource FontAwesome5Solid}" Text="&#xf002;" FontSize="25" BackgroundColor="Transparent" TextColor="#aaffffff"
+									Margin="5" HorizontalOptions="End" WidthRequest="60" Command="{Binding SearchBill}"/>
 							</StackLayout>
 						</Frame>
 					</StackLayout>
@@ -74,7 +76,17 @@
 					</Frame>
 					<Frame Grid.Row="2" BackgroundColor="{StaticResource BcgBottomColor}"/>
 
-					<ListView Grid.Row="2" x:Name="ListBills" ItemsSource="{Binding ObserveBill}" Margin="10,10,10,0" RowHeight="60" SelectedItem="{Binding SelectedItem}">
+					<Label Grid.Row="2" TextColor="#40000000" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,100,0,0" IsVisible="{Binding IsEmpty}">
+						<Label.FormattedText>
+							<FormattedString>
+								<Span Text="List is empty, add bills " FontSize="30"/>
+								<Span Style="{StaticResource FontAwesome5Solid}" Text="&#xf3be;"  FontSize="25" />
+							</FormattedString>
+						</Label.FormattedText>
+					</Label>
+					
+					<!-- HLAVNI list polozek Bill-->
+					<ListView Grid.Row="2" x:Name="ListBills" ItemsSource="{Binding ObserveBill}" SeparatorVisibility="None" Margin="10,10,10,0" RowHeight="60" SelectedItem="{Binding SelectedItem}">
 						<ListView.ItemTemplate>
 							<DataTemplate>
 								<ViewCell>
@@ -82,19 +94,31 @@
 										<Grid VerticalOptions="FillAndExpand">
 											<Frame Padding="0" VerticalOptions="FillAndExpand" CornerRadius="10" BackgroundColor="{StaticResource ItemsRightColor}" HasShadow="False">
 												<StackLayout Orientation="Horizontal">
-													<Frame Padding="0" CornerRadius="10" Margin="6" HasShadow="False" BackgroundColor="{Binding BillItem.ExpirationDate, Converter={StaticResource ExpToColor}}">
-														<Image Source="bill.png" Margin="1"/>
+													<Grid>
+														<Frame Padding="0" WidthRequest="40" HeightRequest="40" CornerRadius="10" Margin="6" HasShadow="False" BackgroundColor="{Binding BillItem.ExpirationDate, Converter={StaticResource ExpToColor}}">
 													</Frame>
+													<!--<Image Source="bill.png" Margin="1"/>-->
+														<Label Style="{StaticResource FontAwesome5Solid}" Margin="10" Text="&#xf543;" FontSize="30" TextColor="#ccffffff" VerticalOptions="Center" HorizontalOptions="Center"/>
+													</Grid>
+														
 													<Label Text="{Binding BillItem.ProductName}" Style="{StaticResource Bold-Font}" TextColor="Black" FontSize="16" VerticalOptions="Center" LineBreakMode="TailTruncation"/>
 													<Frame HorizontalOptions="EndAndExpand" Padding="10,0,10,0" BackgroundColor="#15000000" CornerRadius="10" Margin="6">
 														<Label Text="{Binding BillItem.ExpirationDate, StringFormat='{0:Exp. dd/MM/yyyy}'}" TextColor="{StaticResource BcgTop1Color}" 
 														   FontSize="15" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Style="{StaticResource Bold-Font}"/>
 													</Frame>
-													</StackLayout>
+												</StackLayout>
 											</Frame>
 
-											<Frame Padding="5" BackgroundColor="#85000000" VerticalOptions="FillAndExpand" CornerRadius="10" IsVisible="{Binding IsSelected}">
-												<StackLayout Orientation="Horizontal">
+											<Frame Padding="5" BackgroundColor="#a0000000" VerticalOptions="FillAndExpand" CornerRadius="10" IsVisible="{Binding IsSelected}">
+												<StackLayout Orientation="Horizontal" Spacing="10">
+													<Button Style="{StaticResource FontAwesome5Solid}" Text="&#xf044;" FontSize="Title" TextColor="White" BackgroundColor="{StaticResource ItemButtonsColor}"
+														HorizontalOptions="EndAndExpand" VerticalOptions="Center" Command="{Binding BindingContext.EditBill, Source={x:Reference ThisMainPage}}" WidthRequest="70" CornerRadius="15"/>
+													<Button Style="{StaticResource FontAwesome5Solid}" Text="&#xf06e;" FontSize="Title" TextColor="White" BackgroundColor="{StaticResource ItemButtonsColor}"
+														HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding BindingContext.ViewImage, Source={x:Reference ThisMainPage}}" WidthRequest="70" CornerRadius="15" IsVisible="{Binding BillItem.HasImage}"/>
+													<Button Style="{StaticResource FontAwesome5Solid}" Text="&#xf1f8;" FontSize="Title" TextColor="White" BackgroundColor="{StaticResource ItemButtonsColor}"
+														HorizontalOptions="StartAndExpand" VerticalOptions="Center" Command="{Binding BindingContext.DeleteBill, Source={x:Reference ThisMainPage}}" WidthRequest="70" CornerRadius="15"/>
+													
+													<!--
 													<Button Text="Edit" FontSize="Default" FontAttributes="Bold" HorizontalOptions="EndAndExpand"
 														Command="{Binding BindingContext.EditBill}" BindingContext="{x:Reference ThisMainPage}"
 														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>
@@ -104,6 +128,7 @@
 													<Button Text="Delete" FontSize="Default" FontAttributes="Bold" HorizontalOptions="StartAndExpand"
 														Command="{Binding BindingContext.DeleteBill}" BindingContext="{x:Reference ThisMainPage}"
 														BackgroundColor="{StaticResource ItemButtonsColor}" CornerRadius="30" WidthRequest="80" TextColor="White"/>
+													-->
 												</StackLayout>
 											</Frame>
 										</Grid>
@@ -122,7 +147,7 @@
 					<StackLayout Grid.Row="2" Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="EndAndExpand">
 						<Button Text="+" FontSize="30" FontAttributes="Bold" Command="{Binding AddNewBill}" 
 							Margin="0,20,20,20" BackgroundColor="{StaticResource BcgTop1Color}" CornerRadius="30" 
-							HorizontalOptions="End" WidthRequest="60" HeightRequest="60" TextColor="White"/>
+							HorizontalOptions="End" WidthRequest="60" HeightRequest="60" TextColor="#bbffffff"/>
 					</StackLayout>
 				</Grid>
 
@@ -131,18 +156,18 @@
 		</ContentView>
 
 		<!-- Left menu bar-->
-		<ScrollView x:Name="LeftBar" Padding="10,20,10,20" BackgroundColor="#444444"
+		<ScrollView x:Name="LeftBar" Padding="10,20,10,20" BackgroundColor="#252435"
 					behaviors:SideMenuView.Position="LeftMenu" behaviors:SideMenuView.MainViewOpacityFactor="0.7" behaviors:SideMenuView.MenuWidthPercentage="0.5">
 			<StackLayout Spacing="10">
-				<Label Text="Menu" TextColor="White" HorizontalOptions="Center" VerticalOptions="Start" FontSize="Title"/>
+				<Label Text="Menu" Style="{StaticResource Bold-Font}" TextColor="{StaticResource IconColor}" HorizontalOptions="Center" VerticalOptions="Start" FontSize="Title"/>
 				<Button Text="Add New Shop" Command="{Binding AddShop}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
-					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
+					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White" Style="{StaticResource Bold-Font}"/>
 				<Button Text="Sorting" Command="{Binding SortingPagePush}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="Start"
-					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
+					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White" Style="{StaticResource Bold-Font}"/>
 				<Button Text="Settings" Command="{Binding SettingsPagePush}" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="StartAndExpand"
-					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
+					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White" Style="{StaticResource Bold-Font}"/>
 				<Button Text="Help" FontSize="Default" FontAttributes="Bold" HorizontalOptions="Fill" VerticalOptions="EndAndExpand"
-					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White"/>
+					BackgroundColor="{StaticResource BottomButtonsColor}" CornerRadius="5" TextColor="White" Style="{StaticResource Bold-Font}"/>
 			</StackLayout>
 		</ScrollView>
 

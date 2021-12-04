@@ -21,7 +21,7 @@ namespace Reklamacka.Database
 		// Save new Store instance to database
 		public Task<int> SaveStoreInstanceAsync(Store store)
 		{
-			if (store != null && store.ID == 0) //todo neradi ho pak abecedne
+			if (store != null && store.ID == 0)
 				LofStoreNames.Add(store.Name);
 			return store.ID != 0 ? db.UpdateAsync(store) : db.InsertAsync(store);
 		}

@@ -5,7 +5,7 @@
     <ContentPage.Content>
         <StackLayout Padding="15">
 
-			<Grid RowDefinitions="auto,auto,auto,auto,auto,*,*,*" ColumnDefinitions="*,2.5*" Margin="0,20,0,0">
+			<Grid RowDefinitions="auto,auto,auto,auto,auto,*,*,*,*" ColumnDefinitions="*,2.5*" Margin="0,20,0,0">
 				<Label Grid.Row="0" Grid.Column="0" Text="Pick shop" VerticalOptions="Center"/>
 				<Frame Grid.Row="0" Grid.Column="1" Padding="0" BackgroundColor="#cccccc" CornerRadius="5" WidthRequest="200">
 					<Picker ItemsSource="{Binding ShopNameList}" SelectedItem="{Binding ShopName}" HorizontalOptions="FillAndExpand" />
@@ -26,8 +26,9 @@
 				<Label Grid.Row="4" Grid.Column="0" Text="Phone Number" VerticalOptions="Center"/>
 				<Entry Grid.Row="4" Grid.Column="1" Keyboard="Numeric" Text="{Binding PhoneNumber}" HorizontalOptions="FillAndExpand"/>
 
-				<Button Grid.Row="6" Grid.ColumnSpan="2" Text="Save Shop" Command="{Binding SaveStore}" HorizontalOptions="Center"/>
-				<Button Grid.Row="7" Grid.ColumnSpan="2" Text="Delete All" Command="{Binding DeleteAll}" HorizontalOptions="Center"/>
+				<Button Grid.Row="6" Grid.ColumnSpan="2" Text="Save Shop" Command="{Binding SaveStore}" HorizontalOptions="Center" WidthRequest="110"/>
+				<Button Grid.Row="7" Grid.ColumnSpan="2" Text="Delete" Command="{Binding DeleteStore}" HorizontalOptions="Center" WidthRequest="110"/>
+				<Button Grid.Row="8" Grid.ColumnSpan="2" Text="Delete All" Command="{Binding DeleteAll}" HorizontalOptions="Center" WidthRequest="110"/>
 			</Grid>
 			
 		</StackLayout>

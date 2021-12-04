@@ -21,5 +21,12 @@
 			<Setter Property="FontFamily" Value="OpenSans-ExtraBold.ttf#OpenSans-ExtraBold.ttf"/>
 		</Style>
 
+		<Style x:Key="FontAwesome5Regular" TargetType="Label">
+			<Setter Property="FontFamily" Value="Font-Awesome-5-Free-Regular-400.otf#Font-Awesome-5-Free-Regular-400.otf"/>
+		</Style>
+		<Style x:Key="FontAwesome5Solid" TargetType="Label">
+			<Setter Property="FontFamily" Value="Font-Awesome-5-Free-Solid-900.otf#Font-Awesome-5-Free-Solid-900.otf"/>
+		</Style>
+
 	</Application.Resources>
 </Application>

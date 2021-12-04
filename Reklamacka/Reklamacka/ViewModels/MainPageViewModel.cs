@@ -78,6 +78,14 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
+		private bool isEmpty = true;
+		public bool IsEmpty
+		{
+			get => isEmpty;
+			set { isEmpty = value; OnPropertyChanged(nameof(IsEmpty));
+			}
+		}
+
 		public Command AddShop { get; set; }
 		public Command AddNewBill { get; set; }         //!< Command pro tlacitko pridani nove uctenky
 		public Command EditBill { get; set; }           //!< Command pro tlacitko editace uctenky z listu
@@ -210,7 +218,11 @@ namespace Reklamacka.ViewModels
 
 			// sort displayable bills
 			ObserveBill = new ObservableCollection<ItemBill>(LofBills.Where(bill => bill.IsVisible));
-			await System.Threading.Tasks.Task.CompletedTask;
+			await Task.CompletedTask;
+
+			if (ObserveBill.Count == 0)
+				IsEmpty = true;
+			else IsEmpty = false;
 
 			// expiration notification
 			if (!notified)

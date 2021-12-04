@@ -24,7 +24,7 @@ namespace Reklamacka.Converters
 				else if (DateTime.Compare((DateTime)value, DateTime.Today.AddMonths(2)) < 0)    // 2 mesice
 					return Color.FromHex("#eaab81");
 				else if (DateTime.Compare((DateTime)value, DateTime.Today.AddMonths(3)) < 0)    // 3 mesice
-					return Color.FromHex("#f1e06b");
+					return Color.FromHex("#f2cb6b");
 				return Color.FromHex("#61d384");
 			}
 			catch
