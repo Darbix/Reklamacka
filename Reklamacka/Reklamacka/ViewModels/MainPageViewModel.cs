@@ -1,44 +1,50 @@
 using Reklamacka.Models;
 using Reklamacka.Pages;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
+using static Reklamacka.BaseModel;
 
 namespace Reklamacka.ViewModels
 {
 	public class MainPageViewModel : INotifyPropertyChanged
 	{
 
-		private ObservableCollection<Bill> bills;
-		/// <summary>
-		/// Kolekce uctenek-produktu naplnujici ListView v MainPage
-		/// </summary>
-		public ObservableCollection<Bill> Bills
+		private List<ItemBill> lofBills;
+		public List<ItemBill> LofBills							//!< List of all bills in database
 		{
-			get => bills;
+			get => lofBills;
 			set
 			{
-				bills = value;
-				OnPropertyChanged(nameof(Bills));
+				lofBills = value;
+				OnPropertyChanged(nameof(LofBills));
+			}
+		}
+		private ObservableCollection<ItemBill> observeBill;
+		public ObservableCollection<ItemBill> ObserveBill		//!< List of displayable bills (after applying basic filters)
+		{
+			get => observeBill;
+			set
+			{
+				observeBill = value;
+				OnPropertyChanged(nameof(ObserveBill));
 			}
 		}
 
-		private Bill selectedBill;
-		/// <summary>
-		/// Aktualne zvoleny item uctenky z listu
-		/// </summary>
-		public Bill SelectedBill
+		private ItemBill selectedItem;
+		public ItemBill SelectedItem
 		{
-			get => selectedBill;
+			get => selectedItem;
 			set
 			{
-				if (selectedBill != null)
-					selectedBill.IsSelected = false;
-				selectedBill = value;
-				OnPropertyChanged(nameof(SelectedBill));
+				if (selectedItem != null)
+					selectedItem.IsSelected = false;
+				selectedItem = value;
+				OnPropertyChanged(nameof(SelectedItem));
 			}
 		}
 
@@ -88,6 +94,12 @@ namespace Reklamacka.ViewModels
 		// konstruktor
 		public MainPageViewModel(INavigation Navigation)
 		{
+			// init
+			if (LofBills == null)
+				LofBills = new List<ItemBill>();
+			if (ObserveBill == null)
+				ObserveBill = new ObservableCollection<ItemBill>();
+
 			AddShop = new Command(async () =>
 			{
 				await Navigation.PushAsync(new AddStorePage(Navigation));
@@ -101,13 +113,13 @@ namespace Reklamacka.ViewModels
 			// vytvoreni commandu editace nove uctenky - presun na stranku editace existujici uctenky
 			EditBill = new Command(async () =>
 			{
-				await Navigation.PushAsync(new BillEditPage(Navigation, SelectedBill));
+				await Navigation.PushAsync(new BillEditPage(Navigation, SelectedItem.BillItem));
 			});
 
 			// inicializace tlacitka ke smazani polozky
 			DeleteBill = new Command(async () =>
 			{
-				await BaseModel.BillsDB.DeleteItemAsync(SelectedBill);
+				await BillsDB.DeleteItemAsync(SelectedItem.BillItem);
 				// obnoveni listu polozek
 				OnAppearing();
 			});
@@ -115,12 +127,8 @@ namespace Reklamacka.ViewModels
 			// Po kliknuti je nastaven priznak IsSelected polozky na true
 			ItemTapped = new Command((e) =>
 			{
-				if (SelectedBill == null)
-					return;
-				if (SelectedBill.IsSelected)
-					SelectedBill.IsSelected = false;
-				else
-					SelectedBill.IsSelected = true;
+				if (SelectedItem != null)
+					SelectedItem.IsSelected = !SelectedItem.IsSelected;
 			});
 
 			// vytvoreni commandu pro presun na stranku tridici polozky uctenek
@@ -136,21 +144,20 @@ namespace Reklamacka.ViewModels
 
 			ReverseBills = new Command(() =>
 			{
+				// reordering list
 				if (isFromOldest)
-				{
-					Bills = new ObservableCollection<Bill>(Bills.OrderBy(x => x.ExpirationDate)); //..(await BaseModel.BillsDB.GetAllItemsAsync())
-					isFromOldest = false;
-				}
+					LofBills = LofBills.OrderBy(item => item.BillItem.ExpirationDate).ToList();
 				else
-				{
-					Bills = new ObservableCollection<Bill>(Bills.OrderByDescending(x => x.ExpirationDate)); //..(await BaseModel.BillsDB.GetAllFromOldestAsync())
-					isFromOldest = true;
-				}
+					LofBills = LofBills.OrderByDescending(item => item.BillItem.ExpirationDate).ToList();
+
+				isFromOldest = !isFromOldest;
+				// updating displayable collection
+				ObserveBill = new ObservableCollection<ItemBill>(LofBills.Where(bill => bill.IsVisible));
 			});
 
 			ViewImage = new Command(async () =>
 			{
-				await Navigation.PushAsync(new ViewImagePage(SelectedBill));
+				await Navigation.PushAsync(new ViewImagePage(SelectedItem.BillItem));
 			});
 
 			MenuButtonClicked = new Command(() =>
@@ -160,29 +167,34 @@ namespace Reklamacka.ViewModels
 
 			SearchBill = new Command(async () =>
 			{
-				if (!NameToSearch.Equals(""))
-					Bills = new ObservableCollection<Bill>((await BaseModel.BillsDB.GetAllItemsAsync()).Where(x => x.ProductName.Contains(NameToSearch)).OrderBy(x => x.ProductName).ToList());
+				if (!string.IsNullOrWhiteSpace(NameToSearch))
+					LofBills.ForEach(bill => bill.IsVisible = bill.BillItem.ProductName.Contains(NameToSearch));
 				else
-					Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllItemsAsync());
+					LofBills.ForEach(bill => bill.IsVisible = true);
+
+				ObserveBill = new ObservableCollection<ItemBill>(LofBills.Where(bill => bill.IsVisible));
+				await System.Threading.Tasks.Task.CompletedTask;
 			});
 		}
-
 
 		/// <summary>
 		/// Funkce volana pri eventu kliknuti na item v listu
 		/// </summary>
 		public async void OnAppearing()
 		{
-			// pri nacteni hlavni stranky se kolekce naplni novymi daty z databaze
-			// TODO - mozna lze resit nejak lepe
+			SelectedItem = null;
+
+			// update list of bills
+			LofBills.Clear();
 			if (isFromOldest)
-				Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllFromOldestAsync());
+				BillsDB.GetAllFromOldestAsync().Result.ToList().ForEach(bill => LofBills.Add(new ItemBill(bill)));
 			else
-				Bills = new ObservableCollection<Bill>(await BaseModel.BillsDB.GetAllItemsAsync());
+				BillsDB.GetAllItemsAsync().Result.ToList().ForEach(bill => LofBills.Add(new ItemBill(bill)));
 
-			SelectedBill = null;
+			// sort displayable bills
+			ObserveBill = new ObservableCollection<ItemBill>(LofBills.Where(bill => bill.IsVisible));
+			await System.Threading.Tasks.Task.CompletedTask;
 		}
-
 
 		// OnPropertyChanged() volat pri pozadavku na projeveni zmeny pri nejake udalosti
 		public event PropertyChangedEventHandler PropertyChanged;
