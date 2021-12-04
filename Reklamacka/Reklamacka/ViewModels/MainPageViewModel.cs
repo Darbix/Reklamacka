@@ -114,6 +114,11 @@ namespace Reklamacka.ViewModels
 			{
 				await Navigation.PushAsync(new AddStorePage(Navigation));
 			});
+
+			ArchivePage = new Command(async () =>
+			{
+				await Navigation.PushAsync(new ArchivePage(Navigation));
+			});
 			// vytvoreni commandu pridani nove uctenky - presun na stranku editace
 			AddNewBill = new Command(async () =>
 			{
