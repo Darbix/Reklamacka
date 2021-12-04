@@ -12,19 +12,12 @@ namespace Reklamacka.ViewModels
 		public Command SaveStore { get; set; }			//!< Command for saving new store to the database
 		public Command DeleteAll { get; set; }			//!< Command to clear store database; TODO: temporary solution
 		public Command PushBrowserPage { get; set; }
+		public Command DeleteStore { get; set; }
 		public Web Website = new Web();
 
 		private Store storeInstance;
 		public string StoreName { get; set; }			//!< New store's name
-		public string StoreLink { get; set; }						//!< New store's weblink
-		/*{
-			get => Website.Link;
-			set
-			{
-				Website.Link = value;
-				OnPropertyChanged(nameof(StoreLink));
-			}
-		}*/
+		public string StoreLink { get; set; }			//!< New store's weblink
 		public string Email { get; set; }				//!< New store's contact email
 		public string PhoneNumber { get; set; }			//!< New store's contact number
 
@@ -40,15 +33,18 @@ namespace Reklamacka.ViewModels
 				{
 					shop = StoreDB.GetStoreAsync(value).Result;
 
-					StoreName = shop.Name;
-					StoreLink = shop.Link;
-					Email = shop.Email;
-					PhoneNumber = shop.PhoneNumber;
+					if (shop != null)
+					{
+						StoreName = shop.Name;
+						StoreLink = shop.Link;
+						Email = shop.Email;
+						PhoneNumber = shop.PhoneNumber;
 
-					OnPropertyChanged(nameof(StoreName));
-					OnPropertyChanged(nameof(StoreLink));
-					OnPropertyChanged(nameof(Email));
-					OnPropertyChanged(nameof(PhoneNumber));
+						OnPropertyChanged(nameof(StoreName));
+						OnPropertyChanged(nameof(StoreLink));
+						OnPropertyChanged(nameof(Email));
+						OnPropertyChanged(nameof(PhoneNumber));
+					}
 				}
 			}
 		}
@@ -57,6 +53,12 @@ namespace Reklamacka.ViewModels
 		{
 			SaveStore = new Command(async () =>
 			{
+				if (string.IsNullOrWhiteSpace(StoreName))
+				{
+					await App.Current.MainPage.DisplayAlert("Error", "ShopName cannot be empty!", "Cancel");
+					return;
+				}
+
 				if (PhoneNumber != null)
 				{
 					if (PhoneNumber.Length > 9)
@@ -103,9 +105,25 @@ namespace Reklamacka.ViewModels
 
 			DeleteAll = new Command(async () =>
 			{
+				if (!await App.Current.MainPage.DisplayAlert("Delete all", "Would you like to delete all stores?", "Yes", "No"))
+					return;
+
 				await StoreDB.ClearDatabase();
 				// clear store records of every bill in the database
 				BillsDB.GetAllItemsAsync().Result.ForEach(bill => bill.ShopID = 0);
+				await navig.PopAsync();
+			});
+
+			DeleteStore = new Command(async () =>
+			{
+				if (!(await App.Current.MainPage.DisplayAlert("Delete store", "Would you like to delete the store?", "Yes", "No")) || shop == null)
+					return;
+
+				// clear store record of every bill it had this instance
+				BillsDB.GetAllItemsAsync().Result.Where(bill => bill.ShopID == shop.ID).ToList().ForEach(bill => bill.ShopID = 0);
+
+				await StoreDB.DeleteStoreAsync(shop);
+				LofStoreNames = new ObservableCollection<string>(StoreDB.GetStoresListAlphabetOrderAsync().Result.Select(shop => shop.Name));
 				await navig.PopAsync();
 			});
 

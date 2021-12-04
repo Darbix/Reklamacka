@@ -6,7 +6,7 @@
 			 NavigationPage.HasNavigationBar="false">
 
 	<ContentPage.Content>
-		<Grid BackgroundColor="#333333">
+		<Grid BackgroundColor="#252435">
 			<local:PinchToZoomContainer >
 				<local:PinchToZoomContainer.Content>
 					<Image x:Name="tempImg" Source="{Binding ImgBill}"/>
@@ -14,7 +14,8 @@
 
 			</local:PinchToZoomContainer>
 			<Button WidthRequest="60" HeightRequest="60" VerticalOptions="End" HorizontalOptions="End" Margin="20" Clicked="Cancel_Clicked"
-					BackgroundColor="#555555" CornerRadius="30" Text="←" FontAttributes="Bold" FontSize="25" TextColor="White"/>
+					BackgroundColor="#55546a" CornerRadius="30" FontAttributes="Bold"
+					Style="{StaticResource FontAwesome5Solid}" Text="&#xf060;" FontSize="25" TextColor="#99ffffff"/>
 		</Grid>
 	</ContentPage.Content>
 </ContentPage>

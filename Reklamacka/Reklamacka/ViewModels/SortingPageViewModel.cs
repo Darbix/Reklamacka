@@ -12,12 +12,12 @@ namespace Reklamacka.ViewModels
 {
 	public class SortingPageViewModel : INotifyPropertyChanged
 	{
-		public static ObservableCollection<FilterItem> FilterLofTypes { get; set; }								//!< Static collection of selected product types; used in Filter mode
-		public static ObservableCollection<FilterItem> FilterLofStoreNames { get; set; }						//!< Static collection of selected store names; used in Filter mode
-		public static List<string> LofFilteredShopNames { get; set; } = new List<string>();						//!< Bills of goods that were purchased from these stores will be displayed
-		public static List<ProductTypes> LofFilteredProductTypes { get; set; }									//!< Goods of selected categories will be displayed
+		public static ObservableCollection<FilterItem> FilterLofTypes { get; set; }                             //!< Static collection of selected product types; used in Filter mode
+		public static ObservableCollection<FilterItem> FilterLofStoreNames { get; set; }                        //!< Static collection of selected store names; used in Filter mode
+		public static List<string> LofFilteredShopNames { get; set; } = new List<string>();                     //!< Bills of goods that were purchased from these stores will be displayed
+		public static List<ProductTypes> LofFilteredProductTypes { get; set; }                                  //!< Goods of selected categories will be displayed
 		private List<ItemBill> bills;
-		public List<ItemBill> Bills						//!< List of bills with additional properties
+		public List<ItemBill> Bills                     //!< List of bills with additional properties
 		{
 			get => bills;
 			set
@@ -28,7 +28,7 @@ namespace Reklamacka.ViewModels
 		}
 
 		private ObservableCollection<ItemBill> observeBills;
-		public ObservableCollection<ItemBill> ObserveBills		//!< Displayable bills
+		public ObservableCollection<ItemBill> ObserveBills      //!< Displayable bills
 		{
 			get => observeBills;
 			set
@@ -58,9 +58,9 @@ namespace Reklamacka.ViewModels
 		public SortingPageViewModel(INavigation Navigation)
 		{
 			// init collections of bills
-            var lofBills = BillsDB.GetAllAsync().Result;
+			var lofBills = BillsDB.GetAllAsync().Result;
 			if (Bills == null)
-                Bills = new List<ItemBill>();
+				Bills = new List<ItemBill>();
 
 			if (lofBills != null)
 				lofBills.ForEach(bill => Bills.Add(new ItemBill(bill)));
@@ -110,7 +110,7 @@ namespace Reklamacka.ViewModels
 			bool valSet = false;
 
 			// reset values
-            Bills.ForEach(item =>
+			Bills.ForEach(item =>
 			{
 				item.IsVisible = false;
 				item.IsSelected = false;
