@@ -16,7 +16,7 @@
 		<Color x:Key="ItemsRightColor">#ebebee</Color>
 		<!--<Color x:Key="ItemsLeftColor">#2b32ab</Color>-->
 		<Color x:Key="ItemButtonsColor">#9595a0</Color>
-		<Color x:Key="BottomButtonsColor">#787885</Color>
+		<Color x:Key="BottomButtonsColor">#686875</Color>
 
 		<ResourceDictionary>
 			<converter:ExpColorConverter x:Key="ExpToColor" />

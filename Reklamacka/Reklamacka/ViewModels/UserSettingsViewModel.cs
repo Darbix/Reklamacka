@@ -1,7 +1,9 @@
+using Plugin.LocalNotification;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -25,10 +27,27 @@ namespace Reklamacka.ViewModels
 			get => Preferences.Get("Notifications", false);
 			set
 			{
+
+				if (IsOnNotifications == false && value == true)
+					_ = ShowNotif();
+
 				Preferences.Set("Notifications", value);
 				OnPropertyChanged(nameof(IsOnNotifications));
 			}
 		}
+
+		private async Task<bool> ShowNotif()
+		{
+			var notification = new NotificationRequest
+			{
+				ReturningData = "Notifications enabled",
+				Title = "Notifications have been successfully enabled",
+				Schedule = { NotifyTime = DateTime.Now.AddSeconds(2)}
+			};
+
+			return await NotificationCenter.Current.Show(notification);
+		}
+
 		public bool IsOnAlowColors
 		{
 			get => Preferences.Get("AlowColors", true);

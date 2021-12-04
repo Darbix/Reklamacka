@@ -1,3 +1,4 @@
+using Plugin.LocalNotification;
 using Reklamacka.Models;
 using Reklamacka.Pages;
 using System;
@@ -5,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
 using static Reklamacka.BaseModel;
@@ -175,7 +177,22 @@ namespace Reklamacka.ViewModels
 				ObserveBill = new ObservableCollection<ItemBill>(LofBills.Where(bill => bill.IsVisible));
 				await System.Threading.Tasks.Task.CompletedTask;
 			});
+
 		}
+
+		private async Task<bool> ShowNotif()
+		{
+			var notification = new NotificationRequest
+			{
+				ReturningData = "Notifications enabled",
+				Title = "A product bill will be expired in 3 days",
+				Schedule = { NotifyTime = DateTime.Now.AddSeconds(2) }
+			};
+
+			return await NotificationCenter.Current.Show(notification);
+		}
+
+		private static bool notified;
 
 		/// <summary>
 		/// Funkce volana pri eventu kliknuti na item v listu
@@ -194,6 +211,19 @@ namespace Reklamacka.ViewModels
 			// sort displayable bills
 			ObserveBill = new ObservableCollection<ItemBill>(LofBills.Where(bill => bill.IsVisible));
 			await System.Threading.Tasks.Task.CompletedTask;
+
+			// expiration notification
+			if (!notified)
+			{
+				try
+				{
+					ObserveBill.Where(x => x.BillItem.ExpirationDate <= DateTime.Today.AddDays(3)).First();
+					_ = ShowNotif();
+					// max 1x when app is runnung
+					notified = true;
+				}
+				catch { }
+			}
 		}
 
 		// OnPropertyChanged() volat pri pozadavku na projeveni zmeny pri nejake udalosti

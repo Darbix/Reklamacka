@@ -41,7 +41,7 @@ namespace Reklamacka.ViewModels
 		public string Notes { get; set; }               //!< Additional notes
 
 		private string FilePath { get; set; }
-		private string DefaulltFolderPath { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+		private string DefaultFolderPath { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 		private bool IsSaved { get; set; } = false;
 		private bool SelectingFile { get; set; } = false;
 
@@ -194,6 +194,7 @@ namespace Reklamacka.ViewModels
 			DeleteBill = new Command(async () =>
 			{
 				_ = await BillsDB.DeleteItemAsync(SelectedBill);
+				_ = await navigation.PopAsync();
 			});
 
 			PickPhoto = new Command(async (openCamera) =>
@@ -296,8 +297,8 @@ namespace Reklamacka.ViewModels
 
 				if (result == null)
 					return;
-				if (result.Equals("Cancel"))
-					return;
+				//if (result.Equals("Cancel"))
+				//	return;
 
 				if (result.Equals("Pick") || result.Equals("Change"))
 				{
@@ -313,7 +314,7 @@ namespace Reklamacka.ViewModels
 							fileName = fileResult.FileName;
 
 							// Opakovana snaha o zmenu nazvu souboru
-							while (File.Exists(Path.Combine(DefaulltFolderPath, fileName)))
+							while (File.Exists(Path.Combine(DefaultFolderPath, fileName)))
 							{
 								var promptResult = await App.Current.MainPage.DisplayPromptAsync("The file already exists", "Enter a new name", "OK", "Cancel", "my_file");
 
@@ -330,9 +331,9 @@ namespace Reklamacka.ViewModels
 							if (SelectedBill != null)
 								SelectedBill.FilePath = null;
 
-							File.Copy(fileResult.FullPath, Path.Combine(DefaulltFolderPath, fileName));
+							File.Copy(fileResult.FullPath, Path.Combine(DefaultFolderPath, fileName));
 
-							FilePath = Path.Combine(DefaulltFolderPath, fileName);
+							FilePath = Path.Combine(DefaultFolderPath, fileName);
 						}
 					}
 					catch
@@ -353,7 +354,7 @@ namespace Reklamacka.ViewModels
 							SelectedBill.FilePath = null;
 					}
 				}
-				else
+				else if(!result.StartsWith("Cancel"))
 				{
 					try
 					{
@@ -370,11 +371,11 @@ namespace Reklamacka.ViewModels
 				}
 
 				//todo smazat, jen pomocny vypis obsahu dir
-				var allFiles = Directory.GetFiles(DefaulltFolderPath);
+				var allFiles = Directory.GetFiles(DefaultFolderPath);
 				string finalText = "";
 				for (int i = 0; i < allFiles.Length; i++)
 					finalText += Path.GetFileName(allFiles[i]) + ',';
-				await App.Current.MainPage.DisplayAlert("info", DefaulltFolderPath + "|||" + finalText, "OK");
+				await App.Current.MainPage.DisplayAlert("info", DefaultFolderPath + "|||" + finalText, "OK");
 			});
 
 			PickNoneShop = new Command(() =>

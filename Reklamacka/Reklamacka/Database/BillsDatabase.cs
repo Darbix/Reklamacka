@@ -2,6 +2,7 @@ using Reklamacka.Models;
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,11 +31,22 @@ namespace Reklamacka.Database
 		//Delete  
 		public Task<int> DeleteItemAsync(Bill bill)
 		{
+			if(bill != null && bill.FilePath != null)
+			{
+				try { File.Delete(Path.Combine(bill.FilePath)); }
+				catch { }
+			}
 			return db.DeleteAsync(bill);
 		}
 
 		public Task<int> DeleteAllItems<T>()
 		{
+			var getDb = this.GetAllAsync().Result.Where(bill => !string.IsNullOrWhiteSpace(bill.FilePath)).ToList();
+			getDb.ForEach(bill => 
+			{
+				try { File.Delete(Path.Combine(bill.FilePath)); }
+				catch { }
+			});
 			return db.DeleteAllAsync<Bill>();
 		}
 
