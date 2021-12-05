@@ -15,8 +15,9 @@ namespace Reklamacka.ViewModels
 	{
 		public static ObservableCollection<FilterItem> FilterLofTypes { get; set; }                             //!< Static collection of selected product types; used in Filter mode
 		public static ObservableCollection<FilterItem> FilterLofStoreNames { get; set; }                        //!< Static collection of selected store names; used in Filter mode
-		public static List<string> LofFilteredShopNames { get; set; } = new List<string>();                     //!< Bills of goods that were purchased from these stores will be displayed
+		public static List<string> LofFilteredShopNames { get; set; }                                           //!< Bills of goods that were purchased from these stores will be displayed
 		public static List<ProductTypes> LofFilteredProductTypes { get; set; }                                  //!< Goods of selected categories will be displayed
+		public static bool Intersection { get; set; }
 		private List<ItemBill> bills;
 		public List<ItemBill> Bills                     //!< List of bills with additional properties
 		{
@@ -102,6 +103,7 @@ namespace Reklamacka.ViewModels
 				lofBills.ForEach(bill => Bills.Add(new ItemBill(bill)));
 
 			// reset filters
+			Intersection = false;
 			FilterLofStoreNames = null;
 			FilterLofTypes = null;
 			LofFilteredProductTypes = new List<ProductTypes>();
@@ -192,29 +194,59 @@ namespace Reklamacka.ViewModels
 			NameByAlpha = true;
 			ByExpDate = true;
 
-			// filter applied
-			// filter by product types
-			if (LofFilteredProductTypes != null && LofFilteredProductTypes.Count() > 0)
+			if (Intersection)
 			{
-				// make visible items that are the same category as selected types
-				Bills.Where(item => LofFilteredProductTypes.Any(type => item.BillItem.ProductType == type)).ToList().ForEach(item => item.IsVisible = true);
-				valSet = true;
+				List<ItemBill> validItems = new List<ItemBill>(Bills);
+				// filter applied
+				// filter by product types
+				if (LofFilteredProductTypes != null && LofFilteredProductTypes.Count() > 0)
+				{
+					// filter out items with different type
+					validItems.Where(item => LofFilteredProductTypes.Any(type => item.BillItem.ProductType == type)).ToList().ForEach(item => item.IsVisible = true);
+					valSet = true;
+					ObserveBills = new ObservableCollection<ItemBill>(validItems.Where(item => item.IsVisible));
+				}
+				validItems = new List<ItemBill>(ObserveBills);
+				validItems.ForEach(item => item.IsVisible = false);
+
+				// filter by store name
+				if (LofFilteredShopNames != null && LofFilteredShopNames.Count() > 0)
+				{
+					// filter out items that were purchased from different store
+					validItems.Where(item => LofFilteredShopNames.Any(name => item.StoreName == name)).ToList().ForEach(item => item.IsVisible = true);
+					valSet = true;
+					ObserveBills = new ObservableCollection<ItemBill>(validItems.Where(item => item.IsVisible));
+				}
 			}
-			// filter by store name
-			if (LofFilteredShopNames != null && LofFilteredShopNames.Count() > 0)
+			else
 			{
-				// make visible items that were purchase from selected stores
-				Bills.Where(item => LofFilteredShopNames.Any(name => item.StoreName == name)).ToList().ForEach(item => item.IsVisible = true);
-				valSet = true;
+				// filter applied
+				// filter by product types
+				if (LofFilteredProductTypes != null && LofFilteredProductTypes.Count() > 0)
+				{
+					// make visible items that are the same category as selected types
+					Bills.Where(item => LofFilteredProductTypes.Any(type => item.BillItem.ProductType == type)).ToList().ForEach(item => item.IsVisible = true);
+					valSet = true;
+				}
+				// filter by store name
+				if (LofFilteredShopNames != null && LofFilteredShopNames.Count() > 0)
+				{
+					// make visible items that were purchase from selected stores
+					Bills.Where(item => LofFilteredShopNames.Any(name => item.StoreName == name)).ToList().ForEach(item => item.IsVisible = true);
+					valSet = true;
+				}
+				// save only visible item into observable collection of bills
+				ObserveBills = new ObservableCollection<ItemBill>(Bills.Where(x => x.IsVisible));
 			}
 
 			// if all filters are empty (all in default mode)
 			// set all items as visible
 			if (!valSet)
+			{
 				Bills.ForEach(item => item.IsVisible = true);
-
-			// save only visible item into observable collection of bills
-			ObserveBills = new ObservableCollection<ItemBill>(Bills.Where(x => x.IsVisible));
+				// save only visible item into observable collection of bills
+				ObserveBills = new ObservableCollection<ItemBill>(Bills.Where(x => x.IsVisible));
+			}
 			await System.Threading.Tasks.Task.CompletedTask;
 		}
 

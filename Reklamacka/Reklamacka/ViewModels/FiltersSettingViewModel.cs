@@ -16,7 +16,13 @@ namespace Reklamacka.ViewModels
 	{
 		public ObservableCollection<FilterItem> ListTypes { get; set; }			//!< Product types filter
 		public ObservableCollection<FilterItem> ListStoreNames { get; set; }	//!< Stores filter
+		public bool FilterStatus
+		{
+			get => Intersection;
+			set { Intersection = value; }
+		}
 		public Command SelectChoice { get; set; }
+		public Command ToggleIntersection { get; set; }
 
 		public FiltersSettingViewModel()
 		{
@@ -50,6 +56,11 @@ namespace Reklamacka.ViewModels
 					return;
 
 				filterItem.IsChecked = !filterItem.IsChecked;
+			});
+
+			ToggleIntersection = new Command(() =>
+			{
+				FilterStatus = !FilterStatus;
 			});
 		}
 
