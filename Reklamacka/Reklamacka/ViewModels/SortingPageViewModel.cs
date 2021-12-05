@@ -147,9 +147,9 @@ namespace Reklamacka.ViewModels
 				if (ObserveBills == null || !ObserveBills.Any())
 					return;
 				if (ByExpDate)
-					ObserveBills = new ObservableCollection<ItemBill>(ObserveBills.OrderBy(item => item.BillItem.ExpirationDate).ToList());
-				else
 					ObserveBills = new ObservableCollection<ItemBill>(ObserveBills.OrderByDescending(item => item.BillItem.ExpirationDate).ToList());
+				else
+					ObserveBills = new ObservableCollection<ItemBill>(ObserveBills.OrderBy(item => item.BillItem.ExpirationDate).ToList());
 				ByExpDate = !ByExpDate;
 				await System.Threading.Tasks.Task.CompletedTask;
 			});
@@ -172,7 +172,7 @@ namespace Reklamacka.ViewModels
 
 				// looks for name that contains SearchSubstring while ignoring cases
 				if (!string.IsNullOrWhiteSpace(SearchSubstring))
-					Bills.Where(item => new CultureInfo("cs-CZ", false).CompareInfo.IndexOf(item.BillItem.ProductName, SearchSubstring, CompareOptions.IgnoreCase) >= 0).ToList().ForEach(item => item.IsVisible = false);
+					Bills.Where(item => new CultureInfo("cs-CZ", false).CompareInfo.IndexOf(item.BillItem.ProductName, SearchSubstring, CompareOptions.IgnoreCase) < 0).ToList().ForEach(item => item.IsVisible = false);
 
 				ObserveBills = new ObservableCollection<ItemBill>(Bills.Where(item => item.IsVisible).ToList());
 				await System.Threading.Tasks.Task.CompletedTask;

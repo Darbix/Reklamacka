@@ -7,7 +7,7 @@
 			 x:Name="ThisPage">
 
 	<ContentPage.Resources>
-		<Color x:Key="BcgBottomColor">#dddddd</Color>
+		<Color x:Key="BcgBottomColor">#55556a</Color>
 		<Color x:Key="ItemsRightColor">#3d44cf</Color>
 		<Color x:Key="ItemButtonsColor">#ff0640</Color>
 
@@ -25,68 +25,95 @@
 	</NavigationPage.TitleView>
 
 	<ContentPage.Content>
-		<StackLayout Padding="5,15,5,0" BackgroundColor="#55556a">
-			<ListView Grid.Row="2" x:Name="ListBills" ItemsSource="{Binding ObserveBills}" Margin="10,0,10,0" RowHeight="65" SelectedItem="{Binding SelectedItem}">
-				<ListView.ItemTemplate>
-					<DataTemplate>
-						<ViewCell>
-							<StackLayout Padding="0,0,0,5">
-								<Grid VerticalOptions="FillAndExpand">
-									<Frame Padding="5" VerticalOptions="FillAndExpand" CornerRadius="15" BackgroundColor="#35344a">
+		<StackLayout BackgroundColor="{StaticResource BcgBottomColor}">
+			<StackLayout Padding="5,0,0,10" HeightRequest="90" VerticalOptions="StartAndExpand" Orientation="Horizontal" Spacing="0">
+				<StackLayout.Background>
+					<LinearGradientBrush StartPoint="0,0"
+							EndPoint="0,1">
+						<GradientStop Color="#35344a"
+						Offset="0.3" />
+						<GradientStop Color="#1c1c30"
+						Offset="1.0" />
+					</LinearGradientBrush>
+				</StackLayout.Background>
 
-										<StackLayout Orientation="Horizontal">
-											<Frame BackgroundColor="Transparent" Padding="0" WidthRequest="30">
-												<Grid  BackgroundColor="Transparent" WidthRequest="30">
-													<Frame BackgroundColor="White" Padding="0" CornerRadius="8" HeightRequest="22" WidthRequest="22" 
-													VerticalOptions="Center" HorizontalOptions="Center"/>
-													<Frame BackgroundColor="#ff0640" Padding="0" CornerRadius="8" HeightRequest="18" WidthRequest="18" 
-													VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsSelected}"/>
+				<Button Command="{Binding SortByDate}" TextColor="#c72c56" BackgroundColor="Transparent" WidthRequest="50" VerticalOptions="EndAndExpand"
+					HorizontalOptions="End" Style="{StaticResource FontAwesome5Solid}" Text="&#xf160;" FontSize="25"/>
 
-													<Button Padding="0" BackgroundColor="Transparent" CornerRadius="8" HeightRequest="22" WidthRequest="22" BorderColor="White" BorderWidth="4"
-														VerticalOptions="Center" HorizontalOptions="Center" Command="{Binding BindingContext.SelectBill, Source={x:Reference ThisPage}}" CommandParameter="{Binding .}"/>
-												</Grid>
-											</Frame>
+				<Frame BackgroundColor="#25ffffff" CornerRadius="10" HasShadow="False" Padding="5,0,5,0" Margin="0,0,10,3" VerticalOptions="EndAndExpand" HorizontalOptions="EndAndExpand">
+					<StackLayout Orientation="Horizontal" >
+						<Entry Text="{Binding SearchedSubstring}" WidthRequest="200" Placeholder="Search"  Style="{StaticResource Normal-Font}"
+									TextColor="White" PlaceholderColor="#77ffffff" FontSize="15" HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
+						<Button Style="{StaticResource FontAwesome5Solid}" Text="&#xf002;" FontSize="20" BackgroundColor="Transparent" TextColor="#aaffffff"
+								HorizontalOptions="End" WidthRequest="45" HeightRequest="45" CornerRadius="25" Command="{Binding NameSearch}"/>
+					</StackLayout>
+				</Frame>
+			</StackLayout>
 
-											<Frame BackgroundColor="Transparent" Padding="0" HasShadow="False" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
-												   behaviors:TouchEffect.Command="{Binding BindingContext.EditSelected, Source={x:Reference ThisPage}}" behaviors:TouchEffect.CommandParameter="{Binding .}">
+			<StackLayout Padding="5,0,5,0">
+				<Label Text="Products with expired warranty" TextColor="#dddddd" Style="{StaticResource Bold-Font}" HorizontalOptions="Center" FontSize="18" Margin="0,20,0,20"/>
 
-												<StackLayout Orientation="Horizontal">
-													<StackLayout HorizontalOptions="StartAndExpand">
-														<StackLayout Orientation="Horizontal">
-															<StackLayout Spacing="0" WidthRequest="120" Margin="0,0,3,0">
-																<Label Text="{Binding BillItem.ProductName}" Style="{StaticResource Bold-Font}" TextColor="White" FontSize="14" VerticalOptions="StartAndExpand" LineBreakMode="TailTruncation"/>
+				<ListView Grid.Row="2" x:Name="ListBills" ItemsSource="{Binding ObserveBills}" VerticalOptions="StartAndExpand" Margin="10,0,10,0" RowHeight="65" SelectedItem="{Binding SelectedItem}">
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<ViewCell>
+								<Grid Padding="0,0,0,5">
+									<Grid VerticalOptions="FillAndExpand">
+										<Frame Padding="5" VerticalOptions="FillAndExpand" CornerRadius="10" BackgroundColor="#aa35344a">
+
+											<StackLayout Orientation="Horizontal" VerticalOptions="Center">
+												<Frame BackgroundColor="Transparent" Padding="0" WidthRequest="30" HasShadow="False">
+													<Grid  BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30">
+														<Frame BackgroundColor="White" Padding="0" CornerRadius="8" HeightRequest="22" WidthRequest="22" 
+														VerticalOptions="Center" HorizontalOptions="Center"/>
+														<Frame BackgroundColor="#ff0640" Padding="0" CornerRadius="8" HeightRequest="18" WidthRequest="18" 
+														VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsSelected}"/>
+
+														<Button Padding="0" BackgroundColor="Transparent" CornerRadius="8" HeightRequest="22" WidthRequest="22" BorderColor="White" BorderWidth="4"
+															VerticalOptions="Center" HorizontalOptions="Center" Command="{Binding BindingContext.SelectBill, Source={x:Reference ThisPage}}" CommandParameter="{Binding .}"/>
+													</Grid>
+												</Frame>
+
+												<Frame BackgroundColor="Transparent" Padding="0" HasShadow="False" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+													   behaviors:TouchEffect.Command="{Binding BindingContext.EditSelected, Source={x:Reference ThisPage}}" behaviors:TouchEffect.CommandParameter="{Binding .}">
+
+													<StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+														<StackLayout HorizontalOptions="StartAndExpand" WidthRequest="200">
+															<StackLayout Orientation="Horizontal">
+																<StackLayout Spacing="0" WidthRequest="110" Margin="0,0,3,0" HorizontalOptions="StartAndExpand">
+																	<Label Text="{Binding BillItem.ProductName}" Style="{StaticResource Bold-Font}"  HorizontalOptions="StartAndExpand" TextColor="White" FontSize="13" VerticalOptions="Start" LineBreakMode="TailTruncation"/>
+																</StackLayout>
+
+																<Frame Padding="1" CornerRadius="5" HasShadow="False" BackgroundColor="#22ffffff" HorizontalOptions="End">
+																	<Label FontSize="12" HorizontalOptions="StartAndExpand" WidthRequest="50" Style="{StaticResource Normal-Font}"  LineBreakMode="TailTruncation" Text="{Binding BillItem.ProductType}" TextColor="#99ffffff"/>
+																</Frame>
 															</StackLayout>
 
-															<Frame Padding="1" CornerRadius="5" HasShadow="False" BackgroundColor="#22ffffff" HorizontalOptions="FillAndExpand">
-																<Label FontSize="14" HorizontalOptions="StartAndExpand" Style="{StaticResource Normal-Font}" LineBreakMode="TailTruncation" Text="{Binding BillItem.ProductType}" TextColor="#ccffffff"/>
+															<Frame Padding="2" CornerRadius="5" HasShadow="False" BackgroundColor="#19ffffff">
+																<Label Text="{Binding StoreName}" TextColor="#99ffffff" LineBreakMode="TailTruncation" HorizontalOptions="Start" FontSize="13" Style="{StaticResource Normal-Font}"/>
 															</Frame>
 														</StackLayout>
 
-														<Frame Padding="2" CornerRadius="5" HasShadow="False" BackgroundColor="#22ffffff">
-															<Label Text="{Binding StoreName}" TextColor="#ccffffff" LineBreakMode="TailTruncation" Style="{StaticResource Normal-Font}" WidthRequest="195"/>
+														<Frame HorizontalOptions="End" Padding="5,0,5,0" HasShadow="False" BackgroundColor="#33ffffff" CornerRadius="10" WidthRequest="110">
+															<StackLayout Spacing="0" HorizontalOptions="EndAndExpand">
+																<Label Text="{Binding BillItem.PurchaseDate, StringFormat='{0:DOP. dd/MM/yyyy}'}" TextColor="#ccffffff"
+																				FontSize="12" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand" Style="{StaticResource Bold-Font}"/>
+																<Label Text="{Binding BillItem.ExpirationDate, StringFormat='{0:EXP. dd/MM/yyyy}'}" TextColor="#88ffffff" Style="{StaticResource Bold-Font}"
+																				VerticalOptions="CenterAndExpand" FontSize="12" HorizontalOptions="EndAndExpand"/>
+															</StackLayout>
 														</Frame>
 													</StackLayout>
+												</Frame>
+											</StackLayout>
+										</Frame>
 
-													<Frame HorizontalOptions="EndAndExpand" Padding="10,0,10,0" HasShadow="False" BackgroundColor="#33ffffff" CornerRadius="10" WidthRequest="110">
-														<StackLayout Spacing="0" HorizontalOptions="EndAndExpand">
-															<Label Text="{Binding BillItem.PurchaseDate, StringFormat='{0:DOP. dd/MM/yyyy}'}" TextColor="#ccffffff"
-																			FontSize="13" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand" Style="{StaticResource Bold-Font}"/>
-															<Label Text="{Binding BillItem.ExpirationDate, StringFormat='{0:EXP. dd/MM/yyyy}'}" TextColor="#66ffffff" Style="{StaticResource Bold-Font}"
-																			VerticalOptions="CenterAndExpand" FontSize="13" HorizontalOptions="EndAndExpand"/>
-														</StackLayout>
-													</Frame>
-												</StackLayout>
-											</Frame>
-										</StackLayout>
-									</Frame>
-
+									</Grid>
 								</Grid>
-							</StackLayout>
-						</ViewCell>
-					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
-
+							</ViewCell>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+			</StackLayout>
 		</StackLayout>
     </ContentPage.Content>
 </ContentPage>

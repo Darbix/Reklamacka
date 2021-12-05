@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-
 using Xamarin.Forms;
-
 using Reklamacka.Models;
 using static Reklamacka.BaseModel;
 using Reklamacka.Pages;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace Reklamacka.ViewModels
 {
@@ -82,10 +81,14 @@ namespace Reklamacka.ViewModels
 
 			NameSearch = new Command(async () =>
 			{
-				if (!string.IsNullOrWhiteSpace(SearchedSubstring))
-					LofBills.ForEach(item => item.IsVisible = item.BillItem.ProductName.Contains(SearchedSubstring));
+				// reset filter
+				LofBills.ForEach(item => item.IsVisible = true);
 
-				ObserveBills = new ObservableCollection<ItemBill>(LofBills.Where(item => item.IsVisible));
+				if (!string.IsNullOrWhiteSpace(SearchedSubstring))
+					LofBills.Where(item => new CultureInfo("cs-CZ", false).CompareInfo.IndexOf(item.BillItem.ProductName, SearchedSubstring, CompareOptions.IgnoreCase) < 0).ToList().ForEach(item => item.IsVisible = false);
+
+
+				ObserveBills = new ObservableCollection<ItemBill>(LofBills.Where(item => item.IsVisible).ToList());
 				await System.Threading.Tasks.Task.CompletedTask;
 			});
 
@@ -93,9 +96,9 @@ namespace Reklamacka.ViewModels
 			{
 				OlderFirst = !OlderFirst;
 				if (OlderFirst)
-					LofBills = LofBills.OrderBy(item => item.BillItem.ExpirationDate).ToList();
-				else
 					LofBills = LofBills.OrderByDescending(item => item.BillItem.ExpirationDate).ToList();
+				else
+					LofBills = LofBills.OrderBy(item => item.BillItem.ExpirationDate).ToList();
 
 				ObserveBills = new ObservableCollection<ItemBill>(LofBills.Where(item => item.IsVisible));
 				await System.Threading.Tasks.Task.CompletedTask;

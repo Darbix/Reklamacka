@@ -15,11 +15,21 @@ namespace Reklamacka.ViewModels
 	public class FiltersSettingViewModel : INotifyPropertyChanged
 	{
 		public ObservableCollection<FilterItem> ListTypes { get; set; }			//!< Product types filter
-		public ObservableCollection<FilterItem> ListStoreNames { get; set; }	//!< Stores filter
+		public ObservableCollection<FilterItem> ListStoreNames { get; set; }    //!< Stores filter
+		public string DisplayItemsText { get; set; } = "at least one selected";
 		public bool FilterStatus
 		{
 			get => Intersection;
-			set { Intersection = value; }
+			set 
+			{ 
+				Intersection = value; 
+				if (value)
+					DisplayItemsText = "all selected";
+				else
+					DisplayItemsText = "at least one selected";
+				OnPropertyChanged(nameof(FilterStatus));
+				OnPropertyChanged(nameof(DisplayItemsText));
+			}
 		}
 		public Command SelectChoice { get; set; }
 		public Command ToggleIntersection { get; set; }

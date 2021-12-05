@@ -191,7 +191,7 @@ namespace Reklamacka.ViewModels
 					LofBills.Where(item => new CultureInfo("cs-CZ", false).CompareInfo.IndexOf(item.BillItem.ProductName, NameToSearch, CompareOptions.IgnoreCase) < 0).ToList().ForEach(item => item.IsVisible = false);
 
 				ObserveBill = new ObservableCollection<ItemBill>(LofBills.Where(bill => bill.IsVisible));
-				await System.Threading.Tasks.Task.CompletedTask;
+				await Task.CompletedTask;
 			});
 
 		}
@@ -238,10 +238,14 @@ namespace Reklamacka.ViewModels
 			{
 				try
 				{
-					ObserveBill.Where(x => x.BillItem.ExpirationDate <= DateTime.Today.AddDays(3)).First();
-					_ = ShowNotif();
-					// max 1x when app is runnung
-					notified = true;
+					UserSettingsViewModel settings = new UserSettingsViewModel();
+					if (settings.IsOnNotifications) 
+					{
+						ObserveBill.Where(x => x.BillItem.ExpirationDate <= DateTime.Today.AddDays(3)).First();
+						_ = ShowNotif();
+						// max 1x when app is runnung
+						notified = true;
+					}
 				}
 				catch { }
 			}
