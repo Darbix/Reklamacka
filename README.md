@@ -31,7 +31,7 @@ Aplikace využívá následující externí knihovny a balíčky:
 - [SQLite-net](https://github.com/praeclarum/sqlite-net)
 
 ## Tvůrci
-Hung Do (xdohun00)
+Hung Do (xdohun00)   
 David Kedra (xkedra00)
 
 ## Licence
