@@ -1,3 +1,13 @@
+/**
+ * @brief View model of SortingPage
+ * 
+ * @file SortingPageViewModel.cs
+ * @author Do Hung (xdohun00), Kedra David (xkedra00)
+ * @date 05/12/2021
+ * 
+ * This application serves as submission 
+ * for a group project of class ITU at FIT, BUT 2021/2022
+ */
 using Reklamacka.Models;
 using Reklamacka.Pages;
 using System;
@@ -13,13 +23,37 @@ namespace Reklamacka.ViewModels
 {
 	public class SortingPageViewModel : INotifyPropertyChanged
 	{
-		public static ObservableCollection<FilterItem> FilterLofTypes { get; set; }                             //!< Static collection of selected product types; used in Filter mode
-		public static ObservableCollection<FilterItem> FilterLofStoreNames { get; set; }                        //!< Static collection of selected store names; used in Filter mode
-		public static List<string> LofFilteredShopNames { get; set; }                                           //!< Bills of goods that were purchased from these stores will be displayed
-		public static List<ProductTypes> LofFilteredProductTypes { get; set; }                                  //!< Goods of selected categories will be displayed
+		/// <summary>
+		/// Static collection of selected product categories; used in Filter mode
+		/// </summary>
+		public static ObservableCollection<FilterItem> FilterLofTypes { get; set; }
+
+		/// <summary>
+		/// Static collection of selected store names; used in Filter mode
+		/// </summary>
+		public static ObservableCollection<FilterItem> FilterLofStoreNames { get; set; }
+
+		/// <summary>
+		/// Bills of goods that were purchased from selected stores will be displayed
+		/// </summary>
+		public static List<string> LofFilteredShopNames { get; set; }
+
+		/// <summary>
+		/// Goods of selected categories will be displayed
+		/// </summary>
+		public static List<ProductTypes> LofFilteredProductTypes { get; set; }
+
+		/// <summary>
+		/// Filter mode
+		/// </summary>
 		public static bool Intersection { get; set; }
+
 		private List<ItemBill> bills;
-		public List<ItemBill> Bills                     //!< List of bills with additional properties
+
+		/// <summary>
+		/// List of all bills in database
+		/// </summary>
+		public List<ItemBill> Bills
 		{
 			get => bills;
 			set
@@ -30,7 +64,11 @@ namespace Reklamacka.ViewModels
 		}
 
 		private ObservableCollection<ItemBill> observeBills;
-		public ObservableCollection<ItemBill> ObserveBills      //!< Displayable bills
+
+		/// <summary>
+		/// List of displayable bills
+		/// </summary>
+		public ObservableCollection<ItemBill> ObserveBills
 		{
 			get => observeBills;
 			set
@@ -41,6 +79,10 @@ namespace Reklamacka.ViewModels
 		}
 
 		private ItemBill selectedItem;
+
+		/// <summary>
+		/// Selected bill
+		/// </summary>
 		public ItemBill SelectedItem
 		{
 			get => selectedItem;
@@ -52,6 +94,10 @@ namespace Reklamacka.ViewModels
 		}
 
 		private bool nameByAlpha;
+
+		/// <summary>
+		/// Sort by name mode status
+		/// </summary>
 		public bool NameByAlpha
 		{
 			get => nameByAlpha;
@@ -63,7 +109,11 @@ namespace Reklamacka.ViewModels
 		}
 
 		private string searchSubstring;
-		public string SearchSubstring       //< String for name filter
+
+		/// <summary>
+		/// String used in name filter
+		/// </summary>
+		public string SearchSubstring
 		{
 			get => searchSubstring;
 			set
@@ -74,6 +124,10 @@ namespace Reklamacka.ViewModels
 		}
 
 		private bool byExpDate;
+
+		/// <summary>
+		/// Sort by expiration date mode
+		/// </summary>
 		public bool ByExpDate
 		{
 			get => byExpDate;
@@ -84,13 +138,40 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
-		public Command SelectBill { get; set; }			//!< Change ItemBill.IsSelected property
-		public Command DeleteSelected { get; set; }		//!< Delete items that are selected
-		public Command PushFiltersPage { get; set; }	//!< Open new page
-		public Command EditBill { get; set; }			//!< Edit tapped item
-		public Command SortByExpDate { get; set; }		//!< Sort visible items by expiration date
-		public Command SortByName { get; set; }			//!< Sort visible items by name
-		public Command SearchName { get; set; }			//!< Filter items by given string
+		/// <summary>
+		/// Change ItemBill.IsSelected property
+		/// </summary>
+		public Command SelectBill { get; set; }
+
+		/// <summary>
+		/// Delete selected items
+		/// </summary>
+		public Command DeleteSelected { get; set; }
+
+		/// <summary>
+		/// Open FilterSettingsPage
+		/// </summary>
+		public Command PushFiltersPage { get; set; }
+
+		/// <summary>
+		/// Edit selected (tapped) bill
+		/// </summary>
+		public Command EditBill { get; set; }
+
+		/// <summary>
+		/// Sort visible items by expiration date
+		/// </summary>
+		public Command SortByExpDate { get; set; }
+
+		/// <summary>
+		/// Sort visible items by name
+		/// </summary>
+		public Command SortByName { get; set; }
+
+		/// <summary>
+		/// Filter items by given substring
+		/// </summary>
+		public Command SearchName { get; set; }
 
 		public SortingPageViewModel(INavigation Navigation)
 		{
@@ -171,6 +252,7 @@ namespace Reklamacka.ViewModels
 				Bills.ForEach(item => item.IsVisible = true);
 
 				// looks for name that contains SearchSubstring while ignoring cases
+				// source: https://stackoverflow.com/a/15464440
 				if (!string.IsNullOrWhiteSpace(SearchSubstring))
 					Bills.Where(item => new CultureInfo("cs-CZ", false).CompareInfo.IndexOf(item.BillItem.ProductName, SearchSubstring, CompareOptions.IgnoreCase) < 0).ToList().ForEach(item => item.IsVisible = false);
 

@@ -1,3 +1,13 @@
+/**
+ * @brief View model of UserSettingsPage
+ * 
+ * @file UserSettingsViewModel.cs
+ * @author Do Hung (xdohun00)
+ * @date 05/12/2021
+ * 
+ * This application serves as submission 
+ * for a group project of class ITU at FIT, BUT 2021/2022
+ */
 using Plugin.LocalNotification;
 using System;
 using System.Collections.Generic;
@@ -14,9 +24,20 @@ namespace Reklamacka.ViewModels
 	{
 		public string GitHubLink { get; private set; } = @"https://github.com/Darbix/Reklamacka";
 		public string Authors { get; private set; } = "Kedra David (xkedra00)\nDo Hung (xdohun00)";
+
+		/// <summary>
+		/// Resets settings
+		/// </summary>
 		public Command ResetSettings { get; set; }
+
+		/// <summary>
+		/// Open repo in default web browser
+		/// </summary>
 		public Command ShowRepoPage { get; set; }
 
+		/// <summary>
+		/// Enable auto-delete
+		/// </summary>
 		public bool IsOnAutoDelete 
 		{
 			get => Preferences.Get("AutoDelete", false);
@@ -26,6 +47,10 @@ namespace Reklamacka.ViewModels
 				OnPropertyChanged(nameof(IsOnAutoDelete));
 			}
 		}
+
+		/// <summary>
+		/// Enable notification
+		/// </summary>
 		public bool IsOnNotifications
 		{
 			get => Preferences.Get("Notifications", false);
@@ -52,6 +77,9 @@ namespace Reklamacka.ViewModels
 			return await NotificationCenter.Current.Show(notification);
 		}
 
+		/// <summary>
+		/// Enable color 
+		/// </summary>
 		public bool IsOnAlowColors
 		{
 			get => Preferences.Get("AlowColors", true);

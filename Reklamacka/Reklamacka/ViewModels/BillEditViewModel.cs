@@ -1,3 +1,15 @@
+/**
+ * @brief View model for BillEditPage
+ * 
+ * @detail Allow user to create or edit the bill
+ * 
+ * @file BillEditViewModel.cs
+ * @author Do Hung (xdohun00), Kedra David (xkedra00)
+ * @date 05/12/2021
+ * 
+ * This application serves as submission 
+ * for a group project of class ITU at FIT, BUT 2021/2022
+ */
 using Reklamacka.Models;
 using Reklamacka.Pages;
 using System;
@@ -17,30 +29,106 @@ namespace Reklamacka.ViewModels
 {
 	public class BillEditViewModel : INotifyPropertyChanged
 	{
-		public Command SaveBill { get; set; }           //!< Command to save a new bill
-		public Command DeleteBill { get; set; }         //!< Command to delete a selected bill (if active)
-		public Command PushBrowserPage { get; set; }    //!< Load a store's website in default browser
-		public Command PickPhoto { get; set; }          //!< Open a window to select a bill photo
-		public Command CallNumber { get; set; }         //!< Load a phone dialer
-		public Command ViewImage { get; set; }          //!< Display a bill photo
+		/// <summary>
+		/// Command to save a bill
+		/// </summary>
+		public Command SaveBill { get; set; }
+
+		/// <summary>
+		/// Command to delete selected bill (if active)
+		/// </summary>
+		public Command DeleteBill { get; set; }
+
+		/// <summary>
+		/// Open store's website in default browser
+		/// </summary>
+		public Command PushBrowserPage { get; set; }
+
+		/// <summary>
+		/// Open a window to select a photo
+		/// </summary>
+		public Command PickPhoto { get; set; }
+
+		/// <summary>
+		/// Open a phone call app with store's contact number preloaded (if active)
+		/// </summary>
+		public Command CallNumber { get; set; }
+
+		/// <summary>
+		/// Display a bill photo (if active)
+		/// </summary>
+		public Command ViewImage { get; set; }
+		
+		/// <summary>
+		/// Pick a file from default file manager; permission from the system will be needed
+		/// </summary>
 		public Command PickFile { get; set; }
+
+		/// <summary>
+		/// Create a new store instance (opens AddStorePage)
+		/// </summary>
 		public Command AddStorePush { get; set; }
+
+		/// <summary>
+		/// Reset values
+		/// </summary>
 		public Command PickNoneShop { get; set; }
+
+		/// <summary>
+		/// Open store's email in default email app (if active)
+		/// </summary>
 		public Command OpenEmailDefault { get; set; }
 
-		public Bill SelectedBill { get; set; }          //!< Edited bill
-		public string ProductName { get; set; }         //!< Goods's name 
-		public DateTime PurchaseDate { get; set; }      //!< Date of purchase
-		public DateTime ExpirationDate { get; set; }    //!< Date of expire
-		public string Notes { get; set; }               //!< Additional notes
+		/// <summary>
+		/// Active bill
+		/// </summary>
+		public Bill SelectedBill { get; set; }
 
+		/// <summary>
+		/// Goods's name
+		/// </summary>
+		public string ProductName { get; set; }
+
+		/// <summary>
+		/// Date of purchase
+		/// </summary>
+		public DateTime PurchaseDate { get; set; }
+
+		/// <summary>
+		/// Date of expire
+		/// </summary>
+		public DateTime ExpirationDate { get; set; }
+
+		/// <summary>
+		/// Additional notes
+		/// </summary>
+		public string Notes { get; set; }
+
+		/// <summary>
+		/// File path to document (PDF version of the bill)
+		/// </summary>
 		private string FilePath { get; set; }
+
+		/// <summary>
+		/// Path to folder with with documents
+		/// </summary>
 		private string DefaultFolderPath { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+		/// <summary>
+		/// Status of picked document
+		/// </summary>
 		private bool IsSaved { get; set; } = false;
 		private bool SelectingFile { get; set; } = false;
 
-		public IList<ProductTypes> BillTypes { get; set; } = LofTypes;  //!< List of product types
-		private ProductTypes productType;               //!< Chosen product type
+		/// <summary>
+		/// List of product categories
+		/// </summary>
+		public IList<ProductTypes> BillTypes { get; set; } = LofTypes;
+		private ProductTypes productType;
+
+		/// <summary>
+		/// Chosen product categories
+		/// </summary>
 		public ProductTypes ProductType
 		{
 			get => productType;
@@ -79,13 +167,23 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
-		public ObservableCollection<string> ShopNameList		//!< List of shop names
+		/// <summary>
+		/// List of store names
+		/// </summary>
+		public ObservableCollection<string> ShopNameList
 		{
 			get => LofStoreNames;
 		}
 
-		private Store shop;										//!< Chosen shop
-		public string ShopName									//!< Shop's name to display (Selected item from list of names)
+		/// <summary>
+		/// Chosen store instance
+		/// </summary>
+		private Store shop;
+
+		/// <summary>
+		/// Store's name to display (selected item from list of names) 
+		/// </summary>
+		public string ShopName
 		{
 			get => shop != null ? shop.Name : string.Empty;
 			set
@@ -98,17 +196,26 @@ namespace Reklamacka.ViewModels
 			}
 		}
 
-		public string Weblink							//!< Shop's website to display
+		/// <summary>
+		/// Store's website
+		/// </summary>
+		public string Weblink
 		{
 			get => shop != null ? shop.Link : string.Empty; set { }
 		}
 
-		public string Email								//!< Shop's email to display
+		/// <summary>
+		/// Store;s email to display
+		/// </summary>
+		public string Email
 		{
 			get => shop != null ? shop.Email : string.Empty; set { }
 		}
 
-		public string PhoneNumber						//!< Shop's contact number to display
+		/// <summary>
+		/// Store's contact number to display
+		/// </summary>
+		public string PhoneNumber
 		{
 			get => shop != null ? shop.PhoneNumber : string.Empty; set { }
 		}
@@ -171,6 +278,7 @@ namespace Reklamacka.ViewModels
 				_ = await navigation.PopAsync();
 			});
 
+			// created by David Kedra
 			PickPhoto = new Command(async (openCamera) =>
 			{
 				FileResult img;
@@ -264,6 +372,7 @@ namespace Reklamacka.ViewModels
 				await navigation.PushAsync(new ViewImagePage(SelectedBill));
 			});
 
+			// created by David Kedra
 			PickFile = new Command(async () =>
 			{
 				string result;
@@ -281,8 +390,6 @@ namespace Reklamacka.ViewModels
 
 				if (result == null)
 					return;
-				//if (result.Equals("Cancel"))
-				//	return;
 
 				if (result.Equals("Pick") || result.Equals("Change"))
 				{
@@ -350,16 +457,8 @@ namespace Reklamacka.ViewModels
 					catch
 					{
 						await App.Current.MainPage.DisplayAlert("Error", "The file does not exist", "Cancel");
-						//todo clear path
 					}
 				}
-
-				//todo smazat, jen pomocny vypis obsahu dir
-				var allFiles = Directory.GetFiles(DefaultFolderPath);
-				string finalText = "";
-				for (int i = 0; i < allFiles.Length; i++)
-					finalText += Path.GetFileName(allFiles[i]) + ',';
-				await App.Current.MainPage.DisplayAlert("info", DefaultFolderPath + "|||" + finalText, "OK");
 			});
 
 			PickNoneShop = new Command(() =>

@@ -1,3 +1,15 @@
+/**
+ * @brief View model of add store page
+ * 
+ * @detail Allow user to create or edit store instance
+ * 
+ * @file AddStoreViewModel.cs
+ * @author Do Hung (xdohun00)
+ * @date 05/12/2021
+ * 
+ * This application serves as submission 
+ * for a group project of class ITU at FIT, BUT 2021/2022
+ */
 using Xamarin.Forms;
 using Reklamacka.Models;
 using static Reklamacka.BaseModel;
@@ -11,22 +23,65 @@ namespace Reklamacka.ViewModels
 {
 	public class AddStoreViewModel : ContentView
 	{
-		public Command SaveStore { get; set; }			//!< Command for saving new store to the database
-		public Command DeleteAll { get; set; }			//!< Command to clear store database; TODO: temporary solution
+		/// <summary>
+		/// Command for saving new store to the database
+		/// </summary>
+		public Command SaveStore { get; set; }
+
+		/// <summary>
+		/// Command to clear store database
+		/// </summary>
+		public Command DeleteAll { get; set; }
+
+		/// <summary>
+		/// Command to open store's website in default browser
+		/// </summary>
 		public Command PushBrowserPage { get; set; }
+
+		/// <summary>
+		/// Command to delete selected store instance from database
+		/// </summary>
 		public Command DeleteStore { get; set; }
+
+		/// <summary>
+		/// Command to deselect the store
+		/// </summary>
 		public Command Deselect { get; set; }
 
-		private Store storeInstance;
-		public string StoreName { get; set; }			//!< New store's name
-		public string StoreLink { get; set; }			//!< New store's weblink
-		public string Email { get; set; }				//!< New store's contact email
-		public string PhoneNumber { get; set; }			//!< New store's contact number
+		/// <summary>
+		/// Store's name 
+		/// </summary>
+		public string StoreName { get; set; }
 
+		/// <summary>
+		/// Store's website
+		/// </summary>
+		public string StoreLink { get; set; }
+
+		/// <summary>
+		/// Store's contact email
+		/// </summary>
+		public string Email { get; set; }
+
+		/// <summary>
+		/// Store's contact phone number
+		/// </summary>
+		public string PhoneNumber { get; set; }
+
+		/// <summary>
+		/// List of stored store names
+		/// </summary>
 		public ObservableCollection<string> ShopNameList { get; private set; } = LofStoreNames;
 
-		private Store shop;                             //!< Chosen shop
-		public string ShopName                          //!< Shop's name to display
+		/// <summary>
+		/// Selected store
+		/// </summary>
+		private Store shop;
+
+		/// <summary>
+		/// Store name to display
+		/// </summary>
+		public string ShopName
 		{
 			get => shop != null ? shop.Name : string.Empty;
 			set
@@ -54,12 +109,14 @@ namespace Reklamacka.ViewModels
 		{
 			SaveStore = new Command(async () =>
 			{
+				// store name check
 				if (string.IsNullOrWhiteSpace(StoreName))
 				{
 					await App.Current.MainPage.DisplayAlert("Error", "Shop name cannot be empty!", "Cancel");
 					return;
 				}
 
+				// phone number validation
 				if (!string.IsNullOrWhiteSpace(PhoneNumber))
 				{
 					if (PhoneNumber.Length > 9)
@@ -74,6 +131,7 @@ namespace Reklamacka.ViewModels
 					}
 				}
 
+				// link validation
 				if (!string.IsNullOrWhiteSpace(StoreLink))
 				{
 					// adds http:// if it's not defined
@@ -82,7 +140,7 @@ namespace Reklamacka.ViewModels
 				}
 
 				// create a new instance of the store
-				storeInstance = new Store
+				var storeInstance = new Store
 				{
 					Name = StoreName,
 					Link = StoreLink,
@@ -139,6 +197,7 @@ namespace Reklamacka.ViewModels
 			{
 				if (!string.IsNullOrWhiteSpace(StoreLink))
 				{
+					// add http:// to link if StoreLink doesn't specify it
 					var url = new UriBuilder(StoreLink).Uri;
 					StoreLink = url.ToString();
 					await Launcher.TryOpenAsync(StoreLink);

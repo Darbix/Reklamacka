@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!--
+ * @brief GUI of store management page
+ * 
+ * @file AddStorePage.xaml
+ * @author Kedra David (xkedra00), Do Hung (xdohun00)
+ * @date 05/12/2021
+ * 
+ * This application serves as submission 
+ * for a group project of class ITU at FIT, BUT 2021/2022
+ * 
+-->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodels="clr-namespace:Reklamacka.ViewModels" x:DataType="viewmodels:AddStoreViewModel"
 			 x:Class="Reklamacka.Pages.AddStorePage">

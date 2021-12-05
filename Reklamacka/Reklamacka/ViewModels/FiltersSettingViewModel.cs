@@ -1,3 +1,15 @@
+/**
+ * @brief View model for FilterSettingPage
+ * 
+ * @detail User can set bill's parameters for better searching 
+ * 
+ * @file FilterSettingViewModel.cs
+ * @author Do Hung (xdohun00)
+ * @date 05/12/2021
+ * 
+ * This application serves as submission 
+ * for a group project of class ITU at FIT, BUT 2021/2022
+ */
 using Reklamacka.Models;
 using System;
 using System.Collections.Generic;
@@ -14,9 +26,20 @@ namespace Reklamacka.ViewModels
 {
 	public class FiltersSettingViewModel : INotifyPropertyChanged
 	{
-		public ObservableCollection<FilterItem> ListTypes { get; set; }			//!< Product types filter
-		public ObservableCollection<FilterItem> ListStoreNames { get; set; }    //!< Stores filter
+		/// <summary>
+		/// List of product types
+		/// </summary>
+		public ObservableCollection<FilterItem> ListTypes { get; set; }
+
+		/// <summary>
+		/// List of Store names
+		/// </summary>
+		public ObservableCollection<FilterItem> ListStoreNames { get; set; }
 		public string DisplayItemsText { get; set; } = "at least one selected";
+
+		/// <summary>
+		/// Filter mode
+		/// </summary>
 		public bool FilterStatus
 		{
 			get => Intersection;
@@ -31,12 +54,16 @@ namespace Reklamacka.ViewModels
 				OnPropertyChanged(nameof(DisplayItemsText));
 			}
 		}
+
+		/// <summary>
+		/// Set FilterItem.IsChecked property
+		/// </summary>
 		public Command SelectChoice { get; set; }
-		public Command ToggleIntersection { get; set; }
 
 		public FiltersSettingViewModel()
 		{
 			// init filters
+			// add items to lists and set default values
 			if (FilterLofTypes == null)
 			{
 				FilterLofTypes = new ObservableCollection<FilterItem>();
@@ -66,11 +93,6 @@ namespace Reklamacka.ViewModels
 					return;
 
 				filterItem.IsChecked = !filterItem.IsChecked;
-			});
-
-			ToggleIntersection = new Command(() =>
-			{
-				FilterStatus = !FilterStatus;
 			});
 		}
 
