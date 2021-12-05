@@ -11,7 +11,7 @@
 	</NavigationPage.TitleView>
 
 	<ContentPage.Content>
-		<StackLayout Padding="5" Spacing="20" Margin="5,10,5,0">
+		<StackLayout Padding="5,15,5,5" Spacing="20" BackgroundColor="#e0e0ea">
 
 			<behaviors:Expander>
 				<behaviors:Expander.Header>
@@ -23,14 +23,14 @@
 					</Frame>
 				</behaviors:Expander.Header>
 
-				<StackLayout HeightRequest="200">
+				<StackLayout HeightRequest="220">
 					<Frame Padding="0" CornerRadius="5">
-						<ListView ItemsSource="{Binding ListTypes}" HasUnevenRows="True" BackgroundColor="#cbcbda">
+						<ListView ItemsSource="{Binding ListTypes}" HasUnevenRows="True" BackgroundColor="#c0c0d0" x:Name="FilterList1">
 							<ListView.ItemTemplate>
 								<DataTemplate>
 									<ViewCell>
 										<StackLayout Orientation="Horizontal" HeightRequest="30" Padding="5" VerticalOptions="Center">
-											<Grid VerticalOptions="Center">
+											<Grid VerticalOptions="Center" Padding="5,0,5,0">
 												<Frame BackgroundColor="White" Padding="0" CornerRadius="13" HeightRequest="26" WidthRequest="26" 
 													   VerticalOptions="Center" HorizontalOptions="Center"/>
 												<Frame BackgroundColor="#ff0640" Padding="0" CornerRadius="11" HeightRequest="22" WidthRequest="22" 
@@ -38,16 +38,22 @@
 												<Button Padding="0" BackgroundColor="Transparent" CornerRadius="13" HeightRequest="26" WidthRequest="26" BorderColor="White" BorderWidth="4"
 														    VerticalOptions="Center" HorizontalOptions="Center" Command="{Binding BindingContext.SelectChoice, Source={x:Reference ThisPage}}" CommandParameter="{Binding .}"/>
 											</Grid>
-											<Label Text="{Binding Type}" VerticalOptions="Center" TextColor="#1a1a3a"/>
+											<Label Text="{Binding Type}" VerticalOptions="Center" TextColor="#2a2a4a" Style="{StaticResource Bold-Font}"/>
 										</StackLayout>
 									</ViewCell>
 								</DataTemplate>
 							</ListView.ItemTemplate>
+							<ListView.Behaviors>
+								<behaviors:EventToCommandBehavior
+								EventName="ItemTapped" 
+								Command="{Binding SelectChoice}"
+								CommandParameter="{Binding SelectedItem, Source={x:Reference FilterList1}}"/>
+							</ListView.Behaviors>
 						</ListView>
 					</Frame>
 				</StackLayout>
 			</behaviors:Expander>
-			<!--======================================================-->
+			
 
 			<behaviors:Expander>
 				<behaviors:Expander.Header>
@@ -59,14 +65,14 @@
 					</Frame>
 				</behaviors:Expander.Header>
 
-				<StackLayout HeightRequest="200">
+				<StackLayout HeightRequest="220">
 					<Frame Padding="0" CornerRadius="5">
-						<ListView ItemsSource="{Binding ListStoreNames}" HasUnevenRows="True" BackgroundColor="#cbcbda">
+						<ListView ItemsSource="{Binding ListStoreNames}" HasUnevenRows="True" BackgroundColor="#c0c0d0" x:Name="FilterList2">
 							<ListView.ItemTemplate>
 								<DataTemplate>
 									<ViewCell>
 										<StackLayout Orientation="Horizontal" HeightRequest="30" Padding="5" VerticalOptions="Center">
-											<Grid VerticalOptions="Center">
+											<Grid VerticalOptions="Center" Padding="5,0,5,0">
 												<Frame BackgroundColor="White" Padding="0" CornerRadius="13" HeightRequest="26" WidthRequest="26" 
 													   VerticalOptions="Center" HorizontalOptions="Center"/>
 												<Frame BackgroundColor="#ff0640" Padding="0" CornerRadius="11" HeightRequest="22" WidthRequest="22" 
@@ -74,15 +80,33 @@
 												<Button Padding="0" BackgroundColor="Transparent" CornerRadius="13" HeightRequest="26" WidthRequest="26" BorderColor="White" BorderWidth="4"
 														    VerticalOptions="Center" HorizontalOptions="Center" Command="{Binding BindingContext.SelectChoice, Source={x:Reference ThisPage}}" CommandParameter="{Binding .}"/>
 											</Grid>
-											<Label Text="{Binding ShopName}" VerticalOptions="Center" TextColor="#1a1a3a"/>
+											<Label Text="{Binding ShopName}" VerticalOptions="Center" TextColor="#2a2a4a" Style="{StaticResource Bold-Font}"/>
 										</StackLayout>
 									</ViewCell>
 								</DataTemplate>
 							</ListView.ItemTemplate>
+							<ListView.Behaviors>
+								<behaviors:EventToCommandBehavior
+								EventName="ItemTapped" 
+								Command="{Binding SelectChoice}"
+								CommandParameter="{Binding SelectedItem, Source={x:Reference FilterList2}}"/>
+							</ListView.Behaviors>
 						</ListView>
 					</Frame>
 				</StackLayout>
 			</behaviors:Expander>
+
+
+			
+			<BoxView HeightRequest="1" Color="#994a4a5a" IsVisible="true" Margin="10,50,10,5" VerticalOptions="EndAndExpand"/>
+			
+			<StackLayout  VerticalOptions="End" Padding="20,0,20,30">
+				<StackLayout Orientation="Horizontal">
+					<Label Text="Display items that match" HorizontalOptions="Start"  VerticalOptions="Center" Style="{StaticResource Bold-Font}" FontSize="18"/>
+					<Switch IsToggled="{Binding FilterStatus}" Scale="1.3" ThumbColor="#4a4a5a" OnColor="#ff3065" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/>
+				</StackLayout>
+				<Label Text="{Binding DisplayItemsText}"  VerticalOptions="Center" Style="{StaticResource Bold-Font}" FontSize="15"/>
+			</StackLayout>
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>

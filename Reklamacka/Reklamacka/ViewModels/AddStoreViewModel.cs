@@ -56,7 +56,7 @@ namespace Reklamacka.ViewModels
 			{
 				if (string.IsNullOrWhiteSpace(StoreName))
 				{
-					await App.Current.MainPage.DisplayAlert("Error", "ShopName cannot be empty!", "Cancel");
+					await App.Current.MainPage.DisplayAlert("Error", "Shop name cannot be empty!", "Cancel");
 					return;
 				}
 
