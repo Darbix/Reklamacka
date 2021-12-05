@@ -213,7 +213,7 @@ namespace Reklamacka.ViewModels
 				if (LofFilteredShopNames != null && LofFilteredShopNames.Count() > 0)
 				{
 					// filter out items that were purchased from different store
-					validItems.Where(item => !LofFilteredShopNames.Any(name => item.StoreName == name)).ToList().ForEach(item => item.IsVisible = false);
+					validItems.Where(item => LofFilteredShopNames.Any(name => item.StoreName == name)).ToList().ForEach(item => item.IsVisible = true);
 					valSet = true;
 					ObserveBills = new ObservableCollection<ItemBill>(validItems.Where(item => item.IsVisible));
 				}

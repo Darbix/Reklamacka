@@ -22,7 +22,7 @@ namespace Reklamacka.ViewModels
 			set { Intersection = value; }
 		}
 		public Command SelectChoice { get; set; }
-		public Command ToggleIntersection;
+		public Command ToggleIntersection { get; set; }
 
 		public FiltersSettingViewModel()
 		{
