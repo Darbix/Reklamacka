@@ -1,3 +1,16 @@
+/**
+ * @brief View model of MainPage
+ * 
+ * @detail Display bills that are still active. User can search by name, sort by date,
+ *			created new bill, edit old one or delete one.
+ * 
+ * @file MainPageViewModel.cs
+ * @author Do Hung (xdohun00), Kedra David (xkedra00)
+ * @date 05/12/2021
+ * 
+ * This application serves as submission 
+ * for a group project of class ITU at FIT, BUT 2021/2022
+ */
 using Plugin.LocalNotification;
 using Reklamacka.Models;
 using Reklamacka.Pages;
@@ -18,7 +31,11 @@ namespace Reklamacka.ViewModels
 	{
 
 		private List<ItemBill> lofBills;
-		public List<ItemBill> LofBills							//!< List of all bills in database
+
+		/// <summary>
+		/// List of all bills in database
+		/// </summary>
+		public List<ItemBill> LofBills
 		{
 			get => lofBills;
 			set
@@ -28,7 +45,11 @@ namespace Reklamacka.ViewModels
 			}
 		}
 		private ObservableCollection<ItemBill> observeBill;
-		public ObservableCollection<ItemBill> ObserveBill		//!< List of displayable bills (after applying basic filters)
+
+		/// <summary>
+		/// List of displayable bills (after applying basic filters)
+		/// </summary>
+		public ObservableCollection<ItemBill> ObserveBill
 		{
 			get => observeBill;
 			set
@@ -39,6 +60,10 @@ namespace Reklamacka.ViewModels
 		}
 
 		private ItemBill selectedItem;
+		
+		/// <summary>
+		/// Selected bill item
+		/// </summary>
 		public ItemBill SelectedItem
 		{
 			get => selectedItem;
@@ -80,25 +105,78 @@ namespace Reklamacka.ViewModels
 		}
 
 		private bool isEmpty = true;
+
+		/// <summary>
+		/// Status of bills whether the list is empty or not
+		/// </summary>
 		public bool IsEmpty
 		{
 			get => isEmpty;
-			set { isEmpty = value; OnPropertyChanged(nameof(IsEmpty));
+			set 
+			{ 
+				isEmpty = value; OnPropertyChanged(nameof(IsEmpty));
 			}
 		}
 
+		/// <summary>
+		/// Open AddStorePage
+		/// </summary>
 		public Command AddShop { get; set; }
-		public Command AddNewBill { get; set; }         //!< Command pro tlacitko pridani nove uctenky
-		public Command EditBill { get; set; }           //!< Command pro tlacitko editace uctenky z listu
-		public Command DeleteBill { get; set; }         //!< Command pro smazani vybrane polozky
-		public Command ItemTapped { get; set; }         //!< Command pro reseni eventu kliknuti na polozku
-		public Command SortingPagePush { get; set; }    //!< Command pro presun na stranku trideni
-		public Command ReverseBills { get; set; }       //!< Command pro reverzi poradi uctenek
-		public Command ViewImage { get; set; }          //!< Command k tlacitku pro zobrazeni obrazku
-		public Command MenuButtonClicked { get; set; }  //!< Command k tlacitku otevirajici bocni menu
+
+		/// <summary>
+		/// Create new bill
+		/// </summary>
+		public Command AddNewBill { get; set; }
+
+		/// <summary>
+		/// Edit selected bill
+		/// </summary>
+		public Command EditBill { get; set; }
+
+		/// <summary>
+		/// Delete selected bill
+		/// </summary>
+		public Command DeleteBill { get; set; }
+
+		/// <summary>
+		/// Event handle of item tapped
+		/// </summary>
+		public Command ItemTapped { get; set; }
+
+		/// <summary>
+		/// Open SortingPage
+		/// </summary>
+		public Command SortingPagePush { get; set; }
+		
+		/// <summary>
+		/// Reverse bill order
+		/// </summary>
+		public Command ReverseBills { get; set; }
+		
+		/// <summary>
+		/// Show bills saved image
+		/// </summary>
+		public Command ViewImage { get; set; }
+
+		/// <summary>
+		/// Show side menu
+		/// </summary>
+		public Command MenuButtonClicked { get; set; }
+
+		/// <summary>
+		/// Open SettingsPage
+		/// </summary>
 		public Command SettingsPagePush { get; set; }
+
+		/// <summary>
+		/// Search bill by name
+		/// </summary>
 		public Command SearchBill { get; set; }
-		public Command ArchivePage { get; set; }        //!< Command pro otevreni okna s proslymi uctenkami
+
+		/// <summary>
+		/// Open ArchivePage
+		/// </summary>
+		public Command ArchivePage { get; set; }
 
 		private bool isFromOldest = false;
 
@@ -187,6 +265,7 @@ namespace Reklamacka.ViewModels
 				LofBills.ForEach(bill => bill.IsVisible = true);
 
 				// looks for name that contains SearchSubstring while ignoring cases
+				// source: https://stackoverflow.com/a/15464440
 				if (!string.IsNullOrWhiteSpace(NameToSearch))
 					LofBills.Where(item => new CultureInfo("cs-CZ", false).CompareInfo.IndexOf(item.BillItem.ProductName, NameToSearch, CompareOptions.IgnoreCase) < 0).ToList().ForEach(item => item.IsVisible = false);
 
@@ -196,8 +275,13 @@ namespace Reklamacka.ViewModels
 
 		}
 
+		/// <summary>
+		/// Generates notification
+		/// </summary>
+		/// <returns>Returns true if notification was created successfully</returns>
 		private async Task<bool> ShowNotif()
 		{
+			// created by Kedra David
 			var notification = new NotificationRequest
 			{
 				ReturningData = "Notifications enabled",

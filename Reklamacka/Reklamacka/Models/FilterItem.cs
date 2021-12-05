@@ -1,18 +1,31 @@
-using System;
-using System.Collections.Generic;
+/**
+ * @brief Object of one filter option
+ * 
+ * @file FilterItem.cs
+ * @author Kedra David (xkedra00)
+ * @date 05/12/2021
+ * 
+ * This application serves as submission 
+ * for a group project of class ITU at FIT, BUT 2021/2022
+ */
 using System.ComponentModel;
-using System.Text;
 using static Reklamacka.BaseModel;
 
 namespace Reklamacka.Models
 {
 	public class FilterItem: INotifyPropertyChanged
 	{
-		public string Name { get; set; }
+		/// <summary>
+		/// Type of goods
+		/// </summary>
 		public ProductTypes Type { get; set; }
-		public string ShopName { get; set; }
 
+		/// <summary>
+		/// The name of the store
+		/// </summary>
+		public string ShopName { get; set; }
 		private bool isChecked = false;
+
 		/// <summary>
 		/// Bool hodnota urcujici, zda byl item zvolen oznacenim ve filtrech
 		/// </summary>
@@ -25,7 +38,6 @@ namespace Reklamacka.Models
 				OnPropertyChanged(nameof(IsChecked));
 			}
 		}
-
 
 		public event PropertyChangedEventHandler PropertyChanged;
 		public void OnPropertyChanged(string propertyName)

@@ -1,3 +1,13 @@
+/**
+ * @brief Database with bill instances
+ * 
+ * @file BillsDatabase.cs
+ * @author Kedra David (xkedra00)
+ * @date 05/12/2021
+ * 
+ * This application serves as submission 
+ * for a group project of class ITU at FIT, BUT 2021/2022
+ */
 using Reklamacka.Models;
 using SQLite;
 using System;

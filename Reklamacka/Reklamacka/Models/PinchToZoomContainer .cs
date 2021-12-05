@@ -1,14 +1,21 @@
+/**
+ * @brief Implementaion of pinch to zoom gesture
+ * 
+ * @file PinchToZoomContainer .cs
+ * @author Kedra David (xkedra00)
+ * @date 05/12/2021
+ * 
+ * This application serves as submission 
+ * for a group project of class ITU at FIT, BUT 2021/2022
+ * 
+ * Source: https://docs.microsoft.com/cs-cz/xamarin/xamarin-forms/app-fundamentals/gestures/pinch
+ */
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
 namespace Reklamacka.Models
 {
-	/// <summary>
-	/// Trida pro zpracovani gesta priblizeni obrazku pri jeho zobrazeni
-	/// </summary>
 	public class PinchToZoomContainer: ContentView
 	{
 		public PinchToZoomContainer()
@@ -28,43 +35,46 @@ namespace Reklamacka.Models
 		{
 			if (e.Status == GestureStatus.Started)
 			{
-				// Ulozeni aktualni velikosti a vycentrovani
+				// Store the current scale factor applied to the wrapped user interface element,
+				// and zero the components for the center point of the translate transform.
 				startScale = Content.Scale;
 				Content.AnchorX = 0;
 				Content.AnchorY = 0;
 			}
 			if (e.Status == GestureStatus.Running)
 			{
-				// Vypocet velikosti vektoru
+				// Calculate the scale factor to be applied.
 				currentScale += (e.Scale - 1) * startScale;
 				currentScale = Math.Max(1, currentScale);
 
-				// Zisk X hodnoty z relativniho ScaleOrigin 
+				// The ScaleOrigin is in relative coordinates to the wrapped user interface element,
+				// so get the X pixel coordinate.
 				double renderedX = Content.X + xOffset;
 				double deltaX = renderedX / Width;
 				double deltaWidth = Width / (Content.Width * startScale);
 				double originX = (e.ScaleOrigin.X - deltaX) * deltaWidth;
 
-				// Zisk Y hodnoty z relativniho ScaleOrigin 
+				// The ScaleOrigin is in relative coordinates to the wrapped user interface element,
+				// so get the Y pixel coordinate.
 				double renderedY = Content.Y + yOffset;
 				double deltaY = renderedY / Height;
 				double deltaHeight = Height / (Content.Height * startScale);
 				double originY = (e.ScaleOrigin.Y - deltaY) * deltaHeight;
 
-				// Vypocet pretransformovanych souradnic
-				double targetX = xOffset - (originX * Content.Width) * (currentScale - startScale);
-				double targetY = yOffset - (originY * Content.Height) * (currentScale - startScale);
+				// Calculate the transformed element pixel coordinates.	
+				double targetX = xOffset - originX * Content.Width * (currentScale - startScale);
+				double targetY = yOffset - originY * Content.Height * (currentScale - startScale);
 
-				// Aplikace posunu
+				// Apply translation based on the change in origin.
 				Content.TranslationX = targetX.Clamp(-Content.Width * (currentScale - 1), 0);
 				Content.TranslationY = targetY.Clamp(-Content.Height * (currentScale - 1), 0);
 
-				// Aplikace zvetseni
+				// Apply scale factor.
 				Content.Scale = currentScale;
 			}
 			if (e.Status == GestureStatus.Completed)
 			{
-				// Ulozeni rozdilu posunu
+				// Store the translation delta's of the wrapped user interface element.
 				xOffset = Content.TranslationX;
 				yOffset = Content.TranslationY;
 			}

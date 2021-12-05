@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!--
+ * @brief GUI of bill edit page
+ * 
+ * @file BillEditPage.xaml
+ * @author Kedra David (xkedra00)
+ * @date 05/12/2021
+ * 
+ * This application serves as submission 
+ * for a group project of class ITU at FIT, BUT 2021/2022
+ * 
+-->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodels="clr-namespace:Reklamacka.ViewModels" x:DataType="viewmodels:BillEditViewModel"
 			 x:Class="Reklamacka.Pages.BillEditPage">
@@ -10,7 +21,6 @@
 	
 	<NavigationPage.TitleView>
 		<StackLayout Orientation="Horizontal" Margin="0,0,5,0">
-			<!--<Label Text="Product bill" TextColor="White" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>-->
 			<Button Command="{Binding SaveBill}" TextColor="{StaticResource IconColorBar}" BackgroundColor="Transparent" WidthRequest="60"
 					HorizontalOptions="EndAndExpand" Style="{StaticResource FontAwesome5Solid}" Text="&#xf019;" FontSize="30"/>
 			<Button Command="{Binding DeleteBill}" TextColor="{StaticResource IconColorBar}" BackgroundColor="Transparent" WidthRequest="60"
